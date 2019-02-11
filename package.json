@@ -29,5 +29,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+
+  "proxy":"4040",
+  "main":"server/server.js"
 }
