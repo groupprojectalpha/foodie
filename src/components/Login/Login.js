@@ -35,7 +35,6 @@ class Login extends Component{
             password: value
         })
     }
-
     // async register() {
     //     const { username, password } = this.state
     //     let res = await axios.post('/auth/register', { username: username, password: password })
