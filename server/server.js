@@ -13,6 +13,14 @@ app.use(session({
     saveUninitialized: false
 }))
 
+// TESTING ENDPOINTS //
+app.get('/test' , (req , res) => {
+    let db = app.get('db')
+    db.query("select * from shopper")
+    .then((reply) => {res.status(200).send(reply)})
+    .catch((error) => res.status(400).send(error))
+})
+
 
 
 massive(CONNECTION_STRING).then(dbInstance => {
