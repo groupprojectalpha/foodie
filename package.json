@@ -35,6 +35,6 @@
     "not op_mini all"
   ],
 
-  "proxy":"4040",
+  "proxy":"http://localhost:4040",
   "main":"server/server.js"
 }
