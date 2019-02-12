@@ -38,7 +38,6 @@ class Login extends Component{
     // async register() {
     //     const { username, password } = this.state
     //     let res = await axios.post('/auth/register', { username: username, password: password })
-
     //     if (res.data.loggedIn) {
     //         this.props.updateUsername(res.data.user.username)
     //         // this.props.updateProfilePic(res.data.newUser.profile_pic)
