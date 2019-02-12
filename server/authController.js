@@ -46,9 +46,17 @@ module.exports = {
     // check session.shopper is true
     // on failure, return 404 message obj w/ message "No Shopper On Session"
     // on success, return 200 [session.shopper]
+    if(req.session.shopper){res.status(200).send([req.session.shopper])}
+    else {
+      res.status(404).send({message: "No Shopper On Session"})
+    }
   } ,
   logout(req,res){
     // destroy session
     // redirect to loginoptions
+
+    req.session.destroy(() => {
+      res.redirect('/')
+    })
   }
 }

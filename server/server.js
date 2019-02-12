@@ -27,10 +27,10 @@ app.get('/test' , (req , res) => {
 })
 
 // AUTHORIZATION ENDPOINTS //
-app.post('/auth/login' , aCtrl.login)  // OPERATIONAL //
-app.post('/auth/register' , aCtrl.register) // IN PROGRESS //
-app.get('/auth/check' , aCtrl.check) // IN PROGRESS //
-app.delete('/auth/logout' , aCtrl.logout) // IN PROGRESS //
+app.post('/auth/login' , aCtrl.login) 
+app.post('/auth/register' , aCtrl.register)
+app.get('/auth/check' , aCtrl.check)
+app.delete('/auth/logout' , aCtrl.logout)
 
 // USER DATA ENDPOINTS //
 app.get('/user/:id/lists' , uCtrl.getLists) // IN PROGRESS //
