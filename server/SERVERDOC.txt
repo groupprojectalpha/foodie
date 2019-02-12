@@ -1,0 +1,12 @@
+ENDPOINTS AND USAGE
+
+TEST (get)
+'/test'
+ON SUCCESS: returns 200 and an array of all shoppers.
+
+LOGIN (post)
+'/auth/login'
+Takes a body with an email key and a password key.
+ON SUCCESS: Adds user object to session. Returns status 200 and an ARRAY with one user object. NOTE: The hash key on the user object will be set to true.
+ON FAILURE: returns status 401 and an object with a MESSAGE key that reads "incorrect username or password!"
+WILL FAIL IF: no user with email value is found, or if hashed password doesn't match the user's hash value.
