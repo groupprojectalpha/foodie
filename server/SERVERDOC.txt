@@ -7,6 +7,18 @@ ON SUCCESS: returns 200 and an array of all shoppers.
 LOGIN (post)
 '/auth/login'
 Takes a body with an email key and a password key.
-ON SUCCESS: Adds user object to session. Returns status 200 and an ARRAY with one user object. NOTE: The hash key on the user object will be set to true.
-ON FAILURE: returns status 401 and an object with a MESSAGE key that reads "incorrect username or password!"
+ON SUCCESS: Adds shopper object to session. Returns status 200 and an ARRAY with one user object. NOTE: The hash key on the user object will be set to true.
+ON FAILURE: returns status 401 and an object with a MESSAGE key that reads "incorrect email or password!"
 WILL FAIL IF: no user with email value is found, or if hashed password doesn't match the user's hash value.
+
+REGISTER (post)
+'/auth/register'
+    // Should take in req.body with name, email, password, state, phone properties
+    // Should establish DB
+    // Needs to check against DB to ensure email doesn't exist
+    // on failure, return and send message to client that email is in use
+    // On Success, hash and salt password
+    // Save all of the above info to DB
+    // Set user.hash to true
+    // Put shopper on session
+    // Send user ob back to client
