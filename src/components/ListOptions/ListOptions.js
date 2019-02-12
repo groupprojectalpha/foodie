@@ -1,20 +1,26 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { getLists, getItems } from './../../ducks/reducer';
+import axios from 'axios';
 
-export default class ListOptions extends React.Component{
-    constructor(){
+
+class ListOptions extends React.Component {
+    constructor() {
         super()
-        this.state={
+        this.state = {
 
         }
     }
 
 
-
-    render(){
-        return(
+    render() {
+        return (
             <>
-            this is ListOptions
+                this is ListOptions
             </>
         )
     }
 }
+
+const mapState = (reduxState) => reduxState;
+export default connect(mapState, { getLists, getItems })(ListOptions)
