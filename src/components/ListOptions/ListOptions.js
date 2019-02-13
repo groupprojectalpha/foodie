@@ -19,7 +19,6 @@ class ListOptions extends React.Component {
 
 
     componentDidMount(){
-        console.log('listOPtions', this.props)
         // get list items and lists
         Axios.get('/')
         // pass lists and list items down to ShowItems and Show Lists

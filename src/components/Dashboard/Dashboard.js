@@ -15,10 +15,17 @@ class Dashboard extends React.Component {
                 { id: 1, shopper: 1, name: 'Smiths' },
                 { id: 1, shopper: 1, name: 'Aldi' }
             ],
-            itemCards: [{ item: 'milk', price: 3 }, { item: 'bread', price: 2 }, { item: 'carrots', price: 1 }, { item: 'frog legs', price: 14 }],
-            user: [],
+            itemCards: [
+                { item: 'milk', price: 300 },
+                { item: 'bread', price: 244 },
+                { item: 'carrots', price: 161 },
+                { item: 'frog legs', price: 1430 }
+            ],
+            shopper: [
+                { id: 1, name: 'Teddy', phone: 5555555555, state: 'UT', registered: true, budget: null, email: 'teddy@test.com' }
+            ],
             total: 0,
-            budget: 21,
+            budget: 0,
             overBudget: 0,
             remaining: 0
             // prices: [],
@@ -88,19 +95,20 @@ class Dashboard extends React.Component {
     // subtracts currentRemaining from budget on state
     // adds cost exceeded to currentOverBudget on state (pin)
     // alerts user when budget has been exceeded
-    handleBudget = (arr) => {
-        // this.setState({budget: value})
+    // currentOverBudget = this.state.budget 
+    handleBudget = async (arr) => {
         let currentTotal = 0;
         let currentRemaining = 0;
         let currentOverBudget = 0;
         for (let i = 0; i < arr.length; i++) {
             currentTotal += arr[i].price
-            currentRemaining = this.state.budget - currentTotal
-            // currentOverBudget = this.state.budget 
-            this.setState({ total: currentTotal, overBudget: currentOverBudget, remaining: currentRemaining })
-            if (currentOverBudget > this.state.budget) {
-                alert('You are over budget!')
+            if(currentTotal < this.state.budget){ currentRemaining = this.state.budget - currentTotal}else{ currentRemaining=0}
+            if( currentTotal > this.state.budget){currentOverBudget = currentTotal - this.state.budget}else{ currentOverBudget=0} 
+            await this.setState({ total: currentTotal/100, overBudget: currentOverBudget/100, remaining: currentRemaining/100 })
             }
+
+            if (this.state.total > this.state.budget) {
+                alert('You are over budget!')
         }
         // media query for card background color to change yellow on 85% of budget used
         // media query for background color change to red when budget has been exceeded
@@ -111,9 +119,23 @@ class Dashboard extends React.Component {
 
 
     render() {
+        let displayShopper = this.state.shopper.map((el,i)=>{
+            return <h3 key={i} >
+               <p>{el.name}</p> 
+               <p>{el.state}</p>
+            
+            </h3>
+        })
         return (
             <>
-
+                this is Dashboard
+            <div>
+                {displayShopper}
+            </div>
+            <ShoppingList/>
+            <hr/>
+            <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
+                <h2>budget: ${+this.state.budget/100}</h2>
                 your total is:  ${this.state.total}
                 <br />
                 you have ${this.state.remaining} left
@@ -121,9 +143,9 @@ class Dashboard extends React.Component {
                 you are ${this.state.overBudget} over your budget
            <br />
                 <button onClick={() => this.handleBudget(this.state.itemCards)} >calc</button>
-                {/* <ShoppingList/> */}
+                <hr/>
                 <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
-                this is Dashboard
+                <button>More Items</button>
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
         )
