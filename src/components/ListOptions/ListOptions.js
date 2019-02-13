@@ -5,11 +5,22 @@ import axios from 'axios';
 
 
 class ListOptions extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
 
         }
+    }
+
+    
+    toggle = () => {
+        // toggles between ShowLists and ShowItems
+    }
+
+    handleMoreItems = () => {
+        // onClick sends axios request for next ten most popular items
+        // sets items to state
+        // passes items to ShowItems as props
     }
 
 
