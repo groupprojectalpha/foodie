@@ -33,7 +33,7 @@ app.get('/auth/check' , aCtrl.check)
 app.delete('/auth/logout' , aCtrl.logout)
 
 // USER DATA ENDPOINTS //
-app.get('/user/:id/lists' , uCtrl.getLists) // IN PROGRESS //
+app.get('/user/:id/lists' , uCtrl.getLists)
 app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 
 // ITEM DATA ENDPOINTS //
@@ -42,12 +42,12 @@ app.get('/item/all', iCtrl.all) //IN PROGRESS //
 app.get('/item/:id/:storeId', iCtrl.foodieIncPrice) //IN PROGRESS //
 
 // LIST DATA ENDPOINTS //
-app.get('/list/:id', lCtrl.findList) //IN PROGRESS //
+app.get('/list/:id', lCtrl.findList)
 app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
 
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 
-app.post('/new/list' , nCtrl.list) // IN PROGRESS //
+app.post('/new/list' , nCtrl.list)
 
 
 massive(CONNECTION_STRING).then(dbInstance => {

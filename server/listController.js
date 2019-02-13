@@ -1,13 +1,23 @@
 module.exports ={
-  findList(req,res){
+  async findList(req,res){
+    console.log("ID is" , req.params.id)
     // destructure list id req.params
+    let {id} = req.params
     // establish DB connection
+    let db = req.app.get('db')
     // qurey for limit?
     // if limit qurey DB with limit
+    let limit = null;
+    if(req.query.limit){limit = req.query.limit}
     // if not qurey Db by id
+    let listItems = await db.load_list({list: id , limit}).catch(error => res.status(500).send(error))
     // expect an array of objects
-    // on failure return 404 no list found
     // on success return 200 and array
+    if(listItems.length){return res.status(200).send(listItems)}
+    // on failure return 404 no list found
+    else {
+      res.status(404).send({message: "No List Found"})
+    }
   } ,
   delete(req,res){
     // destructure array id off of req.params
