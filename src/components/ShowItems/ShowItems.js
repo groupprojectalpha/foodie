@@ -7,6 +7,7 @@ export default function ShowItems(props){
        })
     return(
         <>
+        this is ShowItems
         <h1>Item Cards</h1>
         { itemCards }
         
