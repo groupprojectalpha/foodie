@@ -47,6 +47,7 @@ CREATE TABLE shopper (
 	registered BOOLEAN DEFAULT true,
 	budget INT DEFAULT NULL,
   email VARCHAR(150),
+	default_list INT,
 );
 
 INSERT INTO shopper ( name , phone , hash , state)
