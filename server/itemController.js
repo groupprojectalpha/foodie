@@ -6,7 +6,7 @@ module.exports = {
     // on success return 200 single obj array
   },
   all(req, res) {
-    // establish DB
+    let db = req.app.get('db')
     // qurey DB for items
     // expect response array 20 obj sorted by rank
     // on failure send message 404 unable to load items
