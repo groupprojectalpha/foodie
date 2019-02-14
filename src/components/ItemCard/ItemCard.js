@@ -1,4 +1,5 @@
 import React from 'react'
+import './ItemCard.css'
 
 export default function ItemCard(props){
   const {id , name , type , brand , itemcode , rank , price , image} = props.item
@@ -6,7 +7,7 @@ export default function ItemCard(props){
     <div className="item-card">
     <p>{name}</p>
     <p>{price}</p>
-    <p>{name}</p>
+    <img src={image} alt={name} />
     </div>
   )
 }

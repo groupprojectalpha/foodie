@@ -1,5 +1,6 @@
 import React from 'react';
 import Axios from 'axios'
+import ItemCard from '../ItemCard/ItemCard';
 
 export default class AddItems extends React.Component {
     constructor() {
@@ -44,7 +45,7 @@ export default class AddItems extends React.Component {
 
     render() {
         let itemCard = this.state.itemList.map((el, i) => {
-            return <li key={i} >{el.name}</li>
+            return <ItemCard item={el} key={i} />
         })
         console.log(this.state.newList)
         return (
