@@ -1,4 +1,5 @@
 const testCtrl = require('./testController')
+const pCtrl = require('./apiController')
 
 module.exports = {
   findItem(req, res) {
@@ -38,7 +39,7 @@ module.exports = {
         apiItems = [{message: "It's foodie inc!"}]
         break;
       case 2:
-        apiItems = await testCtrl.testWalmart()
+        apiItems = await pCtrl.searchWalMart(store, term, req)
         break;
       default:
         apiItems = []
