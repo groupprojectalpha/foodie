@@ -1,10 +1,19 @@
 const initialState = {
   lists: [],
   items: [],
+  user:{}
 }
 
 const GET_LISTS = 'GET_LISTS'
 const GET_ITEMS = 'GET_ITEMS'
+const GET_USER_DATA = 'GET_USER_DATA'
+
+export function getUserData(userData){
+  return{
+    type:GET_USER_DATA,
+    payload: userData
+  }
+}
 
 export function getLists(lists) {
   return {
@@ -12,7 +21,6 @@ export function getLists(lists) {
     payload: lists
   }
 }
-
 
 
 export function getItems(items) {
@@ -30,6 +38,9 @@ export default function (state = initialState, action) {
 
     case GET_ITEMS:
       return { ...state, getItems: action.payload }
+
+      case GET_USER_DATA: 
+      return { ...state, getUserData: action.payload}
 
     default:
       return state

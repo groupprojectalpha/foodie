@@ -26,13 +26,30 @@ module.exports ={
     let db = req.app.get('db')
     let createdList = await db.create_list({name , userId}).catch((error) => res.status(500).send(error))
     if(!createdList[0]){return res.status(500).send({message: "Unable to Create List!"})}
-    req.params.id = createdList[0].id
+    // let listItems = []
+    // items.forEach((item) => {
+    //   let itemAdded = db.add_list_item({item: item.id , list: createdList[0].id})
+    //   .catch(error => res.status(500).send(error))
+    //   .then(() => {
+    //   console.log(itemAdded)
+    //   listItems.push(itemAdded)
+    //   })
+    // });
+    let itemsAdded = []
     let promises = items.map(async (item) => {
       let itemAdded = db.add_list_item({item: item.id , list: createdList[0].id}).catch(error => res.status(500).send(error))
+      let resolved = await itemAdded
+      itemsAdded.push(resolved[0])
       return itemAdded
     })
+
+
+    // FOR TESTING //
+
+    // PROMISE.ALL RETURNS PROMISES. I"M AT A LOSS //
     Promise.all(promises).then(() => {
-      lCtrl.findList(req, res)
+      res.status(200).send(itemsAdded)
+      // console.log("HIT" , itemsAdded)
     })
     .catch(err => console.log(err))
   }
