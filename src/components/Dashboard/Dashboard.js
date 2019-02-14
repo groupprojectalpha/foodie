@@ -95,7 +95,7 @@ class Dashboard extends React.Component {
     // loops over the itemCard array
     // calculates currentTotal price
     // subtracts currentRemaining from budget on state
-    // adds cost exceeded to currentOverBudget on state (pin)
+    // adds cost exceeded to currentOverBudget on state
     // alerts user when budget has been exceeded
     // currentOverBudget = this.state.budget 
     handleBudget = async (arr) => {
@@ -107,13 +107,13 @@ class Dashboard extends React.Component {
             if(currentTotal < this.state.budget){ currentRemaining = this.state.budget - currentTotal}else{ currentRemaining=0}
             if( currentTotal > this.state.budget){currentOverBudget = currentTotal - this.state.budget}else{ currentOverBudget=0} 
             await this.setState({ total: currentTotal/100, overBudget: currentOverBudget/100, remaining: currentRemaining/100 })
-            }
-
-            if (this.state.total > this.state.budget) {
-                alert('You are over budget!')
         }
+
         // media query for card background color to change yellow on 85% of budget used
         // media query for background color change to red when budget has been exceeded
+        if (this.state.total > this.state.budget) {
+            alert('You are over budget!')
+    }
     }
 
 
@@ -142,7 +142,7 @@ class Dashboard extends React.Component {
             </div>
             <ShoppingList/>
             <hr/>
-            <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
+            {/* <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  /> */}
                 <h2>budget: ${+this.state.budget/100}</h2>
                 your total is:  ${this.state.total}
                 <br />
@@ -152,8 +152,8 @@ class Dashboard extends React.Component {
            <br />
                 <button onClick={() => this.handleBudget(this.state.itemCards)} >calc</button>
                 <hr/>
-                // <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
-                <button>More Items</button>
+                <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
+                
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
         )
