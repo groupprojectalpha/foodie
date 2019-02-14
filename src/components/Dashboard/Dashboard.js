@@ -2,8 +2,8 @@ import React from 'react';
 import BottomBar from '../BottomBar/BottomBar'
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
-import ShoppingList from './ShoppingList'
-import ListOptions from './ListOptions'
+import ShoppingList from '../ShoppingList/ShoppingList'
+import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
 import { getUserData } from '../../ducks/reducer'
 
@@ -152,7 +152,7 @@ class Dashboard extends React.Component {
            <br />
                 <button onClick={() => this.handleBudget(this.state.itemCards)} >calc</button>
                 <hr/>
-                <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
+                // <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
                 <button>More Items</button>
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
