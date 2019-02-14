@@ -29,7 +29,7 @@ class AlertDialogSlide extends React.Component {
     return (
       <div>
         <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-          Continue to Site
+          Get Started
         </Button>
         <Dialog
           open={this.state.open}
