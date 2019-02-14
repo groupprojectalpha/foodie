@@ -29,7 +29,8 @@ app.get('/test' , (req , res) => {
     .catch((error) => res.status(400).send(error))
 })
 app.get('/test/walmart' , testCtrl.testWalmart)
-// app.get('/test/pass' , (req , res) => res.status(200).send(req.session.shopper))
+app.get('/test/pass' , (req , res) => res.status(200).send(req.session.shopper))
+app.put('/test/additems' , iCtrl.addItems)
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login' , aCtrl.login) 
@@ -42,10 +43,11 @@ app.get('/user/:id/lists' , uCtrl.getLists)
 app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 
 // ITEM DATA ENDPOINTS //
+app.put('/item/additems' , iCtrl.addItems)
 app.get('/item/:id' , iCtrl.findItem) // IN PROGRESS //
 app.get('/item/all', iCtrl.all) //IN PROGRESS //
 app.get('/item/:id/:storeId', iCtrl.foodieIncPrice) //IN PROGRESS //
-app.get('/search/:store/:term' , iCtrl.newItems) // IN PROGRESS //
+app.get('/search/:store/:term' , iCtrl.newItems)
 
 // LIST DATA ENDPOINTS //
 app.get('/list/:id', lCtrl.findList)
