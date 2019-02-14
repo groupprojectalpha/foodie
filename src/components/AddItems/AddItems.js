@@ -17,10 +17,9 @@ export default class AddItems extends React.Component {
     //         { item: 'frog legs', price: 14 }
 
     findItem = async (value) => {
-      let res = await Axios.get(`/search/${2}/${value}`)
-      this.setState({itemList:res})
         // makes api call for items
-        // makes DB call for items
+      let res = await Axios.get(`/search/2/${value}`)
+      this.setState({itemList:res.data})
         // sets state with items
         // sends data to redux, then to dashboard
     }
@@ -44,8 +43,8 @@ export default class AddItems extends React.Component {
 
 
     render() {
-        let newItem = this.state.itemList.map((el, i) => {
-            return <li key={i} >{el.item}</li>
+        let itemCard = this.state.itemList.map((el, i) => {
+            return <li key={i} >{el.name}</li>
         })
         console.log(this.state.newList)
         return (
@@ -63,7 +62,7 @@ export default class AddItems extends React.Component {
                 </select>
                 <input placeholder={'ZipCode'} onChange={(e)=>this.setState({zip:e.target.value})} />
                 <hr />
-                {newItem}
+                {itemCard}
             </>
         )
     }
