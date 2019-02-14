@@ -8,6 +8,7 @@ const lCtrl = require('./listController')
 const iCtrl = require('./itemController')
 const nCtrl = require('./newController')
 const testCtrl = require('./testController')
+const passThrough = require('./middlewares/devPassthrough')
 
 const { SERVER_PORT, CONNECTION_STRING, SECRET } = process.env;
 
@@ -18,6 +19,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+// app.use(passThrough)
 
 // TESTING ENDPOINTS //
 app.get('/test' , (req , res) => {
@@ -27,6 +29,7 @@ app.get('/test' , (req , res) => {
     .catch((error) => res.status(400).send(error))
 })
 app.get('/test/walmart' , testCtrl.testWalmart)
+// app.get('/test/pass' , (req , res) => res.status(200).send(req.session.shopper))
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login' , aCtrl.login) 
