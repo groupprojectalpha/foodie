@@ -49,5 +49,51 @@ module.exports = {
     let finalReturn = [...dbItems, ...apiItems]
     // Return the new array of items
     res.status(200).send(finalReturn)
-  }
+  } ,
+  async addItems(req, res){
+    let db = req.app.get('db')
+    let {items} = req.body
+    // THIS SECTION SORTS NEW ITEMS INTO A NEW ARRAY SO THEY CAN BE ADDED TO THE DB //
+    let toAdd = []
+    let existing = []
+    items.forEach(item => {
+      if(item.store){
+        toAdd.push(item)
+      } else {
+        existing.push(item)
+      }
+    });
+
+    // THIS SECTION INSERTS NEW ITEMS INTO DB, AND RETURNS AN ARRAY OF DB ITEMS //
+    let processedItems = await Promise.all(toAdd.map( async (item) => {
+      let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price, image) VALUES ('${item.name}', '${item.type}', ${item.brand}, '${item.code}', ${item.price * 100}, '${item.image}') RETURNING *`)
+      .catch((err) => console.log(err))
+      db.query(`INSERT INTO store_item (store , item) VALUES (${item.store} , ${insertedItemArr[0].id})`)
+      return insertedItemArr[0]
+    }))
+
+    // THIS SECTION RE-COMBINES THE TWO ARRAYS //
+    let all = [...existing , ...processedItems]
+
+    // THIS SECTION CHECKS TO SEE IF THE LIST EXISTS //
+    if(!req.body.name){req.body.name = "Favorite Items"}
+    let listIdArr = await db.query(`SELECT id FROM list WHERE name = '${req.body.name}'`)
+    let listId = null;
+    if(!listIdArr[0]){
+      // THIS SECTION CREATES A LIST IF A LIST IS NOT FOUND //
+      let newListArr = await db.create_list({name: req.body.name , userId: req.session.shopper.id})
+      listId = newListArr[0].id
+    } else {
+      listId = listIdArr[0]
+    }
+
+    // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
+    all.forEach(async (item) => {
+      await db.add_list_item({item: item.id , list: listId})
+    })
+
+    // AT THIS POINT, ALL ITEMS SHOULD HAVE BEEN ADDED TO THE DB AND ASSIGNED TO A LIST. NOW THEY ARE RETURNED TO THE CLIENT //
+
+  res.status(200).send(all)
+  } ,
 }
