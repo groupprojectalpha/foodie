@@ -145,7 +145,7 @@ class Dashboard extends React.Component {
                 <button onClick={() => this.handleBudget(this.state.itemCards)} >calc</button>
                 <hr/>
                 <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
-                <button>More Items</button>
+                
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
         )
