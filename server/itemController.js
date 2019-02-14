@@ -1,3 +1,5 @@
+const testCtrl = require('./testController')
+
 module.exports = {
   findItem(req, res) {
     // establish DB
@@ -21,5 +23,30 @@ module.exports = {
      // on failure retry call
      // on success parse data into object with a key of price in pennies
      // return 200 and obj in array
+  } , 
+  async newItems(req, res){
+    const { store , term } = req.params
+    let db = req.app.get('db')
+    // Search DB for items matching term that ARE NOT on any of the shopper's lists
+    let searchTerm = "%" + term + "%"
+    let { id } = req.session.shopper
+    let dbItems = await db.new_items({searchTerm , id , store})
+    // Determine which store they're searching by, and pass the search off the the appropriate API controller
+    let apiItems = null;
+    switch(+store){
+      case 1:
+        apiItems = [{message: "It's foodie inc!"}]
+        break;
+      case 2:
+        apiItems = await testCtrl.testWalmart()
+        break;
+      default:
+        apiItems = []
+    }
+    // Expect back an array of objects matching the DB objects, but with the additional key 'store'
+    // Merge the two arrays
+    let finalReturn = [...dbItems, ...apiItems]
+    // Return the new array of items
+    res.status(200).send(finalReturn)
   }
 }
