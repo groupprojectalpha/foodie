@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom';
 import LoginInput from './LoginInput';
 import Button from '@material-ui/core/Button';
+import firebase from 'firebase';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
 class Login extends Component{
     constructor(props) {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            signedIn: false
+        }
+    }
+
+    uiConfig = {
+        signInFlow: "popup", //use 'redirect' for mobile
+        signInOptions: [
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+            firebase.auth.TwitterAuthProvider.PROVIDER_ID
+        ],
+        callBacks: {
+            signInSuccess: () => false
         }
     }
 
@@ -38,7 +53,6 @@ class Login extends Component{
     // async register() {
     //     const { username, password } = this.state
     //     let res = await axios.post('/auth/register', { username: username, password: password })
-
     //     if (res.data.loggedIn) {
     //         this.props.updateUsername(res.data.user.username)
     //         // this.props.updateProfilePic(res.data.newUser.profile_pic)
@@ -60,11 +74,22 @@ class Login extends Component{
         } else { alert(res.data.message) }
     }
 
+    componentDidMount = () => {
+        firebase.auth().onAuthStateChanged(user => {
+            this.setState({ signedIn: !!user})
+            console.log('user', user)
+        })
+        if (this.state.signedIn === true) {
+            this.props.history.push('/dashboard')
+        }
+    }
+   
 
 
     render(){
 
         console.log(this.state)
+        
 
         return(
             <>
@@ -77,6 +102,9 @@ class Login extends Component{
                         <Link to='/dashboard' style={{ textDecoration: 'none' }}>
                         <Button> Skip </Button>
                         </Link>
+                        <StyledFirebaseAuth
+                            uiConfig={this.uiConfig}
+                            firebaseAuth={firebase.auth()}/>
                     </div> 
             </>
         )

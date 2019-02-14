@@ -1,10 +1,12 @@
 import React from 'react';
 import BottomBar from '../BottomBar/BottomBar'
-import ShoppingList from '../ShoppingList/ShoppingList';
-import ListOptions from '../ListOptions/ListOptions';
-import Axios from 'axios';
+import firebase from 'firebase';
+import { Link } from 'react-router-dom';
+import ShoppingList from '../ShoppingList/ShoppingList'
+import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
 import { getUserData } from '../../ducks/reducer'
+
 
 class Dashboard extends React.Component {
     constructor() {
@@ -128,6 +130,12 @@ class Dashboard extends React.Component {
         })
         return (
             <>
+            <Link to='/' style={{ textDecoration: 'none' }}>
+             <button onClick={() => firebase.auth().signOut()}>Sign Out!</button>
+            </Link>
+            this is Dashboard
+            <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/>
+           
                 this is Dashboard
             <div>
                 {displayShopper}

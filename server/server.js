@@ -7,6 +7,7 @@ const uCtrl = require('./userController')
 const lCtrl = require('./listController')
 const iCtrl = require('./itemController')
 const nCtrl = require('./newController')
+const testCtrl = require('./testController')
 
 const { SERVER_PORT, CONNECTION_STRING, SECRET } = process.env;
 
@@ -25,6 +26,7 @@ app.get('/test' , (req , res) => {
     .then((reply) => res.status(200).send(reply))
     .catch((error) => res.status(400).send(error))
 })
+app.get('/test/walmart' , testCtrl.testWalmart)
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login' , aCtrl.login) 
@@ -40,6 +42,7 @@ app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 app.get('/item/:id' , iCtrl.findItem) // IN PROGRESS //
 app.get('/item/all', iCtrl.all) //IN PROGRESS //
 app.get('/item/:id/:storeId', iCtrl.foodieIncPrice) //IN PROGRESS //
+app.get('/search/:store/:term' , iCtrl.newItems) // IN PROGRESS //
 
 // LIST DATA ENDPOINTS //
 app.get('/list/:id', lCtrl.findList)
