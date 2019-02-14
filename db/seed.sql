@@ -13,7 +13,8 @@ CREATE TABLE item (
 	brand INT REFERENCES brand(id) ,
 	itemcode TEXT UNIQUE ,
 	rank INT DEFAULT 0 ,
-	price INT DEFAULT 2
+	price INT DEFAULT 2,
+	image TEXT DEFAULT 'https://www.unesale.com/ProductImages/Large/notfound.png'
 );
 
 insert into item (name, type, brand, itemcode, price) values ('Compound - Rum', 'alcohol', 1, 'SQXlr85L', 313);
