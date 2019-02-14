@@ -10,6 +10,7 @@ export default function ShowItems(props){
         this is ShowItems
         <h1>Item Cards</h1>
         { itemCards }
+        <button>More Items</button>
         
         </>
     )
