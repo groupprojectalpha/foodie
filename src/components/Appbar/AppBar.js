@@ -9,6 +9,9 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Logo from '../Logo.svg'
 import './AppBar.css'
+import firebase from 'firebase';
+import {Link} from 'react-router-dom';
+import LogoutIcon from '@material-ui/icons/ExitToApp'
 // import SideDrawer from './SideDrawer';
 
 const styles = {
@@ -39,8 +42,10 @@ function ButtonAppBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             FOODIE
           </Typography>
-          <Button color="inherit"><img src={Logo} id='logo'/></Button>
-          
+          {/* <Button color="inherit"><img src={Logo} id='logo'/></Button> */}
+          <Link to='/' style={{ textDecoration: 'none' }}>
+          <Button color="inherit" onClick={() => firebase.auth().signOut()} style={{color: 'white'}}><LogoutIcon/></Button>
+          </Link>
           {/* <SideDrawer/> */}
         </Toolbar>
       </AppBar>

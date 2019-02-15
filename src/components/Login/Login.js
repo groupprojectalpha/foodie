@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 
-class Login extends Component{
+class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,15 +29,15 @@ class Login extends Component{
         }
     }
 
-    componentDidMount() {
-        this.forceUpdate();
-        axios.get(`/logout`)
-         .then(res => {
-           console.log(res)
-           })
-      }
+    // componentDidMount() {
+    //     this.forceUpdate();
+    //     axios.get(`/logout`)
+    //      .then(res => {
+    //        console.log(res)
+    //        })
+    //   }
 
-      handleUsername = ({ target: { value } }) => {
+    handleUsername = ({ target: { value } }) => {
         this.setState({
             ...this.state,
             email: value
@@ -66,46 +66,56 @@ class Login extends Component{
         const res = await axios.post('/auth/login', { email: email, password: password })
         console.log(res.data)
         if (res.data.user) {
-            this.props.history.push('/dashboard')        
+            this.props.history.push('/dashboard')
         } else { alert(res.data.message) }
     }
 
-    componentDidMount = async() => {
-       
-        firebase.auth().signOut()
-        firebase.auth().onAuthStateChanged(user => {
-            this.setState({ signedIn: !!user})
-            console.log('user', user)
+    componentDidMount = async () => {
+
+        firebase.auth().onAuthStateChanged(async(user) => {
+            if (user) {
+                console.log('user', user.providerData[0])
+                await axios.post('/auth/firebase', 
+                user.providerData[0]
+                ).then(res=>{
+                    this.setState({
+                        signedIn: !!user,
+                        userData: user.providerData[0]
+                    })
+                    this.props.history.push('/dashboard')
+                })
+            }
         })
         if (this.state.signedIn === true) {
-            this.props.history.push('/dashboard')
+           
         }
     }
-   
 
 
-    render(){
+
+
+    render() {
 
         console.log(this.state)
-       if (this.state.signedIn){
-        this.props.history.push('/dashboard')     
-       }
+        if (this.state.signedIn) {
+            this.props.history.push('/dashboard')
+        }
 
-        return(
+        return (
             <>
-            <LoginInput handleUsername={this.handleUsername} handlePassword={this.handlePassword}></LoginInput>
-            <div className='button-container'>
-                        <Button variant="outlined" color="primary" onClick={() => this.login()}>Login</Button>
-                        <Link to='/register' style={{ textDecoration: 'none' }}>
+                <LoginInput handleUsername={this.handleUsername} handlePassword={this.handlePassword}></LoginInput>
+                <div className='button-container'>
+                    <Button variant="outlined" color="primary" onClick={() => this.login()}>Login</Button>
+                    <Link to='/register' style={{ textDecoration: 'none' }}>
                         <Button> Register </Button>
-                        </Link>
-                        <Link to='/dashboard' style={{ textDecoration: 'none' }}>
+                    </Link>
+                    <Link to='/dashboard' style={{ textDecoration: 'none' }}>
                         <Button> Skip </Button>
-                        </Link>
-                        <StyledFirebaseAuth
-                            uiConfig={this.uiConfig}
-                            firebaseAuth={firebase.auth()}/>
-                    </div> 
+                    </Link>
+                    <StyledFirebaseAuth
+                        uiConfig={this.uiConfig}
+                        firebaseAuth={firebase.auth()} />
+                </div>
             </>
         )
     }
