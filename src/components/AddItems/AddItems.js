@@ -1,44 +1,7 @@
 import React from 'react';
 import Axios from 'axios';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-
-const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-    result.splice(endIndex, 0, removed)
-    return result
-}
-
-const move = (sourceList, destLIst, targetSource, targetDest) => {
-    const SLC = Array.from(sourceList)
-    const DLC = Array.from(destLIst)
-
-    const [removed] = SLC.splice(targetSource.index, 1)
-
-    DLC.splice(targetDest.index, 0, removed)
-
-    let result = {}
-    result[targetSource.droppableId] = SLC
-    result[targetDest.droppableId] = DLC
-    return result
-}
-
-const grid = 8
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-    userSelect: 'none',
-    padding: grid * 2,
-    margin: `0 0 ${grid} px 0`,
-    background: isDragging ? 'lightgreen' : 'grey',
-    ...draggableStyle
-
-})
-
-const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? 'lightblue' : 'lighgrey',
-    padding: grid,
-    width: 250,
-})
+import { reorder , move , getListStyle , getItemStyle } from '../../lib/dragFuncModule'
 
 export default class AddItems extends React.Component {
     constructor() {
@@ -146,7 +109,7 @@ export default class AddItems extends React.Component {
                                 {this.state.itemList.map((item, i) => (
                                     <Draggable key={item.code} draggableId={item.code} index={i}>
                                         {(provided, snapshot) => (
-                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
                                                 {item.name}
                                             </div>
                                         )}
@@ -163,7 +126,7 @@ export default class AddItems extends React.Component {
                                 {this.state.newList.map((item, i) => (
                                     <Draggable key={item.code} draggableId={item.code} index={i} >
                                         {(provided, snapshot) => (
-                                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} >
+                                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
                                                 {item.name}
                                             </div>
                                         )}
