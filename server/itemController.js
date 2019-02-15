@@ -86,14 +86,14 @@ module.exports = {
 
     // THIS SECTION CHECKS TO SEE IF THE LIST EXISTS //
     if(!req.body.name){req.body.name = "Favorite Items"}
-    let listIdArr = await db.query(`SELECT id FROM list WHERE name = '${req.body.name}'`)
+    let listIdArr = await db.query(`SELECT id FROM list WHERE name = '${req.body.name}' AND shopper = ${req.session.shopper.id}`)
     let listId = null;
     if(!listIdArr[0]){
       // THIS SECTION CREATES A LIST IF A LIST IS NOT FOUND //
       let newListArr = await db.create_list({name: req.body.name , userId: req.session.shopper.id})
       listId = newListArr[0].id
     } else {
-      listId = listIdArr[0]
+      listId = listIdArr[0].id
     }
 
     // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
