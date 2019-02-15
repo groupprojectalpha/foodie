@@ -160,6 +160,7 @@ class Dashboard extends React.Component {
             </div>
             <ShoppingList/>
             <hr/>
+            <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
             {/* <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  /> */}
                 <h2>budget: ${+this.state.budget/100}</h2>
                 your total is:  ${this.state.total}
