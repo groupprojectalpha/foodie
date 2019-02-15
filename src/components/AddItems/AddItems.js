@@ -15,7 +15,7 @@ class AddItems extends React.Component {
             listName: '',
             zip: 0,
             storeId: 0,
-            showInput: false
+            showInput: false,
         }
 
         this.onDraggEnd = this.onDraggEnd.bind(this)
@@ -116,6 +116,7 @@ class AddItems extends React.Component {
                 this is AddItems
             <input placeholder={'Search'} onChange={(e) => this.findItem(e.target.value)} />
                 <button onClick={this.SaveList}>Save</button>
+             
 
                 {
                     this.state.showInput ?
@@ -140,7 +141,7 @@ class AddItems extends React.Component {
                         {(provided, snapshot) => (
                             <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} >
                                 {this.state.itemList.map((item, i) => (
-                                    <Draggable key={item.code} draggableId={itemcode} index={i}>
+                                    <Draggable key={item.itemcode} draggableId={item.itemcode} index={i}>
                                         {(provided, snapshot) => (
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                 <ItemCard item={item} />
@@ -157,7 +158,7 @@ class AddItems extends React.Component {
                         {(provided, snapshot) => (
                             <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
                                 {this.state.newList.map((item, i) => (
-                                    <Draggable key={item.code} draggableId={itemcode} index={i} >
+                                    <Draggable key={item.itemcode} draggableId={item.itemcode} index={i} >
                                         {(provided, snapshot) => (
                                             <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                 <ItemCard item={item} />
