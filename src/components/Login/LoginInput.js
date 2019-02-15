@@ -22,24 +22,7 @@ const styles = theme => ({
   },
 });
 
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-];
+
 
 class OutlinedTextFields extends React.Component {
   state = {
@@ -64,10 +47,10 @@ class OutlinedTextFields extends React.Component {
 
         <TextField
           id="outlined-email-input"
-          label="Username"
+          label="Email"
           className={classes.textField}
-          type="Username"
-          name="Username"
+          type="Email"
+          name="Email"
           margin="normal"
           variant="outlined"
           value={this.state.Username} 

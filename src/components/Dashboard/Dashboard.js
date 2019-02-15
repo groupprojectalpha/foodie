@@ -6,7 +6,8 @@ import ShoppingList from '../ShoppingList/ShoppingList'
 import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
 import { getUserData } from '../../ducks/reducer'
-
+import axios from 'axios'
+import SideDrawer from '../Appbar/SideDrawer'
 
 class Dashboard extends React.Component {
     constructor() {
@@ -29,7 +30,9 @@ class Dashboard extends React.Component {
             total: 0,
             budget: 0,
             overBudget: 0,
-            remaining: 0
+            remaining: 0,
+            name: '',
+            user: {}
             // prices: [],
         }
     }
@@ -43,17 +46,32 @@ class Dashboard extends React.Component {
     // sets user info to state
 
 
-    // componentDidMount() {
-    //     if(!this.props.getUserData){
-    //         this.props.push('/add_items')
-    //     }
-    //      const userList = Axios.get(`/user/ ${this.props.getUserData.id}/lists` )
-    //     if(!userList){
-    //         this.props.push('/add_items')
-    //     }
-    //     this.setState({lists:userList})
-    //     this.setState({user: this.props.getUserData})
-    // }
+        componentDidMount = async() => {
+
+
+        await axios.get(`/auth/check`)
+        .then(res => {
+          console.log(res.data[0])
+          this.setState({
+           name: res.data[0].name
+
+          })
+        })
+
+        firebase.auth().onAuthStateChanged(user => {
+            console.log(user)
+        })
+
+        // if(!this.props.getUserData){
+        //     this.props.push('/add')
+        // }
+        //  const userList = Axios.get(`/user/ ${this.props.getUserData.id}/lists` )
+        // if(!userList){
+        //     this.props.push('/add')
+        // }
+        // this.setState({lists:userList})
+        // this.setState({user: this.props.getUserData})
+    }
 
     clickList = () => {
         // sends get request for items in lists
@@ -130,18 +148,19 @@ class Dashboard extends React.Component {
         })
         return (
             <>
+            <SideDrawer/>
             <Link to='/' style={{ textDecoration: 'none' }}>
              <button onClick={() => firebase.auth().signOut()}>Sign Out!</button>
             </Link>
-            this is Dashboard
-            <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/>
+            welcome {this.state.name}
+            {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
            
-                this is Dashboard
             <div>
                 {displayShopper}
             </div>
             <ShoppingList/>
             <hr/>
+            <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
             {/* <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  /> */}
                 <h2>budget: ${+this.state.budget/100}</h2>
                 your total is:  ${this.state.total}

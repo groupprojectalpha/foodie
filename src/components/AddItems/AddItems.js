@@ -1,26 +1,70 @@
 import React from 'react';
-import Axios from 'axios'
 import ItemCard from '../ItemCard/ItemCard';
+import Axios from 'axios';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { reorder , move , getListStyle , getItemStyle } from '../../lib/dragFuncModule'
 
 export default class AddItems extends React.Component {
     constructor() {
         super()
         this.state = {
-            itemList:[],
+            itemList: [],
             newList: [],
-            zip:0,
+            zip: 0,
+            storeId: 0
+        }
+
+        this.onDraggEnd = this.onDraggEnd.bind(this)
+    }
+
+    getList = (id) => {
+        return this.state[id]
+    }
+
+    onDraggEnd(result) {
+        const { source, destination } = result
+        if (!destination) {
+            return;
+        }
+
+
+        if (source.droppableId === destination.droppableId) {
+            let list = null
+            switch (source.droppableId) {
+                case "itemList":
+                    list = 'itemList'
+                    break;
+                case 'newList':
+                    list = "newList"
+                    break;
+                default:
+                    console.log('onDraggEnd: no list found. check list names and droppableIds')
+                    return;
+
+            }
+            const reorderedList = reorder(this.state[list], source.index, destination.index)
+            this.setState({ [list]: reorderedList })
+        }
+
+        else {
+            let result = move(
+                this.getList(source.droppableId),
+                this.getList(destination.droppableId),
+                source,
+                destination
+            )
+            this.setState({
+                itemList: result.itemList,
+                newList: result.newList
+            })
         }
     }
 
-    // { item: 'milk', price: 3 },
-    //         { item: 'bread', price: 2 },
-    //         { item: 'carrots', price: 1 },
-    //         { item: 'frog legs', price: 14 }
 
     findItem = async (value) => {
         // makes api call for items
-      let res = await Axios.get(`/search/2/${value}`)
-      this.setState({itemList:res.data})
+        let res = await Axios.get(`/search/${this.state.storeId}/${value}`)
+        this.setState({ itemList: res.data })
         // sets state with items
         // sends data to redux, then to dashboard
     }
@@ -28,30 +72,26 @@ export default class AddItems extends React.Component {
     findStore(e) {
         switch (e) {
             case 'walmart':
-                //axios request for walmart with zip from this.state
-                
+                this.setState({ storeId: 2 })
+
                 break;
             case 'smiths':
-                //axios request for smiths with zip from this.state
-               
+                this.setState({ storeId: 4 })
+
                 break;
             case 'aldi':
-            // axios request for aldi with zip from this.state
-            
+                this.setState({ storeId: 6 })
+
         }
     }
 
 
 
     render() {
-        let itemCard = this.state.itemList.map((el, i) => {
-            return <ItemCard item={el} key={i} />
-        })
-        console.log(this.state.newList)
         return (
             <>
                 this is AddItems
-            <input placeholder={'Search'} onChange={(e)=>this.findItem(e.target.value)} />
+            <input placeholder={'Search'} onChange={(e) => this.findItem(e.target.value)} />
                 <button>Save Items</button>
                 <input placeholder={'List Name'} onChange={(e) => { this.setState({ newList: e.target.value }) }} />
                 <button onClick={() => { }} >Save List</button>
@@ -61,9 +101,44 @@ export default class AddItems extends React.Component {
                     <option value='smiths' >Smiths</option>
                     <option value='aldi' >Aldi</option>
                 </select>
-                <input placeholder={'ZipCode'} onChange={(e)=>this.setState({zip:e.target.value})} />
+                <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} />
                 <hr />
-                {itemCard}
+                <DragDropContext onDragEnd={this.onDraggEnd} >
+                    <Droppable droppableId='itemList'>
+                        {(provided, snapshot) => (
+                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} >
+                                {this.state.itemList.map((item, i) => (
+                                    <Draggable key={item.code} draggableId={item.code} index={i}>
+                                        {(provided, snapshot) => (
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
+                                                <ItemCard item={item} />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                            </div>
+                        )}
+                    </Droppable>
+
+
+                    <Droppable droppableId='newList' >
+                        {(provided, snapshot) => (
+                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
+                                {this.state.newList.map((item, i) => (
+                                    <Draggable key={item.code} draggableId={item.code} index={i} >
+                                        {(provided, snapshot) => (
+                                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
+                                                <ItemCard item={item} />
+                                            </div>
+                                        )}
+
+                                    </Draggable>
+                                ))}
+                            </div>
+                        )}
+
+                    </Droppable>
+                </DragDropContext>
             </>
         )
     }
