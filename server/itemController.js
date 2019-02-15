@@ -28,10 +28,14 @@ module.exports = {
   async newItems(req, res){
     const { store , term } = req.params
     let db = req.app.get('db')
+    
+    // BAD CODE //
     // Search DB for items matching term that ARE NOT on any of the shopper's lists
-    let searchTerm = "%" + term + "%"
-    let { id } = req.session.shopper
-    let dbItems = await db.new_items({searchTerm , id , store})
+    // let searchTerm = "%" + term + "%"
+    // let { id } = req.session.shopper
+    // let dbItems = await db.new_items({searchTerm , id , store})
+
+
     // Determine which store they're searching by, and pass the search off the the appropriate API controller
     let apiItems = null;
     switch(+store){
@@ -45,10 +49,15 @@ module.exports = {
         apiItems = []
     }
     // Expect back an array of objects matching the DB objects, but with the additional key 'store'
-    // Merge the two arrays
-    let finalReturn = [...dbItems, ...apiItems]
+    // Compare the array with our DB
+    let comparedItems = apiItems.map(async (item , i) => {
+      let retArr = await db.query(`SELECT * FROM item WHERE itemcode = '${+item.code}'`)
+      if(retArr[0]){return retArr[0]}
+      else if(!retArr[0]){return item}
+      else {return;}
+    })
     // Return the new array of items
-    res.status(200).send(finalReturn)
+    res.status(200).send(await Promise.all(comparedItems))
   } ,
   async addItems(req, res){
     let db = req.app.get('db')
