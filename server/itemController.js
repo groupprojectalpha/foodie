@@ -73,6 +73,8 @@ module.exports = {
       }
     });
 
+    console.log("AI Initial Body: " , req.body)
+
     // THIS SECTION INSERTS NEW ITEMS INTO DB, AND RETURNS AN ARRAY OF DB ITEMS //
     let processedItems = await Promise.all(toAdd.map( async (item) => {
       let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price, image) VALUES ('${item.name}', '${item.type}', ${item.brand}, '${item.itemcode}', ${item.price * 100}, '${item.image}') RETURNING *`)
@@ -81,17 +83,23 @@ module.exports = {
       return insertedItemArr[0]
     }))
 
+    console.log("AI processedItems: " , processedItems)
+
     // THIS SECTION RE-COMBINES THE TWO ARRAYS //
     let all = [...existing , ...processedItems]
+
+    console.log("AI The Completed Array: " , all)
 
     // THIS SECTION CHECKS TO SEE IF THE LIST EXISTS //
     if(!req.body.name){req.body.name = "Favorite Items"}
     let listIdArr = await db.query(`SELECT id FROM list WHERE name = '${req.body.name}'`)
+    console.log("AI List Exists Already? " , listIdArr)
     let listId = null;
     if(!listIdArr[0]){
       // THIS SECTION CREATES A LIST IF A LIST IS NOT FOUND //
       let newListArr = await db.create_list({name: req.body.name , userId: req.session.shopper.id})
       listId = newListArr[0].id
+      console.log("AI New List ID: " , newListArr[0].id)
     } else {
       listId = listIdArr[0]
     }
