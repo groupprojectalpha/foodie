@@ -61,7 +61,7 @@ module.exports = {
     // on success, return 200 [session.shopper]
     if(req.session.shopper){res.status(200).send([req.session.shopper])}
     else {
-      res.status(404).send({message: "No Shopper On Session"})
+      res.status(401).send({message: "No Shopper On Session"})
     }
   } ,
   logout(req,res){
@@ -71,5 +71,29 @@ module.exports = {
     req.session.destroy(() => {
       res.redirect('/')
     })
+  },
+
+  async fireBase(req,res){
+    const { uid,  } = req.body
+    console.log( 'top', uid)
+    let db = req.app.get('db')
+    let userArr = await db.query(`SELECT * FROM shopper WHERE uid = '${uid}'`)
+    console.log('mid', userArr)
+    let id;
+    if(!userArr.length){
+      let regArr = await db.query(`INSERT INTO shopper (uid) VALUES ('${uid}') RETURNING *`)
+      console.log('bottom', regArr[0])
+      let listArr = await db.create_list({name: 'Favorite Items', userId: id})
+      let default_list = listArr[0].id
+      req.session.shopper = regArr[0]
+      return res.status(200).send({ message: 'shopper exists'})
+    } else {
+      console.log('very bottom', userArr[0])
+      id = userArr[0].id
+      req.session.shopper = userArr[0]
+      console.log(req.session.shopper)
+      return res.status(200).send({ message: 'logged in' });
+    }
+    
   }
 }
