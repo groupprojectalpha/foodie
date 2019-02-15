@@ -11,7 +11,7 @@ class Login extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
+            email: '',
             password: '',
             signedIn: false
         }
@@ -40,7 +40,7 @@ class Login extends Component{
       handleUsername = ({ target: { value } }) => {
         this.setState({
             ...this.state,
-            username: value
+            email: value
         })
     }
 
@@ -62,19 +62,17 @@ class Login extends Component{
     // }
 
     async login() {
-        const { username, password } = this.state
-        const res = await axios.post('/login', { username: username, password: password })
-
-        if (res.data.loggedIn) {
-            this.props.updateUsername(res.data.user.username)
-           
-            this.props.history.push('/dashboard')
-            console.log(res.data.message)
-            console.log(res.data.user)
+        const { email, password } = this.state
+        const res = await axios.post('/auth/login', { email: email, password: password })
+        console.log(res.data)
+        if (res.data.user) {
+            this.props.history.push('/dashboard')        
         } else { alert(res.data.message) }
     }
 
-    componentDidMount = () => {
+    componentDidMount = async() => {
+       
+        firebase.auth().signOut()
         firebase.auth().onAuthStateChanged(user => {
             this.setState({ signedIn: !!user})
             console.log('user', user)
@@ -89,7 +87,9 @@ class Login extends Component{
     render(){
 
         console.log(this.state)
-        
+       if (this.state.signedIn){
+        this.props.history.push('/dashboard')     
+       }
 
         return(
             <>
@@ -111,4 +111,4 @@ class Login extends Component{
     }
 }
 
-export default Login
+export default withRouter(Login)

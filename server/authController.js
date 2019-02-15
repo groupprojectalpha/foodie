@@ -2,17 +2,23 @@ let bcrypt = require('bcryptjs')
 let lCtrl = require('./listController')
 
 module.exports = {
+
   async login(req, res){
+    const {email, password} = req.body
     let db = req.app.get('db')
-    let user = await db.check_email(req.body)
-    // console.log(user[0])
-    if(user.length === 0){return res.status(401).send({message: "Incorrect Email or Password!"})}
-    let isCorrect = bcrypt.compareSync(req.body.password , user[0].hash)
-    if(!isCorrect){return res.status(401).send({message: "Incorrect Email or Password!"})}
-    user[0].hash = true
-    req.session.shopper=user[0]
-    res.status(200).send([req.session.shopper])
+    let userArray = await db.check_email({email: email})
+    if(!userArray[0]) {
+      return res.status(200).send({ message: 'Email not found.' });
+    } else {
+      const pass = bcrypt.compareSync(password, userArray[0].hash)
+      if (pass) {
+        userArray[0].hash=true;
+        req.session.shopper=userArray[0]
+         return res.status(200).send({ message: 'logged in', user: req.session.shopper })
+      } else { return res.status(200).send({ message: 'Password does not match Username' }); }
+    }
   } , 
+
   async register(req, res){
     // Should take in req.body with name, email, password, state, phone properties
     let { name , email , password , state , phone } = req.body
