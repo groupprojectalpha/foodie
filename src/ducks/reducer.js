@@ -1,7 +1,7 @@
 const initialState = {
   lists: [],
   items: [],
-  user:[{ id: 1, name: 'Teddy', phone: 5555555555, state: 'UT', registered: true, budget: null, email: 'teddy@test.com' }]
+  user:[]
 }
 
 const GET_LISTS = 'GET_LISTS'
