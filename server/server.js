@@ -19,7 +19,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-// app.use(passThrough)
+app.use(passThrough)
 
 // TESTING ENDPOINTS //
 app.get('/test' , (req , res) => {

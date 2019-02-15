@@ -49,6 +49,7 @@ CREATE TABLE shopper (
 	budget INT DEFAULT NULL,
   email VARCHAR(150),
 	default_list INT,
+	uid BIGINT,
 );
 
 INSERT INTO shopper ( name , phone , hash , state)

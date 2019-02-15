@@ -60,11 +60,11 @@ class Dashboard extends React.Component {
 
      
         // if(!this.props.getUserData){
-        //     this.props.push('/add_items')
+        //     this.props.push('/add')
         // }
         //  const userList = Axios.get(`/user/ ${this.props.getUserData.id}/lists` )
         // if(!userList){
-        //     this.props.push('/add_items')
+        //     this.props.push('/add')
         // }
         // this.setState({lists:userList})
         // this.setState({user: this.props.getUserData})
@@ -157,6 +157,7 @@ class Dashboard extends React.Component {
             </div>
             <ShoppingList/>
             <hr/>
+            <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
             {/* <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  /> */}
                 <h2>budget: ${+this.state.budget/100}</h2>
                 your total is:  ${this.state.total}

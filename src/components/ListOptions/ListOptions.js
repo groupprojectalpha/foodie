@@ -10,7 +10,6 @@ class ListOptions extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            toggleLists:true,
             toggleItems:false,
 
         }
