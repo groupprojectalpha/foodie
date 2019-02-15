@@ -1,21 +1,26 @@
 import React from 'react';
 import ItemCard from '../ItemCard/ItemCard';
 import Axios from 'axios';
+import { getLists, getItems } from '../../ducks/reducer'
+import { connect } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { reorder , move , getListStyle , getItemStyle } from '../../lib/dragFuncModule'
+import { reorder, move, getListStyle, getItemStyle } from '../../lib/dragFuncModule'
 
-export default class AddItems extends React.Component {
+class AddItems extends React.Component {
     constructor() {
         super()
         this.state = {
             itemList: [],
             newList: [],
+            listName: '',
             zip: 0,
-            storeId: 0
+            storeId: 0,
+            showInput: false
         }
 
         this.onDraggEnd = this.onDraggEnd.bind(this)
     }
+
 
     getList = (id) => {
         return this.state[id]
@@ -60,13 +65,14 @@ export default class AddItems extends React.Component {
         }
     }
 
+    toggleInput = () => {
+        this.setState({ showInput: !this.state.showInput })
+    }
+
 
     findItem = async (value) => {
-        // makes api call for items
         let res = await Axios.get(`/search/${this.state.storeId}/${value}`)
         this.setState({ itemList: res.data })
-        // sets state with items
-        // sends data to redux, then to dashboard
     }
 
     findStore(e) {
@@ -85,16 +91,42 @@ export default class AddItems extends React.Component {
         }
     }
 
+    SaveList = async () => {
+        let res = await Axios.put(`/item/additems`, { items: this.state.newList, name: this.state.listName })
+        if (!res.data) {
+            console.log('item retrieval failure')
+        }
+        this.props.getItems(res.data)
+        this.props.history.push('/dashboard')
+    }
+
+    onKeyPressed=(e)=>{
+        if(e.keyCode === 13){
+            this.SaveList()
+            this.toggleInput()
+        }
+    }
+
 
 
     render() {
+        console.log(this.state)
         return (
             <>
                 this is AddItems
             <input placeholder={'Search'} onChange={(e) => this.findItem(e.target.value)} />
-                <button>Save Items</button>
-                <input placeholder={'List Name'} onChange={(e) => { this.setState({ newList: e.target.value }) }} />
-                <button onClick={() => { }} >Save List</button>
+                <button onClick={this.SaveList}>Save</button>
+
+                {
+                    this.state.showInput ?
+
+                        <input placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value }) }}
+                        onKeyDown={this.onKeyPressed} />
+                        : <button onClick={this.toggleInput} >Save as List</button>
+                }
+
+
+
                 <select onChange={(e) => this.findStore(e.target.value)}>
                     <option value='' >Please select store</option>
                     <option value='walmart' >Walmart</option>
@@ -110,7 +142,7 @@ export default class AddItems extends React.Component {
                                 {this.state.itemList.map((item, i) => (
                                     <Draggable key={item.code} draggableId={item.code} index={i}>
                                         {(provided, snapshot) => (
-                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                 <ItemCard item={item} />
                                             </div>
                                         )}
@@ -127,7 +159,7 @@ export default class AddItems extends React.Component {
                                 {this.state.newList.map((item, i) => (
                                     <Draggable key={item.code} draggableId={item.code} index={i} >
                                         {(provided, snapshot) => (
-                                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
+                                            <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                 <ItemCard item={item} />
                                             </div>
                                         )}
@@ -143,3 +175,6 @@ export default class AddItems extends React.Component {
         )
     }
 }
+
+const mapState = (reduxState) => reduxState
+export default connect(mapState, { getLists, getItems })(AddItems)
