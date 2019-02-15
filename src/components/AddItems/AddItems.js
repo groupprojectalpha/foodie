@@ -140,7 +140,7 @@ class AddItems extends React.Component {
                         {(provided, snapshot) => (
                             <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} >
                                 {this.state.itemList.map((item, i) => (
-                                    <Draggable key={item.code} draggableId={item.code} index={i}>
+                                    <Draggable key={item.code} draggableId={itemcode} index={i}>
                                         {(provided, snapshot) => (
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                 <ItemCard item={item} />
@@ -157,7 +157,7 @@ class AddItems extends React.Component {
                         {(provided, snapshot) => (
                             <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
                                 {this.state.newList.map((item, i) => (
-                                    <Draggable key={item.code} draggableId={item.code} index={i} >
+                                    <Draggable key={item.code} draggableId={itemcode} index={i} >
                                         {(provided, snapshot) => (
                                             <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
                                                 <ItemCard item={item} />
