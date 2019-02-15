@@ -51,7 +51,7 @@ module.exports = {
     // Expect back an array of objects matching the DB objects, but with the additional key 'store'
     // Compare the array with our DB
     let comparedItems = apiItems.map(async (item , i) => {
-      let retArr = await db.query(`SELECT * FROM item WHERE itemcode = '${+item.code}'`)
+      let retArr = await db.query(`SELECT * FROM item WHERE itemcode = '${+item.itemcode}'`)
       if(retArr[0]){return retArr[0]}
       else if(!retArr[0]){return item}
       else {return;}
@@ -75,7 +75,7 @@ module.exports = {
 
     // THIS SECTION INSERTS NEW ITEMS INTO DB, AND RETURNS AN ARRAY OF DB ITEMS //
     let processedItems = await Promise.all(toAdd.map( async (item) => {
-      let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price, image) VALUES ('${item.name}', '${item.type}', ${item.brand}, '${item.code}', ${item.price * 100}, '${item.image}') RETURNING *`)
+      let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price, image) VALUES ('${item.name}', '${item.type}', ${item.brand}, '${item.itemcode}', ${item.price * 100}, '${item.image}') RETURNING *`)
       .catch((err) => console.log(err))
       db.query(`INSERT INTO store_item (store , item) VALUES (${item.store} , ${insertedItemArr[0].id})`)
       return insertedItemArr[0]

@@ -14,11 +14,11 @@ module.exports = {
       let name = item.basic.name
       let type = null;
       let brand = null;
-      let code = item.USItemId;
+      let itemcode = item.USItemId;
       let price = item.store.price.list;
       let store = id
       let image = item.basic.image.thumbnail
-      return {name , type , brand , code , price , store , image}
+      return {name , type , brand , itemcode , price , store , image}
     })
     // return the formatted array
     return items
