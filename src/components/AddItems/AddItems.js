@@ -1,4 +1,5 @@
 import React from 'react';
+import ItemCard from '../ItemCard/ItemCard';
 import Axios from 'axios';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { reorder , move , getListStyle , getItemStyle } from '../../lib/dragFuncModule'
@@ -110,7 +111,7 @@ export default class AddItems extends React.Component {
                                     <Draggable key={item.code} draggableId={item.code} index={i}>
                                         {(provided, snapshot) => (
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
-                                                {item.name}
+                                                <ItemCard item={item} />
                                             </div>
                                         )}
                                     </Draggable>
@@ -127,7 +128,7 @@ export default class AddItems extends React.Component {
                                     <Draggable key={item.code} draggableId={item.code} index={i} >
                                         {(provided, snapshot) => (
                                             <div ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}>
-                                                {item.name}
+                                                <ItemCard item={item} />
                                             </div>
                                         )}
 

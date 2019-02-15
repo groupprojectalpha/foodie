@@ -63,11 +63,11 @@ class Dashboard extends React.Component {
         })
 
         // if(!this.props.getUserData){
-        //     this.props.push('/add_items')
+        //     this.props.push('/add')
         // }
         //  const userList = Axios.get(`/user/ ${this.props.getUserData.id}/lists` )
         // if(!userList){
-        //     this.props.push('/add_items')
+        //     this.props.push('/add')
         // }
         // this.setState({lists:userList})
         // this.setState({user: this.props.getUserData})

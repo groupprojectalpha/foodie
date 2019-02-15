@@ -11,7 +11,7 @@ import ShoppingList from './components/ShoppingList/ShoppingList'
 export default (
     <Switch>
     <Route exact path='/' component={LoginOptions} />
-    <Route path='/add_items' component={AddItems} />
+    <Route path='/add' component={AddItems} />
     <Route path='/login' component={Login} />
     <Route path='/dashboard' component={Dashboard} />
     <Route path='/register' component={Register} />
