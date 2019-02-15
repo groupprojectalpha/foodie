@@ -7,7 +7,7 @@ import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
 import { getUserData } from '../../ducks/reducer'
 import axios from 'axios'
-import ButtonAppBar from '../Appbar/AppBar'
+import SideDrawer from '../Appbar/SideDrawer'
 
 class Dashboard extends React.Component {
     constructor() {
@@ -31,7 +31,8 @@ class Dashboard extends React.Component {
             budget: 0,
             overBudget: 0,
             remaining: 0,
-            name: ''
+            name: '',
+            user: {}
             // prices: [],
         }
     }
@@ -45,7 +46,7 @@ class Dashboard extends React.Component {
     // sets user info to state
 
 
-    async componentDidMount() {
+        componentDidMount = async() => {
 
 
         await axios.get(`/auth/check`)
@@ -53,6 +54,7 @@ class Dashboard extends React.Component {
           console.log(res.data[0])
           this.setState({
            name: res.data[0].name
+
           })
         })
 
@@ -146,14 +148,13 @@ class Dashboard extends React.Component {
         })
         return (
             <>
-            <ButtonAppBar/>
+            <SideDrawer/>
             <Link to='/' style={{ textDecoration: 'none' }}>
              <button onClick={() => firebase.auth().signOut()}>Sign Out!</button>
             </Link>
             welcome {this.state.name}
             {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
            
-                this is Dashboard
             <div>
                 {displayShopper}
             </div>

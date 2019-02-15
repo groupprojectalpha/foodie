@@ -70,7 +70,9 @@ class Login extends Component{
         } else { alert(res.data.message) }
     }
 
-    componentDidMount = () => {
+    componentDidMount = async() => {
+       
+        firebase.auth().signOut()
         firebase.auth().onAuthStateChanged(user => {
             this.setState({ signedIn: !!user})
             console.log('user', user)

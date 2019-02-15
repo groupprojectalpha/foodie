@@ -4,6 +4,8 @@ import Alert from '../Login/Alert'
 import './LoginOptions.css'
 import { useTransition, animated } from 'react-spring'
 import logo from '../Logo.svg'
+import axios from 'axios'
+
 
 
 export default class LoginOptions extends React.Component{
@@ -12,6 +14,10 @@ export default class LoginOptions extends React.Component{
         this.state={
 
         }
+    }
+    componentDidMount = async() => {
+        console.log('delete session')
+        await axios.delete('/auth/logout')
     }
    
    

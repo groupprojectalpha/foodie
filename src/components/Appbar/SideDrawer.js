@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Button from '@material-ui/core/Button';
@@ -10,7 +11,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-
+import AppBar from './AppBar'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import LogoutIcon from '@material-ui/icons/ExitToApp'
+import Dashboard from '@material-ui/icons/Dashboard'
+import ShoppingCart from '@material-ui/icons/ShoppingCart'
+import SettingsIcon from '@material-ui/icons/Settings'
 
 const styles = {
   list: {
@@ -41,21 +47,54 @@ class SwipeableTemporaryDrawer extends React.Component {
     const sideList = (
       <div className={classes.list}>
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            
+          {['Profile'].map((text, index) => (
+              <Link to='/profile' style={{ textDecoration: 'none' }}>
+            <ListItem button key={text} >
+              <ListItemIcon>{ <AccountCircle />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
-          ))}
+            </Link>
+            ))}
+
+            {['Dashboard'].map((text, index) => (
+              <Link to='/dashboard' style={{ textDecoration: 'none' }}>
+            <ListItem button key={text} >
+              <ListItemIcon>{ <Dashboard />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+            </Link>
+            ))}
+
+            {['My Lists'].map((text, index) => (
+              <Link to='/shopping_list' style={{ textDecoration: 'none' }}>
+            <ListItem button key={text} >
+              <ListItemIcon>{ <ShoppingCart />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+            </Link>
+            ))}
+          
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+         {['Settings'].map((text, index) => (
+              <Link to='/register' style={{ textDecoration: 'none' }}>
+            <ListItem button key={text} >
+              <ListItemIcon>{ <SettingsIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
-          ))}
+            </Link>
+            ))}
+             
+             {['Logout'].map((text, index) => (
+              <Link to='/' style={{ textDecoration: 'none' }}>
+            <ListItem button key={text}>
+              <ListItemIcon>{ <LogoutIcon />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+            </Link>
+            ))}
         </List>
       </div>
     );
@@ -84,10 +123,8 @@ class SwipeableTemporaryDrawer extends React.Component {
 
     return (
       <div>
-        <Button onClick={this.toggleDrawer('left', true)}>Open Left</Button>
-        <Button onClick={this.toggleDrawer('right', true)}>Open Right</Button>
-        <Button onClick={this.toggleDrawer('top', true)}>Open Top</Button>
-        <Button onClick={this.toggleDrawer('bottom', true)}>Open Bottom</Button>
+          <AppBar toggleDrawer={this.toggleDrawer('left', true)}></AppBar>
+      
         <SwipeableDrawer
           open={this.state.left}
           onClose={this.toggleDrawer('left', false)}
