@@ -74,8 +74,8 @@ module.exports = {
   },
 
   async fireBase(req,res){
-    const { uid,  } = req.body
-    console.log( 'top', uid)
+    const { uid, displayName, photoURL, email,  } = req.body
+    console.log( 'top', req.body)
     let db = req.app.get('db')
     let userArr = await db.query(`SELECT * FROM shopper WHERE uid = '${uid}'`)
     console.log('mid', userArr)
