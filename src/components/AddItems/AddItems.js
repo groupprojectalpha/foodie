@@ -100,6 +100,8 @@ class AddItems extends React.Component {
         this.props.history.push('/dashboard')
     }
 
+    //change onkeypress so it doesn't save, make it just display list name
+
     onKeyPressed=(e)=>{
         if(e.keyCode === 13){
             this.SaveList()

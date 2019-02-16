@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import ShoppingList from '../ShoppingList/ShoppingList'
 import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
-import { getUserData } from '../../ducks/reducer'
+import { getUserData, getItems, getLists } from '../../ducks/reducer'
 import axios from 'axios'
 import SideDrawer from '../Appbar/SideDrawer'
 
@@ -13,20 +13,10 @@ class Dashboard extends React.Component {
     constructor() {
         super()
         this.state = {
-            lists: [
-                { id: 1, shopper: 1, name: 'Walmart' },
-                { id: 1, shopper: 1, name: 'Smiths' },
-                { id: 1, shopper: 1, name: 'Aldi' }
-            ],
-            itemCards: [
-                { item: 'milk', price: 300 },
-                { item: 'bread', price: 244 },
-                { item: 'carrots', price: 161 },
-                { item: 'frog legs', price: 1430 }
-            ],
-            shopper: [
-                { id: 1, name: 'Teddy', phone: 5555555555, state: 'UT', registered: true, budget: null, email: 'teddy@test.com' }
-            ],
+            lists: [],
+            itemCards: [],
+            cart:[{item:'milk', price:344}],
+            shopper: [],
             total: 0,
             budget: 0,
             overBudget: 0,
@@ -47,8 +37,6 @@ class Dashboard extends React.Component {
 
 
         componentDidMount = async() => {
-
-
         await axios.get(`/auth/check`)
         .then(res => {
           console.log(res.data[0])
@@ -108,14 +96,6 @@ class Dashboard extends React.Component {
     // alerts success
     // }
 
-
-    // sets value (the shoppers budget) to state
-    // loops over the itemCard array
-    // calculates currentTotal price
-    // subtracts currentRemaining from budget on state
-    // adds cost exceeded to currentOverBudget on state
-    // alerts user when budget has been exceeded
-    // currentOverBudget = this.state.budget 
     handleBudget = async (arr) => {
         let currentTotal = 0;
         let currentRemaining = 0;
@@ -161,7 +141,6 @@ class Dashboard extends React.Component {
             <ShoppingList/>
             <hr/>
             <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
-            {/* <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  /> */}
                 <h2>budget: ${+this.state.budget/100}</h2>
                 your total is:  ${this.state.total}
                 <br />
@@ -169,9 +148,9 @@ class Dashboard extends React.Component {
            <br />
                 you are ${this.state.overBudget} over your budget
            <br />
-                <button onClick={() => this.handleBudget(this.state.itemCards)} >calc</button>
+                <button onClick={() => this.handleBudget(this.state.cart)} >calc</button>
                 <hr/>
-                <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
+                <ListOptions listsArray={this.state.lists} cart={this.state.cart} />
                 
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
@@ -180,4 +159,4 @@ class Dashboard extends React.Component {
 }
 
 const mapState = (reduxState) => reduxState
-export default connect(mapState, { getUserData })(Dashboard)
+export default connect(mapState, { getUserData, getItems, getLists })(Dashboard)
