@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { type } from 'os';
 import { withRouter } from 'react-router-dom';
+import SideDrawer from '../Appbar/SideDrawer'
 
  class Register extends React.Component{
     constructor(props){
@@ -22,18 +23,20 @@ import { withRouter } from 'react-router-dom';
 
     async createNewUser()  {
         const { username, password, firstName, lastName, email, phoneNumber, state } =this.state
-        let res = await axios.post('/auth/register', {name:username, password:password, email:email, phone:phoneNumber, state:state})
-        console.log(res.message)
-      if(!res.data.status === 200){
-          alert(res.data.message)
+        let res = await axios.post('/auth/register', {name:username, password:password, email:email, phone:phoneNumber, state:state}).catch(()=>{
+            alert('Email already in use')
+        })
+
+        if(res.data){
+            this.props.history.push('/add')
         }
-        this.props.history.push('/add')
     }
 
 
     render(){
         return(
             <>
+             <SideDrawer/>
             <h1>Register Below</h1>
             <div><p>Username</p><input onChange={(e)=>this.setState({username:e.target.value})} type='text' maxLength='20' /></div>
             <div><p>Email</p><input onChange={(e)=>this.setState({email:e.target.value})} type='text' max='60' /></div>

@@ -129,9 +129,6 @@ class Dashboard extends React.Component {
         return (
             <>
             <SideDrawer/>
-            <Link to='/' style={{ textDecoration: 'none' }}>
-             <button onClick={() => firebase.auth().signOut()}>Sign Out!</button>
-            </Link>
             welcome {this.state.name}
             {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
            
