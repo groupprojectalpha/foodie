@@ -9,7 +9,8 @@ const styles = {
     margin: 10,
   },
   bigAvatar: {
-    margin: 50,
+    marginTop: '50px',
+    marginBottom: '10px',
     width: 60,
     height: 60,
     border: 'solid white'

@@ -74,7 +74,7 @@ module.exports = {
   },
 
   async fireBase(req,res){
-    const { uid, displayName, photoURL, email } = req.body
+    const { uid, displayName, photoURL, email, providerId } = req.body
     console.log( 'top', req.body)
     let db = req.app.get('db')
     let userArr = await db.query(`SELECT * FROM shopper WHERE uid = '${uid}'`)
@@ -90,7 +90,7 @@ module.exports = {
     } else {
       console.log('very bottom', userArr[0])
       id = userArr[0].id
-      req.session.shopper = { uid: uid, displayName: displayName, photoURL: photoURL, email: email }
+      req.session.shopper = { uid: uid, displayName: displayName, photoURL: photoURL, email: email, providerId: providerId }
       console.log(req.session.shopper)
       return res.status(200).send({ message: 'logged in' });
     }

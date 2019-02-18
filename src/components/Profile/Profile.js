@@ -6,6 +6,7 @@ import axios from 'axios'
 import firebase from 'firebase'
 import Circle from './Circle'
 import './Profile.css'
+import { isNull } from 'util';
 
 class Profile extends React.Component{
     constructor(props){
@@ -14,7 +15,8 @@ class Profile extends React.Component{
             shopper:[],
             name: '',
             profilePic: '',
-            email: ''
+            email: '',
+            providerId: ''
         }
     }
 
@@ -26,7 +28,8 @@ class Profile extends React.Component{
           this.setState({
            name: res.data[0].displayName,
            profilePic: res.data[0].photoURL,
-           email: res.data[0].email
+           email: res.data[0].email,
+           providerId: res.data[0].providerId
           })
         })
 
@@ -37,7 +40,7 @@ class Profile extends React.Component{
  
 
     render(){
-       
+       const { providerId } = this.state
         return(
             <div className='profile'>
             <SideDrawer/>
@@ -47,6 +50,25 @@ class Profile extends React.Component{
                 
                 <div className='top'>
                 <Circle id='circle' image={this.state.profilePic}/>
+                
+               { providerId === 'facebook.com' ? 
+               <span className='icons'>
+               <i class="fab fa-facebook-f"></i>
+               </span>
+               : 
+               providerId === 'twitter.com' ? 
+               <span className='icons'>
+               <i class="fab fa-twitter"></i>
+               </span>
+               :
+               providerId === 'google.com' ?
+               <span className='icons'>
+               <i class="fab fa-google"></i>
+               </span>
+                :
+                null
+            }
+
                 <h5 id='name'>{this.state.name}</h5>
                 
                 </div>
