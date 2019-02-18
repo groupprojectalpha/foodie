@@ -1,6 +1,4 @@
 import React from 'react';
-import firebase from 'firebase';
-import { Link } from 'react-router-dom';
 import ShoppingList from '../ShoppingList/ShoppingList'
 import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
@@ -15,28 +13,11 @@ class Dashboard extends React.Component {
     constructor() {
         super()
         this.state = {
-<<<<<<< HEAD
-            lists: [
-                { id: 1, shopper: 1, name: 'Walmart' },
-                { id: 1, shopper: 1, name: 'Smiths' },
-                { id: 1, shopper: 1, name: 'Aldi' }
-            ],
-            itemCards: [
-                { name: 'milk', price: 300 , itemcode: 1 , image: "None" },
-                { name: 'bread', price: 244 , itemcode: 2 , image: "None" },
-                { name: 'carrots', price: 161 , itemcode: 3 , image: "None" },
-                { name: 'frog legs', price: 1430 , itemcode: 4 , image: "None" }
-            ],
-            shopper: [
-                { id: 1, name: 'Teddy', phone: 5555555555, state: 'UT', registered: true, budget: null, email: 'teddy@test.com' }
-            ],
-            shoppingList: [],
-=======
             lists: [],
             itemCards: [],
+            shoppingList: [],
             cart:[{item:'milk', price:344}],
             shopper: [],
->>>>>>> master
             total: 0,
             budget: 0,
             overBudget: 0,
@@ -111,6 +92,9 @@ class Dashboard extends React.Component {
                     break;
                 case "listItems":
                     list = "listItems"
+                    break;
+                case "showLists":
+                    list = "lists"
                     break;
                 default:
                     console.log("dragItem: Unable to determine list. Check switch and droppableId's.")
@@ -191,16 +175,12 @@ class Dashboard extends React.Component {
            <br />
                 <button onClick={() => this.handleBudget(this.state.cart)} >calc</button>
                 <hr/>
-<<<<<<< HEAD
                     <DragDropContext onDragEnd={this.dragItem}>
                 <div className="lists-block"> 
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
                         <ShoppingList items={this.state.shoppingList} />
                 </div>
                     </DragDropContext>
-=======
-                <ListOptions listsArray={this.state.lists} cart={this.state.cart} />
->>>>>>> master
                 
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
