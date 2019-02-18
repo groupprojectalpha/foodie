@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ShoppingList from '../ShoppingList/ShoppingList'
 import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
-import { getUserData } from '../../ducks/reducer'
+import { getUserData, getItems, getLists } from '../../ducks/reducer'
 import axios from 'axios'
 import SideDrawer from '../Appbar/SideDrawer'
 import { DragDropContext } from "react-beautiful-dnd"
@@ -15,6 +15,7 @@ class Dashboard extends React.Component {
     constructor() {
         super()
         this.state = {
+<<<<<<< HEAD
             lists: [
                 { id: 1, shopper: 1, name: 'Walmart' },
                 { id: 1, shopper: 1, name: 'Smiths' },
@@ -30,6 +31,12 @@ class Dashboard extends React.Component {
                 { id: 1, name: 'Teddy', phone: 5555555555, state: 'UT', registered: true, budget: null, email: 'teddy@test.com' }
             ],
             shoppingList: [],
+=======
+            lists: [],
+            itemCards: [],
+            cart:[{item:'milk', price:344}],
+            shopper: [],
+>>>>>>> master
             total: 0,
             budget: 0,
             overBudget: 0,
@@ -50,21 +57,16 @@ class Dashboard extends React.Component {
 
 
         componentDidMount = async() => {
-
-
         await axios.get(`/auth/check`)
         .then(res => {
-          console.log(res.data[0])
+          console.log('current user', res.data)
           this.setState({
            name: res.data[0].name
 
           })
         })
 
-        firebase.auth().onAuthStateChanged(user => {
-            console.log(user)
-        })
-
+     
         // if(!this.props.getUserData){
         //     this.props.push('/add')
         // }
@@ -139,14 +141,6 @@ class Dashboard extends React.Component {
     // alerts success
     // }
 
-
-    // sets value (the shoppers budget) to state
-    // loops over the itemCard array
-    // calculates currentTotal price
-    // subtracts currentRemaining from budget on state
-    // adds cost exceeded to currentOverBudget on state
-    // alerts user when budget has been exceeded
-    // currentOverBudget = this.state.budget 
     handleBudget = async (arr) => {
         let currentTotal = 0;
         let currentRemaining = 0;
@@ -180,9 +174,6 @@ class Dashboard extends React.Component {
         return (
             <>
             <SideDrawer/>
-            <Link to='/' style={{ textDecoration: 'none' }}>
-             <button onClick={() => firebase.auth().signOut()}>Sign Out!</button>
-            </Link>
             welcome {this.state.name}
             {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
            
@@ -191,7 +182,6 @@ class Dashboard extends React.Component {
             </div>
             <hr/>
             <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
-            {/* <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  /> */}
                 <h2>budget: ${+this.state.budget/100}</h2>
                 your total is:  ${this.state.total}
                 <br />
@@ -199,14 +189,18 @@ class Dashboard extends React.Component {
            <br />
                 you are ${this.state.overBudget} over your budget
            <br />
-                <button onClick={() => this.handleBudget(this.state.itemCards)} >calc</button>
+                <button onClick={() => this.handleBudget(this.state.cart)} >calc</button>
                 <hr/>
+<<<<<<< HEAD
                     <DragDropContext onDragEnd={this.dragItem}>
                 <div className="lists-block"> 
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
                         <ShoppingList items={this.state.shoppingList} />
                 </div>
                     </DragDropContext>
+=======
+                <ListOptions listsArray={this.state.lists} cart={this.state.cart} />
+>>>>>>> master
                 
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
@@ -215,4 +209,4 @@ class Dashboard extends React.Component {
 }
 
 const mapState = (reduxState) => reduxState
-export default connect(mapState, { getUserData })(Dashboard)
+export default connect(mapState, { getUserData, getItems, getLists })(Dashboard)

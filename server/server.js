@@ -19,7 +19,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-app.use(passThrough)
+// app.use(passThrough)
 
 // TESTING ENDPOINTS //
 app.get('/test' , (req , res) => {
@@ -62,3 +62,6 @@ massive(CONNECTION_STRING).then(dbInstance => {
     app.set('db', dbInstance);
     app.listen(SERVER_PORT, ()=>{console.log(`Battle Cruiser Operational On Port ${SERVER_PORT}`)})
 })
+
+// FIREBASE ENDPOINT //
+app.post('/auth/firebase', aCtrl.fireBase)
