@@ -35,6 +35,11 @@ class ListOptions extends React.Component {
         // passes items to ShowItems as props
     }
 
+    clickList = (id) => {
+        this.toggle()
+        this.props.clickList(id)
+    }
+
 
     render() {
         return (
@@ -42,8 +47,8 @@ class ListOptions extends React.Component {
             <button onClick={this.toggle}>toggle</button>
             {
                 this.state.toggleItems ?
-                <ShowItems itemCards={this.props.itemCards}  />
-                : <ShowLists lists={this.props.listsArray}  />
+                <ShowItems items={this.props.itemCards}  />
+                : <ShowLists lists={this.props.listsArray} clickList={this.clickList} />
             }
 
                 
