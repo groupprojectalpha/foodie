@@ -42,7 +42,7 @@ class ListOptions extends React.Component {
             <button onClick={this.toggle}>toggle</button>
             {
                 this.state.toggleItems ?
-                <ShowItems itemCards={this.props.itemCards}  />
+                <ShowItems items={this.props.itemCards}  />
                 : <ShowLists lists={this.props.listsArray}  />
             }
 

@@ -21,10 +21,10 @@ class Dashboard extends React.Component {
                 { id: 1, shopper: 1, name: 'Aldi' }
             ],
             itemCards: [
-                { item: 'milk', price: 300 },
-                { item: 'bread', price: 244 },
-                { item: 'carrots', price: 161 },
-                { item: 'frog legs', price: 1430 }
+                { name: 'milk', price: 300 , itemcode: 1 , image: "None" },
+                { name: 'bread', price: 244 , itemcode: 2 , image: "None" },
+                { name: 'carrots', price: 161 , itemcode: 3 , image: "None" },
+                { name: 'frog legs', price: 1430 , itemcode: 4 , image: "None" }
             ],
             shopper: [
                 { id: 1, name: 'Teddy', phone: 5555555555, state: 'UT', registered: true, budget: null, email: 'teddy@test.com' }
@@ -104,8 +104,8 @@ class Dashboard extends React.Component {
                 case "shoppingList":
                     list = "shoppingList"
                     break;
-                case "showItems":
-                    list = "showItems"
+                case "itemCards":
+                    list = "itemCards"
                     break;
                 case "listItems":
                     list = "listItems"
