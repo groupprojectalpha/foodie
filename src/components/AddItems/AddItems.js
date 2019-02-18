@@ -5,6 +5,7 @@ import { getLists, getItems } from '../../ducks/reducer'
 import { connect } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { reorder, move, getListStyle, getItemStyle } from '../../lib/dragFuncModule'
+import SideDrawer from '../Appbar/SideDrawer'
 
 class AddItems extends React.Component {
     constructor() {
@@ -100,6 +101,8 @@ class AddItems extends React.Component {
         this.props.history.push('/dashboard')
     }
 
+    //change onkeypress so it doesn't save, make it just display list name
+
     onKeyPressed=(e)=>{
         if(e.keyCode === 13){
             this.SaveList()
@@ -113,6 +116,7 @@ class AddItems extends React.Component {
         console.log(this.state)
         return (
             <>
+            <SideDrawer/>
                 this is AddItems
             <input placeholder={'Search'} onChange={(e) => this.findItem(e.target.value)} />
                 <button onClick={this.SaveList}>Save</button>
