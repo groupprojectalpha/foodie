@@ -7,7 +7,7 @@ import axios from 'axios'
 import SideDrawer from '../Appbar/SideDrawer'
 import { DragDropContext } from "react-beautiful-dnd"
 import './Dashboard.css'
-import { reorder , move } from "../../lib/dragFuncModule"
+import { reorder, move } from "../../lib/dragFuncModule"
 
 class Dashboard extends React.Component {
     constructor() {
@@ -16,7 +16,6 @@ class Dashboard extends React.Component {
             lists: [],
             itemCards: [],
             shoppingList: [],
-            cart:[{item:'milk', price:344}],
             shopper: [],
             total: 0,
             budget: 0,
@@ -37,17 +36,22 @@ class Dashboard extends React.Component {
     // sets user info to state
 
 
-        componentDidMount = async() => {
-        await axios.get(`/auth/check`)
-        .then(res => {
-          console.log('current user', res.data)
-          this.setState({
-           name: res.data[0].name
+    componentDidMount = () => {
+        axios.get(`/auth/check`)
+            .then(res => {
+                console.log('current user', res.data)
+                this.setState({
+                    name: res.data[0].name
+                })
+                axios.get('/user/lists')
+                .then(res => {
+                    this.setState({
+                        lists: res.data
+                    })
+                })
+            })
 
-          })
-        })
 
-     
         // if(!this.props.getUserData){
         //     this.props.push('/add')
         // }
@@ -59,9 +63,12 @@ class Dashboard extends React.Component {
         // this.setState({user: this.props.getUserData})
     }
 
-    clickList = () => {
+    clickList = (id) => {
         // sends get request for items in lists
+        axios.get(`/list/${id}/items`)
+        .catch(er => console.log(er))
         // sets items to itemCards on state
+        .then((res) => this.setState({itemCards: res.data}))
         // sets prices from server response to prices(pin)
         // sends items to ShowItems as props
     }
@@ -76,14 +83,14 @@ class Dashboard extends React.Component {
     }
 
     dragItem = (result) => {
-        const { source , destination } = result
-        if (!destination){
+        const { source, destination } = result
+        if (!destination) {
             return;
         }
 
-        if(source.droppableId === destination.droppableId){
+        if (source.droppableId === destination.droppableId) {
             let list = null;
-            switch(source.droppableId){
+            switch (source.droppableId) {
                 case "shoppingList":
                     list = "shoppingList"
                     break;
@@ -101,11 +108,20 @@ class Dashboard extends React.Component {
                     return;
             }
             const reorderedList = reorder(
-                this.state[list] ,
+                this.state[list],
                 source.index,
                 destination.index
             )
-            this.setState({[list]: reorderedList})
+            this.setState({ [list]: reorderedList })
+        } else {
+            if(source.droppableId === "showLists"){
+                axios.get(`/list/${result.draggableId}/items`)
+                .then((res) => {
+                    this.setState({
+                        shoppingList: res.data
+                    })
+                })
+            }
         }
         // listener for new itemCard in ShoppingList
         // sends itemCard to ShoppingList as prop
@@ -131,16 +147,16 @@ class Dashboard extends React.Component {
         let currentOverBudget = 0;
         for (let i = 0; i < arr.length; i++) {
             currentTotal += arr[i].price
-            if(currentTotal < this.state.budget){ currentRemaining = this.state.budget - currentTotal}else{ currentRemaining=0}
-            if( currentTotal > this.state.budget){currentOverBudget = currentTotal - this.state.budget}else{ currentOverBudget=0} 
-            await this.setState({ total: currentTotal/100, overBudget: currentOverBudget/100, remaining: currentRemaining/100 })
+            if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
+            if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
+            await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
         }
 
         // media query for card background color to change yellow on 85% of budget used
         // media query for background color change to red when budget has been exceeded
         if (this.state.total > this.state.budget) {
             alert('You are over budget!')
-    }
+        }
     }
 
 
@@ -148,41 +164,41 @@ class Dashboard extends React.Component {
 
 
     render() {
-        let displayShopper = this.state.shopper.map((el,i)=>{
+        let displayShopper = this.state.shopper.map((el, i) => {
             return <h3 key={i} >
-               <p>{el.name}</p> 
-               <p>{el.state}</p>
-            
+                <p>{el.name}</p>
+                <p>{el.state}</p>
+
             </h3>
         })
         return (
             <>
-            <SideDrawer/>
-            welcome {this.state.name}
-            {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
-           
-            <div>
-                {displayShopper}
-            </div>
-            <hr/>
-            <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
-                <h2>budget: ${+this.state.budget/100}</h2>
+                <SideDrawer />
+                welcome {this.state.name}
+                {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
+
+                <div>
+                    {displayShopper}
+                </div>
+                <hr />
+                <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
+                <h2>budget: ${+this.state.budget / 100}</h2>
                 your total is:  ${this.state.total}
                 <br />
                 you have ${this.state.remaining} left
            <br />
                 you are ${this.state.overBudget} over your budget
            <br />
-                <button onClick={() => this.handleBudget(this.state.cart)} >calc</button>
-                <hr/>
-                    <DragDropContext onDragEnd={this.dragItem}>
-                <div className="lists-block"> 
-                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
+                <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
+                <hr />
+                <DragDropContext onDragEnd={this.dragItem}>
+                    <div className="lists-block">
+                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                         <ShoppingList items={this.state.shoppingList} />
-                </div>
-                    </DragDropContext>
-                
-            {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
+                    </div>
+                </DragDropContext>
+
+                {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
         )
     }

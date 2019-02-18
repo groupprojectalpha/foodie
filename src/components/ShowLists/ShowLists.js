@@ -22,6 +22,7 @@ export default function ShowList(props){
                                     style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}
                                     {...provided.dragHandleProps}
                                     {...provided.draggableProps}
+                                    onClick={() => props.clickList(list.id)}
                                 >
                                     {list.name}
                                 </div>

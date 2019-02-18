@@ -19,7 +19,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-// app.use(passThrough)
+app.use(passThrough)
 
 // TESTING ENDPOINTS //
 app.get('/test' , (req , res) => {
@@ -39,7 +39,7 @@ app.get('/auth/check' , aCtrl.check)
 app.delete('/auth/logout' , aCtrl.logout)
 
 // USER DATA ENDPOINTS //
-app.get('/user/:id/lists' , uCtrl.getLists)
+app.get('/user/lists' , uCtrl.getLists)
 app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 
 // ITEM DATA ENDPOINTS //
@@ -51,6 +51,7 @@ app.get('/search/:store/:term' , iCtrl.newItems)
 
 // LIST DATA ENDPOINTS //
 app.get('/list/:id', lCtrl.findList)
+app.get('/list/:id/items' , lCtrl.items)
 app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
 
 // NEW DB OBJECT ENDPOINTS //
