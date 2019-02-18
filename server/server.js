@@ -52,6 +52,7 @@ app.get('/search/:store/:term' , iCtrl.newItems)
 // LIST DATA ENDPOINTS //
 app.get('/list/:id', lCtrl.findList)
 app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
+app.delete('/list/clear', lCtrl.clear)
 
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 

@@ -28,6 +28,16 @@ module.exports ={
     // check array to ensure it has been removed
     // return 201 and list item array
 
+  },
+
+  async clear(req,res){
+    const { id } =req.session.shopper
+    const db = req.app.get('db');
+    let res = await db.clear_default({id}).catch((error)=>{
+      res.sendStatus(500)
+      console.log(error)
+    })
+    res.sendStatus(201)
   }
 
 }
