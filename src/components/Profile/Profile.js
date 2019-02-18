@@ -4,13 +4,17 @@ import { connect } from 'react-redux';
 import SideDrawer from '../Appbar/SideDrawer'
 import axios from 'axios'
 import firebase from 'firebase'
+import Circle from './Circle'
+import './Profile.css'
 
 class Profile extends React.Component{
     constructor(props){
         super(props)
         this.state={
             shopper:[],
-            name: ''
+            name: '',
+            profilePic: '',
+            email: ''
         }
     }
 
@@ -20,7 +24,9 @@ class Profile extends React.Component{
         .then(res => {
           console.log(res.data[0])
           this.setState({
-           name: res.data[0].name
+           name: res.data[0].displayName,
+           profilePic: res.data[0].photoURL,
+           email: res.data[0].email
           })
         })
 
@@ -33,12 +39,23 @@ class Profile extends React.Component{
     render(){
        
         return(
-            <>
+            <div className='profile'>
             <SideDrawer/>
-            this is 
-            {this.state.name}'s
-            profile
-            </>
+          
+    
+            <div className='card'>
+                
+                <div className='top'>
+                <Circle id='circle' image={this.state.profilePic}/>
+                <h5 id='name'>{this.state.name}</h5>
+                
+                </div>
+                
+                <div id='bottom'>
+
+                </div>
+            </div>
+            </div>
         )
     }
 }
