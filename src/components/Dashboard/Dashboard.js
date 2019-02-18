@@ -39,17 +39,14 @@ class Dashboard extends React.Component {
         componentDidMount = async() => {
         await axios.get(`/auth/check`)
         .then(res => {
-          console.log(res.data[0])
+          console.log('current user', res.data)
           this.setState({
            name: res.data[0].name
 
           })
         })
 
-        firebase.auth().onAuthStateChanged(user => {
-            console.log(user)
-        })
-
+     
         // if(!this.props.getUserData){
         //     this.props.push('/add')
         // }
