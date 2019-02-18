@@ -1,5 +1,4 @@
 import React from 'react';
-import BottomBar from '../BottomBar/BottomBar'
 import firebase from 'firebase';
 import { Link } from 'react-router-dom';
 import ShoppingList from '../ShoppingList/ShoppingList'
@@ -8,6 +7,9 @@ import { connect } from 'react-redux'
 import { getUserData } from '../../ducks/reducer'
 import axios from 'axios'
 import SideDrawer from '../Appbar/SideDrawer'
+import { DragDropContext } from "react-beautiful-dnd"
+import './Dashboard.css'
+import { reorder , move } from "../../lib/dragFuncModule"
 
 class Dashboard extends React.Component {
     constructor() {
@@ -27,6 +29,7 @@ class Dashboard extends React.Component {
             shopper: [
                 { id: 1, name: 'Teddy', phone: 5555555555, state: 'UT', registered: true, budget: null, email: 'teddy@test.com' }
             ],
+            shoppingList: [],
             total: 0,
             budget: 0,
             overBudget: 0,
@@ -89,7 +92,35 @@ class Dashboard extends React.Component {
         // invokes handleBudget
     }
 
-    dragItem = () => {
+    dragItem = (result) => {
+        const { source , destination } = result
+        if (!destination){
+            return;
+        }
+
+        if(source.droppableId === destination.droppableId){
+            let list = null;
+            switch(source.droppableId){
+                case "shoppingList":
+                    list = "shoppingList"
+                    break;
+                case "showItems":
+                    list = "showItems"
+                    break;
+                case "listItems":
+                    list = "listItems"
+                    break;
+                default:
+                    console.log("dragItem: Unable to determine list. Check switch and droppableId's.")
+                    return;
+            }
+            const reorderedList = reorder(
+                this.state[list] ,
+                source.index,
+                destination.index
+            )
+            this.setState({[list]: reorderedList})
+        }
         // listener for new itemCard in ShoppingList
         // sends itemCard to ShoppingList as prop
         // adds price to total on state
@@ -158,7 +189,6 @@ class Dashboard extends React.Component {
             <div>
                 {displayShopper}
             </div>
-            <ShoppingList/>
             <hr/>
             <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
             {/* <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  /> */}
@@ -171,7 +201,12 @@ class Dashboard extends React.Component {
            <br />
                 <button onClick={() => this.handleBudget(this.state.itemCards)} >calc</button>
                 <hr/>
-                <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
+                    <DragDropContext onDragEnd={this.dragItem}>
+                <div className="lists-block"> 
+                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} />
+                        <ShoppingList items={this.state.shoppingList} />
+                </div>
+                    </DragDropContext>
                 
             {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
