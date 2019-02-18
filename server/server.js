@@ -10,7 +10,9 @@ const nCtrl = require('./newController')
 const testCtrl = require('./testController')
 const passThrough = require('./middlewares/devPassthrough')
 
-const { SERVER_PORT, CONNECTION_STRING, SECRET } = process.env;
+const { SERVER_PORT, CONNECTION_STRING, SECRET, } = process.env;
+
+
 
 const app=express();
 app.use(express.json())
@@ -19,7 +21,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-// app.use(passThrough)
+app.use(passThrough)
 
 // TESTING ENDPOINTS //
 app.get('/test' , (req , res) => {

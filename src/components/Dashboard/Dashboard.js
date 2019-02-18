@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { getUserData, getItems, getLists } from '../../ducks/reducer'
 import axios from 'axios'
 import SideDrawer from '../Appbar/SideDrawer'
+// import twilio from 'twilio';
 
 class Dashboard extends React.Component {
     constructor() {
@@ -15,7 +16,7 @@ class Dashboard extends React.Component {
         this.state = {
             lists: [],
             itemCards: [],
-            cart:[{item:'milk', price:344}],
+            cart: [{ item: 'milk', price: 344 }],
             shopper: [],
             total: 0,
             budget: 0,
@@ -36,17 +37,17 @@ class Dashboard extends React.Component {
     // sets user info to state
 
 
-        componentDidMount = async() => {
+    componentDidMount = async () => {
         await axios.get(`/auth/check`)
-        .then(res => {
-          console.log('current user', res.data)
-          this.setState({
-           name: res.data[0].name
+            .then(res => {
+                console.log('current user', res.data)
+                this.setState({
+                    name: res.data[0].name
 
-          })
-        })
+                })
+            })
 
-     
+
         // if(!this.props.getUserData){
         //     this.props.push('/add')
         // }
@@ -99,43 +100,60 @@ class Dashboard extends React.Component {
         let currentOverBudget = 0;
         for (let i = 0; i < arr.length; i++) {
             currentTotal += arr[i].price
-            if(currentTotal < this.state.budget){ currentRemaining = this.state.budget - currentTotal}else{ currentRemaining=0}
-            if( currentTotal > this.state.budget){currentOverBudget = currentTotal - this.state.budget}else{ currentOverBudget=0} 
-            await this.setState({ total: currentTotal/100, overBudget: currentOverBudget/100, remaining: currentRemaining/100 })
+            if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
+            if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
+            await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
         }
 
         // media query for card background color to change yellow on 85% of budget used
         // media query for background color change to red when budget has been exceeded
         if (this.state.total > this.state.budget) {
             alert('You are over budget!')
+        }
     }
-    }
+
+
+    // sendText = () => {
+    //     console.log('button hit')
+    //     const { AUTHTOKEN, SID, PHONENUMBER } = process.env;
+    //     const accountSid = SID;
+    //     const authToken = AUTHTOKEN;
+    //     const client = twilio(accountSid, authToken);
+
+    //     client.messages
+    //         .create({
+    //             body: 'success',
+    //             from: PHONENUMBER,
+    //             to: `+3852369850`
+    //         })
+    //         .then(message => console.log(message.sid));
+    // }
 
 
 
 
 
     render() {
-        let displayShopper = this.state.shopper.map((el,i)=>{
+        let displayShopper = this.state.shopper.map((el, i) => {
             return <h3 key={i} >
-               <p>{el.name}</p> 
-               <p>{el.state}</p>
-            
+                <p>{el.name}</p>
+                <p>{el.state}</p>
+
             </h3>
         })
         return (
             <>
-            <SideDrawer/>
-            welcome {this.state.name}
-            {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
-           
-            <div>
-                {displayShopper}
-            </div>
-            <ShoppingList/>
-            <hr/>
-            <input onChange={(e)=>this.setState({budget:e.target.value*100})} placeholder={'Enter Budget'}  />
-                <h2>budget: ${+this.state.budget/100}</h2>
+                <SideDrawer />
+                welcome {this.state.name}
+                {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
+
+                <div>
+                    {displayShopper}
+                </div>
+                <ShoppingList />
+                <hr />
+                <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
+                <h2>budget: ${+this.state.budget / 100}</h2>
                 your total is:  ${this.state.total}
                 <br />
                 you have ${this.state.remaining} left
@@ -143,7 +161,8 @@ class Dashboard extends React.Component {
                 you are ${this.state.overBudget} over your budget
            <br />
                 <button onClick={() => this.handleBudget(this.state.cart)} >calc</button>
-                <hr/>
+                <button onClick={() =>  this.sendText() }>Send me A Text Reminder</button>
+                <hr />
                 <ListOptions listsArray={this.state.lists} cart={this.state.cart} />
             </>
         )
