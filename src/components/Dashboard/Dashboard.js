@@ -82,6 +82,20 @@ class Dashboard extends React.Component {
         // invokes handleBudget
     }
 
+    getList = (id) => {
+        switch(id){
+            case "shoppingList":
+                return this.state.shoppingList
+            case "itemCards":
+                return this.state.itemCards
+            case "showLists":
+                throw new Error("getList: lists array should already be handled!")
+            default:
+                console.log("getList: Unable to determine list! Check list names and droppable ID's")
+                return;
+        }
+    }
+
     dragItem = (result) => {
         const { source, destination } = result
         if (!destination) {
@@ -120,6 +134,19 @@ class Dashboard extends React.Component {
                     this.setState({
                         shoppingList: res.data
                     })
+                })
+            } else if (destination.droppableId === "showLists"){
+                return;
+            } else {
+                let result = move(
+                    this.getList(source.droppableId) ,
+                    this.getList(destination.droppableId) ,
+                    source,
+                    destination
+                )
+                this.setState({
+                    shoppingList: result.shoppingList ,
+                    itemCards: result.itemCards
                 })
             }
         }
@@ -193,8 +220,8 @@ class Dashboard extends React.Component {
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                         <ShoppingList items={this.state.shoppingList} />
+                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
 
