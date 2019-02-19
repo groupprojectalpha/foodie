@@ -103,6 +103,8 @@ class Dashboard extends React.Component {
         if (!destination) {
             return;
         }
+       
+
 
         // THIS FIRST SECTION REORDERS AN ARRAY, IF THE ITEM IS GETTING MOVED FROM AN ARRAY TO AN ARRAY //
         if (source.droppableId === destination.droppableId) {
@@ -130,6 +132,7 @@ class Dashboard extends React.Component {
                 destination.index
             )
             this.setState({ [list]: reorderedList })
+            return;
         } else {
             // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
             if (source.droppableId === "showLists") {
@@ -141,6 +144,7 @@ class Dashboard extends React.Component {
                     })
             } else if (destination.droppableId === "showLists") {
                 return;
+
             } else {
                 // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
                 // IF IT IS, IT INCREMENTS THE "QUANTITY" PROPERTY AND ENDS THE FUNCTION WITHOUT MOVING THE ITEM OVER //
@@ -149,7 +153,9 @@ class Dashboard extends React.Component {
                 this.getList(destination.droppableId).forEach((item) => {
                     if (itemId === item.itemcode) {
                         isMatch = true;
-                        if (item.quantity) { item.quantity += 1 }
+                        if (!item.quantity) { item.quantity = 0 }
+                        item.quantity++
+                        console.log(item.quantity)
                         return;
                     }
                 })
@@ -165,12 +171,14 @@ class Dashboard extends React.Component {
                     shoppingList: r.shoppingList,
                     itemCards: r.itemCards
                 })
+                
             }
         }
-        // listener for new itemCard in ShoppingList
-        // sends itemCard to ShoppingList as prop
-        // adds price to total on state
-        // invokes handleBudget
+
+        setTimeout(()=>{
+            this.handleBudget(this.state.shoppingList)
+        },0)
+        
     }
 
     removeCard() {
@@ -190,18 +198,22 @@ class Dashboard extends React.Component {
         let currentRemaining = 0;
         let currentOverBudget = 0;
         for (let i = 0; i < arr.length; i++) {
-            currentTotal += arr[i].price
+            currentTotal += arr[i].price * arr[i].quantity
             if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
             if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
             await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
         }
-        if (this.state.total > this.state.budget) {
-            alert('You are over budget!')
-        }
     }
 
+    updateQuantity = (id, newPrice) => {
+        let targetIndex = this.state.shoppingList.findIndex((item) => item.id === id)
+        let newShoppingList = this.state.shoppingList.slice()
+        newShoppingList[targetIndex].quantity = newPrice
+        if (targetIndex !== -1) { this.setState({ shoppingList: newShoppingList }) }
+        else { console.log("updateQuantity: No Object Found!") }
+    }
     sendText = async () => {
-        // await axios.delete('/list/clear')
+        await axios.delete('/list/clear')
         axios.put('/item/additems', {
             name: 'clearabledefault',
             items: this.state.shoppingList
@@ -244,13 +256,12 @@ class Dashboard extends React.Component {
            <br />
                 you are ${this.state.overBudget} over your budget
            <br />
-                <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
                 <button onClick={() => this.sendText()} >text</button>
 
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
