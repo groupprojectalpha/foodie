@@ -2,6 +2,7 @@ import React from 'react';
 import {Droppable , Draggable} from 'react-beautiful-dnd'
 import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
 import ItemCard from '../ItemCard/ItemCard';
+import Price from '../ItemCard/Price';
 
 export default class ShoppingList extends React.Component{
     constructor(props){
@@ -34,7 +35,7 @@ export default class ShoppingList extends React.Component{
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
                                     >
-                                    <ItemCard item={item} updateQuantity={this.props.updateQuantity} classString={arr.slice(0 , i + 1).reduce((total , item) => total + item.price * item.quantity , 0) < this.props.budget ? "green" : "red"}/>
+                                    <ItemCard item={item} Price={<Price item={item} updateQuantity={this.props.updateQuantity} />} classString={arr.slice(0 , i + 1).reduce((total , item) => total + item.price * item.quantity , 0) < this.props.budget ? "green" : "red"}/>
                                     </div>
                                 )}
                             </Draggable>
