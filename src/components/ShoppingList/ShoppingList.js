@@ -20,8 +20,9 @@ export default class ShoppingList extends React.Component{
                     <div 
                         ref={provided.innerRef} 
                         style={getListStyle(snapshot.isDraggingOver)}
+                        className="list"
                     >
-                        {this.props.items.map((item, i) => (
+                        {this.props.items.map((item, i , arr) => (
                             <Draggable
                                 key={item.itemcode}
                                 draggableId={item.itemcode}
@@ -34,7 +35,7 @@ export default class ShoppingList extends React.Component{
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
                                     >
-                                    <ItemCard item={item}/>
+                                    <ItemCard item={item} classString={arr.slice(0 , i + 1).reduce((total , item) => total + item.price , 0) < this.props.budget ? "green" : "red"}/>
                                     </div>
                                 )}
                             </Draggable>

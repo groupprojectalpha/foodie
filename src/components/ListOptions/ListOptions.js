@@ -42,9 +42,10 @@ class ListOptions extends React.Component {
 
 
     render() {
+        let show = this.state.toggleItems ? "My Lists" : "My Items"
         return (
             <>
-            <button onClick={this.toggle}>toggle</button>
+            <button onClick={this.toggle}>{show}</button>
             {
                 this.state.toggleItems ?
                 <ShowItems items={this.props.itemCards}  />
