@@ -95,7 +95,6 @@ module.exports = {
     } else {
       listId = listIdArr[0].id
     }
-
     // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
     all.forEach(async (item) => {
       await db.add_list_item({item: item.id , list: listId})
