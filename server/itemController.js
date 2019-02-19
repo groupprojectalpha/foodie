@@ -90,7 +90,6 @@ module.exports = {
     let listId = null;
     if(!listIdArr[0]){
       // THIS SECTION CREATES A LIST IF A LIST IS NOT FOUND //
-      console.log("List Exists... this should fire")
       let newListArr = await db.create_list({name: req.body.name , userId: req.session.shopper.id})
       listId = newListArr[0].id
     } else {
@@ -98,7 +97,6 @@ module.exports = {
     }
     // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
     all.forEach(async (item) => {
-      console.log("Item Id is: " , item.id)
       await db.add_list_item({item: item.id , list: listId})
     })
 
