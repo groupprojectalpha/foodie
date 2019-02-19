@@ -18,6 +18,7 @@ import Dashboard from '@material-ui/icons/Dashboard'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
 import SettingsIcon from '@material-ui/icons/Settings'
 import SearchIcon from '@material-ui/icons/Search'
+import Axios from 'axios';
 
 const styles = {
   list: {
@@ -35,6 +36,10 @@ class SwipeableTemporaryDrawer extends React.Component {
     bottom: false,
     right: false,
   };
+
+  logout(){
+    Axios.delete('/auth/logout')
+  }
 
   toggleDrawer = (side, open) => () => {
     this.setState({
@@ -67,8 +72,8 @@ class SwipeableTemporaryDrawer extends React.Component {
             </Link>
             ))}
 
-            {['My Lists'].map((text, index) => (
-              <Link to='/shopping_list' style={{ textDecoration: 'none' }}>
+            {['Add Items'].map((text, index) => (
+              <Link to='/add' style={{ textDecoration: 'none' }}>
             <ListItem button key={text} >
               <ListItemIcon>{ <ShoppingCart />}</ListItemIcon>
               <ListItemText primary={text} />
@@ -99,7 +104,7 @@ class SwipeableTemporaryDrawer extends React.Component {
              
              {/* {['Logout'].map((text, index) => (
               <Link to='/' style={{ textDecoration: 'none' }}>
-            <ListItem button key={text}>
+            <ListItem button key={text} onClick={()=>this.logout()}>
               <ListItemIcon>{ <LogoutIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>

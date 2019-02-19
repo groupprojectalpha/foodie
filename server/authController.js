@@ -67,9 +67,8 @@ module.exports = {
   logout(req,res){
     // destroy session
     // redirect to loginoptions
-
-    req.session.destroy(() => {
-      res.redirect('/')
+    req.session.destroy(()=>{
+      res.sendStatus(201)
     })
   },
 

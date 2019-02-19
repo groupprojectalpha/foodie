@@ -28,6 +28,11 @@ module.exports ={
     // check array to ensure it has been removed
     // return 201 and list item array
 
+  } ,
+  async items(req, res){
+    let db = req.app.get('db')
+    let r = await db.load_list({list: req.params.id , limit: 25}).catch(error => res.status(500).send(error))
+    res.status(200).send(r)
   }
 
 }
