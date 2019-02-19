@@ -151,13 +151,7 @@ class Dashboard extends React.Component {
                 this.getList(destination.droppableId).forEach((item) => {
                     if (itemId === item.itemcode) {
                         isMatch = true;
-<<<<<<< HEAD
-                        if(!item.quantity){item.quantity = 0}
-                        item.quantity++
-                        console.log(item.quantity)
-=======
                         if (item.quantity) { item.quantity += 1 }
->>>>>>> 723b5cc70a5a962a4fcba02f98ce66ad1fcad66c
                         return;
                     }
                 })
@@ -224,6 +218,7 @@ class Dashboard extends React.Component {
             name:'clearabledefault',
             items:this.state.shoppingList
         })
+        return;
         const { phone } = this.state.user[0]
         let res = await axios.get(`/text/${phone}`).then(() => {
         }).catch(error => { console.log(res,error) })
