@@ -10,11 +10,12 @@ export default function ShowItems(props){
                 <div
                     ref={provided.innerRef}
                     style={getListStyle(snapshot.isDraggingOver)}
+                    className="list"
                 >
                     {props.items.map((item , i) => (
                         <Draggable
                             key={item.itemcode}
-                            draggableId={item.itemcode}
+                            draggableId={"I" + item.itemcode}
                             index={i}
                         >
                             {(provided , snapshot) => (

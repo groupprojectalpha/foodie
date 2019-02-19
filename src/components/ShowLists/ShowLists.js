@@ -9,6 +9,7 @@ export default function ShowList(props){
                 <div
                     ref={provided.innerRef}
                     style={getListStyle(snapshot.isDraggingOver)}
+                    className="list"
                 >
                     {props.lists.map((list, i) => (
                         <Draggable

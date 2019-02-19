@@ -1,4 +1,10 @@
 .lists-block{
   display: flex;
   border: 1px dotted red;
+  width: 100vw;
+  justify-content: center;
+}
+
+.list{
+  width: 50%;
 }

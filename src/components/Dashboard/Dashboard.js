@@ -96,12 +96,14 @@ class Dashboard extends React.Component {
         }
     }
 
+
     dragItem = (result) => {
         const { source, destination } = result
         if (!destination) {
             return;
         }
 
+        // THIS FIRST SECTION REORDERS AN ARRAY, IF THE ITEM IS GETTING MOVED FROM AN ARRAY TO AN ARRAY //
         if (source.droppableId === destination.droppableId) {
             let list = null;
             switch (source.droppableId) {
@@ -128,7 +130,8 @@ class Dashboard extends React.Component {
             )
             this.setState({ [list]: reorderedList })
         } else {
-            if (source.droppableId === "showLists") {
+            // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
+            if(source.droppableId === "showLists"){
                 axios.get(`/list/${result.draggableId}/items`)
                     .then((res) => {
                         this.setState({
@@ -138,15 +141,28 @@ class Dashboard extends React.Component {
             } else if (destination.droppableId === "showLists") {
                 return;
             } else {
-                let result = move(
-                    this.getList(source.droppableId),
-                    this.getList(destination.droppableId),
+                // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
+                // IF IT IS, IT INCREMENTS THE "QUANTITY" PROPERTY AND ENDS THE FUNCTION WITHOUT MOVING THE ITEM OVER //
+                let itemId = result.draggableId.slice(1)
+                let isMatch = false
+                this.getList(destination.droppableId).forEach((item) => {
+                    if(itemId === item.itemcode){
+                        isMatch = true;
+                        if(item.quantity){item.quantity += 1}
+                        return;
+                    }
+                })
+                if(isMatch){return;}
+                // IF THE ITEM ISN'T PRESENT ON THE TARGET ARRAY, THIS SECTION MOVES IT OVER AND REORDERS BOTH ARRAYS //
+                let r = move(
+                    this.getList(source.droppableId) ,
+                    this.getList(destination.droppableId) ,
                     source,
                     destination
                 )
                 this.setState({
-                    shoppingList: result.shoppingList,
-                    itemCards: result.itemCards
+                    shoppingList: r.shoppingList ,
+                    itemCards: r.itemCards
                 })
             }
         }
@@ -232,7 +248,7 @@ class Dashboard extends React.Component {
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
