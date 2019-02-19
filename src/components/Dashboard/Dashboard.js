@@ -129,6 +129,7 @@ class Dashboard extends React.Component {
                 destination.index
             )
             this.setState({ [list]: reorderedList })
+            return;
         } else {
             // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
             if(source.droppableId === "showLists"){
@@ -140,6 +141,7 @@ class Dashboard extends React.Component {
                     })
             } else if (destination.droppableId === "showLists") {
                 return;
+            
             } else {
                 // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
                 // IF IT IS, IT INCREMENTS THE "QUANTITY" PROPERTY AND ENDS THE FUNCTION WITHOUT MOVING THE ITEM OVER //
@@ -148,7 +150,9 @@ class Dashboard extends React.Component {
                 this.getList(destination.droppableId).forEach((item) => {
                     if(itemId === item.itemcode){
                         isMatch = true;
-                        if(item.quantity){item.quantity += 1}
+                        if(!item.quantity){item.quantity = 0}
+                        item.quantity++
+                        console.log(item.quantity)
                         return;
                     }
                 })
@@ -189,7 +193,7 @@ class Dashboard extends React.Component {
         let currentRemaining = 0;
         let currentOverBudget = 0;
         for (let i = 0; i < arr.length; i++) {
-            currentTotal += arr[i].price
+            currentTotal += arr[i].price * arr[i].quantity
             if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
             if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
             await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
@@ -202,6 +206,13 @@ class Dashboard extends React.Component {
         }
     }
 
+    updateQuantity = (id,newPrice) => {
+        let targetIndex = this.state.shoppingList.findIndex((item) => item.id === id)
+        let newShoppingList = this.state.shoppingList.slice()
+        newShoppingList[targetIndex].quantity = newPrice
+        if(targetIndex !== -1){this.setState({shoppingList: newShoppingList})}
+        else {console.log("updateQuantity: No Object Found!")}
+    }
     sendText = async () => {
         console.log('button hit')
        let res = await axios.post('/text').then(() => {
@@ -248,7 +259,7 @@ class Dashboard extends React.Component {
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>

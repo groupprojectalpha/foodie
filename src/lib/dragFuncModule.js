@@ -12,7 +12,8 @@ export const move = (sourceList, destLIst, targetSource, targetDest) => {
     const DLC = Array.from(destLIst)
 
     const [removed] = SLC.splice(targetSource.index, 1)
-
+    if(targetDest.droppableId === "shoppingList"){removed.quantity = 1}
+    if(targetDest.droppableId === "itemCards"){delete removed.quantity}
     DLC.splice(targetDest.index, 0, removed)
 
     let result = {}
