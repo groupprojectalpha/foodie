@@ -9,8 +9,11 @@ const iCtrl = require('./itemController')
 const nCtrl = require('./newController')
 const testCtrl = require('./testController')
 const passThrough = require('./middlewares/devPassthrough')
+const twilio = require('twilio')
 
-const { SERVER_PORT, CONNECTION_STRING, SECRET } = process.env;
+const { SERVER_PORT, CONNECTION_STRING, SECRET, } = process.env;
+
+
 
 const app=express();
 app.use(express.json())
@@ -20,6 +23,26 @@ app.use(session({
     saveUninitialized: false
 }))
 app.use(passThrough)
+
+
+
+
+app.post('/text', ()=>{
+        console.log('button hit')
+        const { AUTHTOKEN, SID, PHONENUMBER } = process.env;
+        const accountSid = SID;
+        const authToken = AUTHTOKEN;
+        const client = twilio(accountSid, authToken);
+
+        client.messages
+            .create({
+                body: 'success',
+                from: PHONENUMBER,
+                to: `+3852369850`
+            })
+            .then(message => console.log(message.sid));
+})
+
 
 // TESTING ENDPOINTS //
 app.get('/test' , (req , res) => {
@@ -53,6 +76,7 @@ app.get('/search/:store/:term' , iCtrl.newItems)
 app.get('/list/:id', lCtrl.findList)
 app.get('/list/:id/items' , lCtrl.items)
 app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
+app.delete('/list/clear', lCtrl.clear)
 
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 

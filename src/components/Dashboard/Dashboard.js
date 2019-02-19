@@ -44,11 +44,11 @@ class Dashboard extends React.Component {
                     name: res.data[0].name
                 })
                 axios.get('/user/lists')
-                .then(res => {
-                    this.setState({
-                        lists: res.data
+                    .then(res => {
+                        this.setState({
+                            lists: res.data
+                        })
                     })
-                })
             })
 
 
@@ -66,9 +66,9 @@ class Dashboard extends React.Component {
     clickList = (id) => {
         // sends get request for items in lists
         axios.get(`/list/${id}/items`)
-        .catch(er => console.log(er))
-        // sets items to itemCards on state
-        .then((res) => this.setState({itemCards: res.data}))
+            .catch(er => console.log(er))
+            // sets items to itemCards on state
+            .then((res) => this.setState({ itemCards: res.data }))
         // sets prices from server response to prices(pin)
         // sends items to ShowItems as props
     }
@@ -83,7 +83,7 @@ class Dashboard extends React.Component {
     }
 
     getList = (id) => {
-        switch(id){
+        switch (id) {
             case "shoppingList":
                 return this.state.shoppingList
             case "itemCards":
@@ -133,12 +133,12 @@ class Dashboard extends React.Component {
             // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
             if(source.droppableId === "showLists"){
                 axios.get(`/list/${result.draggableId}/items`)
-                .then((res) => {
-                    this.setState({
-                        shoppingList: res.data
+                    .then((res) => {
+                        this.setState({
+                            shoppingList: res.data
+                        })
                     })
-                })
-            } else if (destination.droppableId === "showLists"){
+            } else if (destination.droppableId === "showLists") {
                 return;
             } else {
                 // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
@@ -202,6 +202,16 @@ class Dashboard extends React.Component {
         }
     }
 
+    sendText = async () => {
+        console.log('button hit')
+       let res = await axios.post('/text').then(() => {
+            console.log(res)
+        })
+    }
+
+
+
+
 
 
 
@@ -233,6 +243,8 @@ class Dashboard extends React.Component {
                 you are ${this.state.overBudget} over your budget
            <br />
                 <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
+                <button onClick={() => this.sendText()} >text</button>
+
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
