@@ -8,8 +8,8 @@ module.exports = {
     // On success, return 200 shopper array
   } , 
   async getLists(req , res){
-    // destructure ID from req.params
-    const {id} = req.params
+    // destructure ID from req.session.shopper
+    const {id} = req.session.shopper
     // establish db
     let db = req.app.get('db')
     // query db for user by id

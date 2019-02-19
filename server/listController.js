@@ -38,6 +38,11 @@ module.exports ={
       console.log(error)
     })
     res.sendStatus(201)
+  } ,
+  async items(req, res){
+    let db = req.app.get('db')
+    let r = await db.load_list({list: req.params.id , limit: 25}).catch(error => res.status(500).send(error))
+    res.status(200).send(r)
   }
 
 }

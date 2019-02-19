@@ -1,14 +1,13 @@
 import React from 'react';
-import BottomBar from '../BottomBar/BottomBar'
-import firebase from 'firebase';
-import { Link } from 'react-router-dom';
 import ShoppingList from '../ShoppingList/ShoppingList'
 import ListOptions from '../ListOptions/ListOptions'
 import { connect } from 'react-redux'
 import { getUserData, getItems, getLists } from '../../ducks/reducer'
 import axios from 'axios'
 import SideDrawer from '../Appbar/SideDrawer'
-// import twilio from 'twilio';
+import { DragDropContext } from "react-beautiful-dnd"
+import './Dashboard.css'
+import { reorder, move } from "../../lib/dragFuncModule"
 
 class Dashboard extends React.Component {
     constructor() {
@@ -16,7 +15,7 @@ class Dashboard extends React.Component {
         this.state = {
             lists: [],
             itemCards: [],
-            cart: [{ item: 'milk', price: 344 }],
+            shoppingList: [],
             shopper: [],
             total: 0,
             budget: 0,
@@ -37,14 +36,19 @@ class Dashboard extends React.Component {
     // sets user info to state
 
 
-    componentDidMount = async () => {
-        await axios.get(`/auth/check`)
+    componentDidMount = () => {
+        axios.get(`/auth/check`)
             .then(res => {
                 console.log('current user', res.data)
                 this.setState({
                     name: res.data[0].name
-
                 })
+                axios.get('/user/lists')
+                    .then(res => {
+                        this.setState({
+                            lists: res.data
+                        })
+                    })
             })
 
 
@@ -59,9 +63,12 @@ class Dashboard extends React.Component {
         // this.setState({user: this.props.getUserData})
     }
 
-    clickList = () => {
+    clickList = (id) => {
         // sends get request for items in lists
-        // sets items to itemCards on state
+        axios.get(`/list/${id}/items`)
+            .catch(er => console.log(er))
+            // sets items to itemCards on state
+            .then((res) => this.setState({ itemCards: res.data }))
         // sets prices from server response to prices(pin)
         // sends items to ShowItems as props
     }
@@ -75,7 +82,74 @@ class Dashboard extends React.Component {
         // invokes handleBudget
     }
 
-    dragItem = () => {
+    getList = (id) => {
+        switch (id) {
+            case "shoppingList":
+                return this.state.shoppingList
+            case "itemCards":
+                return this.state.itemCards
+            case "showLists":
+                throw new Error("getList: lists array should already be handled!")
+            default:
+                console.log("getList: Unable to determine list! Check list names and droppable ID's")
+                return;
+        }
+    }
+
+    dragItem = (result) => {
+        const { source, destination } = result
+        if (!destination) {
+            return;
+        }
+
+        if (source.droppableId === destination.droppableId) {
+            let list = null;
+            switch (source.droppableId) {
+                case "shoppingList":
+                    list = "shoppingList"
+                    break;
+                case "itemCards":
+                    list = "itemCards"
+                    break;
+                case "listItems":
+                    list = "listItems"
+                    break;
+                case "showLists":
+                    list = "lists"
+                    break;
+                default:
+                    console.log("dragItem: Unable to determine list. Check switch and droppableId's.")
+                    return;
+            }
+            const reorderedList = reorder(
+                this.state[list],
+                source.index,
+                destination.index
+            )
+            this.setState({ [list]: reorderedList })
+        } else {
+            if (source.droppableId === "showLists") {
+                axios.get(`/list/${result.draggableId}/items`)
+                    .then((res) => {
+                        this.setState({
+                            shoppingList: res.data
+                        })
+                    })
+            } else if (destination.droppableId === "showLists") {
+                return;
+            } else {
+                let result = move(
+                    this.getList(source.droppableId),
+                    this.getList(destination.droppableId),
+                    source,
+                    destination
+                )
+                this.setState({
+                    shoppingList: result.shoppingList,
+                    itemCards: result.itemCards
+                })
+            }
+        }
         // listener for new itemCard in ShoppingList
         // sends itemCard to ShoppingList as prop
         // adds price to total on state
@@ -112,22 +186,15 @@ class Dashboard extends React.Component {
         }
     }
 
+    sendText = async () => {
+        console.log('button hit')
+       let res = await axios.post('/text').then(() => {
+            console.log(res)
+        })
+    }
 
-    // sendText = () => {
-    //     console.log('button hit')
-    //     const { AUTHTOKEN, SID, PHONENUMBER } = process.env;
-    //     const accountSid = SID;
-    //     const authToken = AUTHTOKEN;
-    //     const client = twilio(accountSid, authToken);
 
-    //     client.messages
-    //         .create({
-    //             body: 'success',
-    //             from: PHONENUMBER,
-    //             to: `+3852369850`
-    //         })
-    //         .then(message => console.log(message.sid));
-    // }
+
 
 
 
@@ -150,7 +217,6 @@ class Dashboard extends React.Component {
                 <div>
                     {displayShopper}
                 </div>
-                <ShoppingList />
                 <hr />
                 <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                 <h2>budget: ${+this.state.budget / 100}</h2>
@@ -160,10 +226,18 @@ class Dashboard extends React.Component {
            <br />
                 you are ${this.state.overBudget} over your budget
            <br />
-                <button onClick={() => this.handleBudget(this.state.cart)} >calc</button>
-                <button onClick={() =>  this.sendText() }>Send me A Text Reminder</button>
+                <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
+                <button onClick={() => this.sendText()} >text</button>
+
                 <hr />
-                <ListOptions listsArray={this.state.lists} cart={this.state.cart} />
+                <DragDropContext onDragEnd={this.dragItem}>
+                    <div className="lists-block">
+                        <ShoppingList items={this.state.shoppingList} />
+                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
+                    </div>
+                </DragDropContext>
+
+                {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
         )
     }

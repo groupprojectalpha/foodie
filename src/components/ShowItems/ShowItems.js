@@ -1,17 +1,36 @@
 import React from 'react';
+import { Droppable, Draggable } from "react-beautiful-dnd"
+import { getListStyle, getItemStyle} from "../../lib/dragFuncModule"
+import ItemCard from '../ItemCard/ItemCard';
 
 export default function ShowItems(props){
-    
-       let itemCards = props.itemCards.map((el,i)=>{
-           return <li key={i} >{el.item}</li>
-       })
     return(
-        <>
-        this is ShowItems
-        <h1>Item Cards</h1>
-        { itemCards }
-        <button>More Items</button>
-        
-        </>
+        <Droppable droppableId="itemCards">
+            {(provided , snapshot) => (
+                <div
+                    ref={provided.innerRef}
+                    style={getListStyle(snapshot.isDraggingOver)}
+                >
+                    {props.items.map((item , i) => (
+                        <Draggable
+                            key={item.itemcode}
+                            draggableId={item.itemcode}
+                            index={i}
+                        >
+                            {(provided , snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    style={getItemStyle(snapshot.isDragging , provided.draggableProps.style)}
+                                    {...provided.dragHandleProps}
+                                    {...provided.draggableProps}
+                                >
+                                 <ItemCard item={item}/>
+                                </div>
+                            )}
+                        </Draggable>
+                    ))}
+                </div>
+            )}
+        </Droppable>
     )
 }

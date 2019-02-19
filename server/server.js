@@ -9,6 +9,7 @@ const iCtrl = require('./itemController')
 const nCtrl = require('./newController')
 const testCtrl = require('./testController')
 const passThrough = require('./middlewares/devPassthrough')
+const twilio = require('twilio')
 
 const { SERVER_PORT, CONNECTION_STRING, SECRET, } = process.env;
 
@@ -22,6 +23,26 @@ app.use(session({
     saveUninitialized: false
 }))
 app.use(passThrough)
+
+
+
+
+app.post('/text', ()=>{
+        console.log('button hit')
+        const { AUTHTOKEN, SID, PHONENUMBER } = process.env;
+        const accountSid = SID;
+        const authToken = AUTHTOKEN;
+        const client = twilio(accountSid, authToken);
+
+        client.messages
+            .create({
+                body: 'success',
+                from: PHONENUMBER,
+                to: `+3852369850`
+            })
+            .then(message => console.log(message.sid));
+})
+
 
 // TESTING ENDPOINTS //
 app.get('/test' , (req , res) => {
@@ -41,7 +62,7 @@ app.get('/auth/check' , aCtrl.check)
 app.delete('/auth/logout' , aCtrl.logout)
 
 // USER DATA ENDPOINTS //
-app.get('/user/:id/lists' , uCtrl.getLists)
+app.get('/user/lists' , uCtrl.getLists)
 app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 
 // ITEM DATA ENDPOINTS //
@@ -53,6 +74,7 @@ app.get('/search/:store/:term' , iCtrl.newItems)
 
 // LIST DATA ENDPOINTS //
 app.get('/list/:id', lCtrl.findList)
+app.get('/list/:id/items' , lCtrl.items)
 app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
 app.delete('/list/clear', lCtrl.clear)
 
