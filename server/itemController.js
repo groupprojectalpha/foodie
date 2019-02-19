@@ -62,6 +62,7 @@ module.exports = {
   async addItems(req, res){
     let db = req.app.get('db')
     let {items} = req.body
+    console.log(items)
     // THIS SECTION SORTS NEW ITEMS INTO A NEW ARRAY SO THEY CAN BE ADDED TO THE DB //
     let toAdd = []
     let existing = []

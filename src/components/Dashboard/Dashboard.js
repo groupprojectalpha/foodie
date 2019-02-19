@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
             overBudget: 0,
             remaining: 0,
             name: '',
-            user: {}
+            user: []
             // prices: [],
         }
     }
@@ -41,7 +41,8 @@ class Dashboard extends React.Component {
             .then(res => {
                 console.log('current user', res.data)
                 this.setState({
-                    name: res.data[0].name
+                    name: res.data[0].name,
+                    user:res.data
                 })
                 axios.get('/user/lists')
                     .then(res => {
@@ -132,7 +133,7 @@ class Dashboard extends React.Component {
             return;
         } else {
             // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
-            if(source.droppableId === "showLists"){
+            if (source.droppableId === "showLists") {
                 axios.get(`/list/${result.draggableId}/items`)
                     .then((res) => {
                         this.setState({
@@ -148,24 +149,28 @@ class Dashboard extends React.Component {
                 let itemId = result.draggableId.slice(1)
                 let isMatch = false
                 this.getList(destination.droppableId).forEach((item) => {
-                    if(itemId === item.itemcode){
+                    if (itemId === item.itemcode) {
                         isMatch = true;
+<<<<<<< HEAD
                         if(!item.quantity){item.quantity = 0}
                         item.quantity++
                         console.log(item.quantity)
+=======
+                        if (item.quantity) { item.quantity += 1 }
+>>>>>>> 723b5cc70a5a962a4fcba02f98ce66ad1fcad66c
                         return;
                     }
                 })
-                if(isMatch){return;}
+                if (isMatch) { return; }
                 // IF THE ITEM ISN'T PRESENT ON THE TARGET ARRAY, THIS SECTION MOVES IT OVER AND REORDERS BOTH ARRAYS //
                 let r = move(
-                    this.getList(source.droppableId) ,
-                    this.getList(destination.droppableId) ,
+                    this.getList(source.droppableId),
+                    this.getList(destination.droppableId),
                     source,
                     destination
                 )
                 this.setState({
-                    shoppingList: r.shoppingList ,
+                    shoppingList: r.shoppingList,
                     itemCards: r.itemCards
                 })
             }
@@ -214,10 +219,14 @@ class Dashboard extends React.Component {
         else {console.log("updateQuantity: No Object Found!")}
     }
     sendText = async () => {
-        console.log('button hit')
-       let res = await axios.post('/text').then(() => {
-            console.log(res)
+        // await axios.delete('/list/clear')
+        axios.put('/item/additems',{
+            name:'clearabledefault',
+            items:this.state.shoppingList
         })
+        const { phone } = this.state.user[0]
+        let res = await axios.get(`/text/${phone}`).then(() => {
+        }).catch(error => { console.log(res,error) })
     }
 
 
