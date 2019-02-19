@@ -129,6 +129,7 @@ class Dashboard extends React.Component {
                 destination.index
             )
             this.setState({ [list]: reorderedList })
+            return;
         } else {
             // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
             if(source.droppableId === "showLists"){
@@ -140,6 +141,7 @@ class Dashboard extends React.Component {
                 })
             } else if (destination.droppableId === "showLists"){
                 return;
+            
             } else {
                 // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
                 // IF IT IS, IT INCREMENTS THE "QUANTITY" PROPERTY AND ENDS THE FUNCTION WITHOUT MOVING THE ITEM OVER //
@@ -148,7 +150,9 @@ class Dashboard extends React.Component {
                 this.getList(destination.droppableId).forEach((item) => {
                     if(itemId === item.itemcode){
                         isMatch = true;
-                        if(item.quantity){item.quantity += 1}
+                        if(!item.quantity){item.quantity = 0}
+                        item.quantity++
+                        console.log(item.quantity)
                         return;
                     }
                 })

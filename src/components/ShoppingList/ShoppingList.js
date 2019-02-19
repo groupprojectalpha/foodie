@@ -22,10 +22,9 @@ export default class ShoppingList extends React.Component{
                         style={getListStyle(snapshot.isDraggingOver)}
                         className="list"
                     >
-                        {this.props.items.map((item, i , arr) => (
-                            <Draggable
+                        {this.props.items.map((item, i , arr) => (<Draggable
                                 key={item.itemcode}
-                                draggableId={item.itemcode}
+                                draggableId={"S" + item.itemcode}
                                 index={i}
                             >
                                 {(provided , snapshot) => (
