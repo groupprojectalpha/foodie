@@ -24,15 +24,27 @@ export default class LoginOptions extends React.Component{
     render(){
         return(
             <div className='landing'>
-                <header className='header-container'></header>
-                <div className='main-card'>
-                    <img src={logo} className='logo'/>
-                    <div>
-                <h1>Foodie</h1>
-                <h2>Shopping.. Made Easy</h2>
-                <Alert/>
-                </div>
-                </div>
+                <header className='header-container'> <div id='about'>about</div> </header>
+                   <div className='top1'>
+                        <div className='main-card'>
+                            <img src={logo} className='logo'/>
+                            <div className='words'>
+                                <h1 id='text'>Foodie</h1>
+                                <h2 id='text2'>Shopping.. Made Easy</h2>
+                                <h5 id='text3'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr</h5>
+                                <Alert/>
+                            </div>
+                        </div>
+                        <div className='boxes'>
+                            <div className='box1'>
+                            <img id='boximage1' src="https://images.unsplash.com/photo-1516594798947-e65505dbb29d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80"/>
+                            </div>
+                            <div className='box2'>
+                            <img id='boximage1' src="https://images.unsplash.com/photo-1545269041-0faf48914252?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80"/>
+                            </div>
+                        </div>
+                    </div> 
+                
                 
                
            

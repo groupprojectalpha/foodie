@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, withTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -12,11 +12,13 @@ import './AppBar.css'
 import firebase from 'firebase';
 import {Link} from 'react-router-dom';
 import LogoutIcon from '@material-ui/icons/ExitToApp'
+import classNames from 'classnames'
 // import SideDrawer from './SideDrawer';
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1,
+    
   },
   grow: {
     flexGrow: 1,
@@ -27,15 +29,18 @@ const styles = {
   },
   position: {
       position: 'relative'
+  },
+  AppBar: {
+    background: 'linear-gradient(to right top, #342c4a, #4f3558, #6c3d62, #8a4668, #a65069, #b05b6e, #b96573, #c27079, #bd7b85, #b68590, #af8f98, #a8999e);'
   }
-};
+});
 
 function ButtonAppBar(props) {
   const { classes, toggleDrawer } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="static" className={classNames(classes.AppBar)}>
+        <Toolbar >
           <IconButton onClick={toggleDrawer} className={classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon />
           </IconButton>
@@ -57,4 +62,4 @@ ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ButtonAppBar);
+export default withStyles(styles, {withTheme: true })(ButtonAppBar);
