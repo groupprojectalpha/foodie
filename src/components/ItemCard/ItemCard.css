@@ -1,5 +1,21 @@
 .item-card {
   height: 5rem;
   width: 25rem;
-  border: 2px solid red;
+  border: 2px solid #F4D8C2;
+  display: flex;
+  overflow: hidden;
+}
+
+.thumbnail {
+  height: 4.5rem;
+  border-radius: 50%;
+  margin: 2px;
+}
+
+.green {
+  border-color: green;
+}
+
+.red {
+  border-color: red;
 }
