@@ -193,7 +193,7 @@ class Dashboard extends React.Component {
         let currentRemaining = 0;
         let currentOverBudget = 0;
         for (let i = 0; i < arr.length; i++) {
-            currentTotal += arr[i].price
+            currentTotal += arr[i].price * arr[i].quantity
             if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
             if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
             await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
@@ -206,7 +206,13 @@ class Dashboard extends React.Component {
         }
     }
 
-
+    updateQuantity = (id,newPrice) => {
+        let targetIndex = this.state.shoppingList.findIndex((item) => item.id === id)
+        let newShoppingList = this.state.shoppingList.slice()
+        newShoppingList[targetIndex].quantity = newPrice
+        if(targetIndex !== -1){this.setState({shoppingList: newShoppingList})}
+        else {console.log("updateQuantity: No Object Found!")}
+    }
 
 
 
@@ -240,7 +246,7 @@ class Dashboard extends React.Component {
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
