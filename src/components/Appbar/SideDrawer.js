@@ -17,6 +17,7 @@ import LogoutIcon from '@material-ui/icons/ExitToApp'
 import Dashboard from '@material-ui/icons/Dashboard'
 import ShoppingCart from '@material-ui/icons/ShoppingCart'
 import SettingsIcon from '@material-ui/icons/Settings'
+import SearchIcon from '@material-ui/icons/Search'
 import Axios from 'axios';
 
 const styles = {
@@ -79,6 +80,15 @@ class SwipeableTemporaryDrawer extends React.Component {
             </ListItem>
             </Link>
             ))}
+
+          {['Search'].map((text, index) => (
+              <Link to='/add' style={{ textDecoration: 'none' }}>
+            <ListItem button key={text} >
+              <ListItemIcon>{ <SearchIcon />}</ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+            </Link>
+            ))}
           
         </List>
         <Divider />
@@ -92,14 +102,14 @@ class SwipeableTemporaryDrawer extends React.Component {
             </Link>
             ))}
              
-             {['Logout'].map((text, index) => (
+             {/* {['Logout'].map((text, index) => (
               <Link to='/' style={{ textDecoration: 'none' }}>
             <ListItem button key={text} onClick={()=>this.logout()}>
               <ListItemIcon>{ <LogoutIcon />}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
             </Link>
-            ))}
+            ))} */}
         </List>
       </div>
     );

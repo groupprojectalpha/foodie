@@ -28,7 +28,7 @@ class AlertDialogSlide extends React.Component {
   render() {
     return (
       <div>
-        <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+        <Button classes={{ colorInherit: 'red' }} variant="outlined" color="inherit" onClick={this.handleClickOpen}>
           Get Started
         </Button>
         <Dialog

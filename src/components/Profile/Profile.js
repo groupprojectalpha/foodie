@@ -4,13 +4,19 @@ import { connect } from 'react-redux';
 import SideDrawer from '../Appbar/SideDrawer'
 import axios from 'axios'
 import firebase from 'firebase'
+import Circle from './Circle'
+import './Profile.css'
+import { isNull } from 'util';
 
 class Profile extends React.Component{
     constructor(props){
         super(props)
         this.state={
             shopper:[],
-            name: ''
+            name: '',
+            profilePic: '',
+            email: '',
+            providerId: ''
         }
     }
 
@@ -20,7 +26,10 @@ class Profile extends React.Component{
         .then(res => {
           console.log(res.data[0])
           this.setState({
-           name: res.data[0].name
+           name: res.data[0].displayName,
+           profilePic: res.data[0].photoURL,
+           email: res.data[0].email,
+           providerId: res.data[0].providerId
           })
         })
 
@@ -28,17 +37,47 @@ class Profile extends React.Component{
             console.log(user)
         })
     }
-
+ 
 
     render(){
-       
+       const { providerId } = this.state
         return(
-            <>
+            <div className='profile'>
             <SideDrawer/>
-            this is 
-            {this.state.name}'s
-            profile
-            </>
+          
+    
+            <div className='card'>
+                
+                <div className='top'>
+                <Circle id='circle' image={this.state.profilePic}/>
+                
+               { providerId === 'facebook.com' ? 
+               <span className='icons'>
+               <i class="fab fa-facebook-f"></i>
+               </span>
+               : 
+               providerId === 'twitter.com' ? 
+               <span className='icons'>
+               <i class="fab fa-twitter"></i>
+               </span>
+               :
+               providerId === 'google.com' ?
+               <span className='icons'>
+               <i class="fab fa-google"></i>
+               </span>
+                :
+                null
+            }
+
+                <h5 id='name'>{this.state.name}</h5>
+                
+                </div>
+                
+                <div id='bottom'>
+
+                </div>
+            </div>
+            </div>
         )
     }
 }
