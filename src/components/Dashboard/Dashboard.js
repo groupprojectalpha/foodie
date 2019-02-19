@@ -42,7 +42,7 @@ class Dashboard extends React.Component {
                 console.log('current user', res.data)
                 this.setState({
                     name: res.data[0].name,
-                    user:res.data
+                    user: res.data
                 })
                 axios.get('/user/lists')
                     .then(res => {
@@ -195,9 +195,6 @@ class Dashboard extends React.Component {
             if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
             await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
         }
-
-        // media query for card background color to change yellow on 85% of budget used
-        // media query for background color change to red when budget has been exceeded
         if (this.state.total > this.state.budget) {
             alert('You are over budget!')
         }
@@ -205,13 +202,13 @@ class Dashboard extends React.Component {
 
     sendText = async () => {
         // await axios.delete('/list/clear')
-        axios.put('/item/additems',{
-            name:'clearabledefault',
-            items:this.state.shoppingList
+        axios.put('/item/additems', {
+            name: 'clearabledefault',
+            items: this.state.shoppingList
         })
         const { phone } = this.state.user[0]
         let res = await axios.get(`/text/${phone}`).then(() => {
-        }).catch(error => { console.log(res,error) })
+        }).catch(error => { console.log(res, error) })
     }
 
 
@@ -257,8 +254,6 @@ class Dashboard extends React.Component {
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
-
-                {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
         )
     }

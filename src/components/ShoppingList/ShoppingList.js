@@ -15,12 +15,13 @@ export default class ShoppingList extends React.Component{
     render(){
         return(
             <>
-            <Droppable droppableId="shoppingList">
+            <Droppable droppableId="shoppingList"  onChange={()=>this.props.budget(this.props.items)}>
                 {(provided, snapshot) => (
                     <div 
                         ref={provided.innerRef} 
                         style={getListStyle(snapshot.isDraggingOver)}
                         className="list"
+                       
                     >
                         {this.props.items.map((item, i , arr) => (
                             <Draggable
