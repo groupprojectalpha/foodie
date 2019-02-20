@@ -30,13 +30,23 @@ app.use(passThrough)
 
 
 
-app.get('/text/:recipient', (req, res) => {
+app.get('/text/:recipient', async (req, res) => {
+    const db = req.app.get('db');
+    let listId = await db.query('select id from list where shopper = ' + req.session.shopper.id + "and name = 'clearabledefault' ").catch((error) => { console.log(error) })
+    if (listId.length === 0) {
+        listId = await db.create_list({
+            name: 'clearabledefault',
+            userId: req.session.shopper.id
+        })
+
+    }
+    console.log(listId[0].id, 'is list id')
     const { recipient } = req.params
     console.log(recipient)
     client.messages.create({
         to: recipient,
         from: PHONENUMBER,
-        body: 'success',
+        body: 'http://localhost:3000/#/mobile/' + listId[0].id,
     })
         .then(message => console.log(message.sid)).catch((error) => { console.log(error) })
 }
@@ -72,10 +82,10 @@ app.get('/item/:id/:storeId', iCtrl.foodieIncPrice) //IN PROGRESS //
 app.get('/search/:store/:term', iCtrl.newItems)
 
 // LIST DATA ENDPOINTS //
+app.delete('/list/clear', lCtrl.clear)
 app.get('/list/:id', lCtrl.findList)
 app.get('/list/:id/items', lCtrl.items)
 app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
-app.delete('/list/clear', lCtrl.clear)
 
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 

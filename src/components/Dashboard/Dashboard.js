@@ -42,7 +42,7 @@ class Dashboard extends React.Component {
                 console.log('current user', res.data)
                 this.setState({
                     name: res.data[0].name,
-                    user:res.data
+                    user: res.data
                 })
                 axios.get('/user/lists')
                     .then(res => {
@@ -103,6 +103,8 @@ class Dashboard extends React.Component {
         if (!destination) {
             return;
         }
+       
+
 
         // THIS FIRST SECTION REORDERS AN ARRAY, IF THE ITEM IS GETTING MOVED FROM AN ARRAY TO AN ARRAY //
         if (source.droppableId === destination.droppableId) {
@@ -142,7 +144,7 @@ class Dashboard extends React.Component {
                     })
             } else if (destination.droppableId === "showLists") {
                 return;
-            
+
             } else {
                 // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
                 // IF IT IS, IT INCREMENTS THE "QUANTITY" PROPERTY AND ENDS THE FUNCTION WITHOUT MOVING THE ITEM OVER //
@@ -167,12 +169,14 @@ class Dashboard extends React.Component {
                     shoppingList: r.shoppingList,
                     itemCards: r.itemCards
                 })
+                
             }
         }
-        // listener for new itemCard in ShoppingList
-        // sends itemCard to ShoppingList as prop
-        // adds price to total on state
-        // invokes handleBudget
+
+        setTimeout(()=>{
+            this.handleBudget(this.state.shoppingList)
+        },0)
+        
     }
 
     removeCard() {
@@ -195,33 +199,26 @@ class Dashboard extends React.Component {
             currentTotal += arr[i].price * arr[i].quantity
             if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
             if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
-            await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
-        }
-
-        // media query for card background color to change yellow on 85% of budget used
-        // media query for background color change to red when budget has been exceeded
-        if (this.state.total > this.state.budget) {
-            alert('You are over budget!')
+            await this.setState({ total:Math.floor(currentTotal*100)/100, overBudget:Math.floor(currentOverBudget*100)/100 , remaining: Math.floor(currentRemaining*100)/100  })
         }
     }
 
-    updateQuantity = (id,newPrice) => {
+    updateQuantity = (id, newPrice) => {
         let targetIndex = this.state.shoppingList.findIndex((item) => item.id === id)
         let newShoppingList = this.state.shoppingList.slice()
         newShoppingList[targetIndex].quantity = newPrice
-        if(targetIndex !== -1){this.setState({shoppingList: newShoppingList})}
-        else {console.log("updateQuantity: No Object Found!")}
+        if (targetIndex !== -1) { this.setState({ shoppingList: newShoppingList }) }
+        else { console.log("updateQuantity: No Object Found!") }
     }
-    sendText = async () => {
-        // await axios.delete('/list/clear')
-        axios.put('/item/additems',{
-            name:'clearabledefault',
-            items:this.state.shoppingList
+    sendText =  () => {
+      axios.delete('/list/clear')
+        axios.put('/item/additems', {
+            name: 'clearabledefault',
+            items: this.state.shoppingList
         })
-        return;
         const { phone } = this.state.user[0]
-        let res = await axios.get(`/text/${phone}`).then(() => {
-        }).catch(error => { console.log(res,error) })
+        let res =  axios.get(`/text/${phone}`).then(() => {
+        }).catch(error => { console.log(res, error) })
     }
 
 
@@ -251,13 +248,12 @@ class Dashboard extends React.Component {
                 <hr />
                 <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                 <h2>budget: ${+this.state.budget / 100}</h2>
-                your total is:  ${this.state.total}
+                your total is:  ${this.state.total/100}
                 <br />
-                you have ${this.state.remaining} left
+                you have ${this.state.remaining/100} left
            <br />
-                you are ${this.state.overBudget} over your budget
+                you are ${this.state.overBudget/100} over your budget
            <br />
-                <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
                 <button onClick={() => this.sendText()} >text</button>
 
                 <hr />
@@ -267,8 +263,6 @@ class Dashboard extends React.Component {
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
-
-                {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
             </>
         )
     }
