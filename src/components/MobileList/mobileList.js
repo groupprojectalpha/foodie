@@ -5,7 +5,8 @@ export default class Mobile extends React.Component {
     state = {
         list: [],
         checkedOff: [],
-        user: []
+        user: [],
+        total:0
     }
     componentDidMount() {
         axios.get(`/list/${this.props.match.params.id}/items`).then((res) => {
@@ -21,6 +22,10 @@ export default class Mobile extends React.Component {
             list: arrCopy,
             checkedOff: [...this.state.checkedOff, checked[0]]
         })
+        setTimeout(()=>{
+            this.total()
+        },0)
+        
 
 
     }
@@ -32,12 +37,26 @@ export default class Mobile extends React.Component {
         this.setState({
             list: arrCopy
         })
+        setTimeout(()=>{
+            this.total()
+        },0)
 
+    }
+
+    total = () => {
+        if(this.state.checkedOff.length < 1){
+            this.setState({total:0})
+        }
+
+        let total = 0;
+        this.state.checkedOff.forEach((item) => {
+            total += item.price / 100
+            this.setState({total:Math.floor(total*100)/100})
+        })
     }
 
 
     render() {
-        console.log(this.state)
         let items = this.state.list.map((item, i) => {
             return <div key={i} onClick={() => this.remove(i)} >
                 <p>{item.name}</p>
@@ -48,11 +67,14 @@ export default class Mobile extends React.Component {
         let checkedArr = this.state.checkedOff.map((item, i) => {
             return <div key={i} onClick={() => this.unRemove(i)}>
                 <p>{item.name}</p>
-                <p>{item.price}</p>
+                <p>{item.price / 100}</p>
             </div>
         })
         return (
             <>
+               <h1>Thank You For Choosing BudgetButler!</h1>
+               <hr/>
+            <h1>Your Total Is: {this.state.total}</h1>
                 {items}
                 <hr />
                 <h1>Checked Off</h1>

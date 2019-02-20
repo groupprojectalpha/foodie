@@ -199,7 +199,7 @@ class Dashboard extends React.Component {
             currentTotal += arr[i].price * arr[i].quantity
             if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
             if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
-            await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
+            await this.setState({ total:Math.floor(currentTotal*100)/100, overBudget:Math.floor(currentOverBudget*100)/100 , remaining: Math.floor(currentRemaining*100)/100  })
         }
     }
 
@@ -248,11 +248,11 @@ class Dashboard extends React.Component {
                 <hr />
                 <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                 <h2>budget: ${+this.state.budget / 100}</h2>
-                your total is:  ${this.state.total}
+                your total is:  ${this.state.total/100}
                 <br />
-                you have ${this.state.remaining} left
+                you have ${this.state.remaining/100} left
            <br />
-                you are ${this.state.overBudget} over your budget
+                you are ${this.state.overBudget/100} over your budget
            <br />
                 <button onClick={() => this.sendText()} >text</button>
 
