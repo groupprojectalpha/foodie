@@ -83,7 +83,8 @@ CREATE TABLE list_item (
 CREATE TABLE user_store (
 	id SERIAL PRIMARY KEY ,
 	store INT REFERENCES store(id) ,
-	shopper INT REFERENCES shopper(id)
+	shopper INT REFERENCES shopper(id) ,
+	nickname VARCHAR(40)
 );
 
 CREATE TABLE store_item (

@@ -1,2 +1,2 @@
 SELECT chain FROM store
-WHERE id = ${storeId}
+WHERE store_id = ${storeId}

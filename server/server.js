@@ -82,7 +82,7 @@ app.delete('/list/clear', lCtrl.clear)
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 
 app.post('/new/list' , nCtrl.list)
-// app.post('/new/store' , nCtrl.store) // IN PROGRESS //
+app.post('/new/store' , nCtrl.store) // IN PROGRESS //
 
 
 massive(CONNECTION_STRING).then(dbInstance => {

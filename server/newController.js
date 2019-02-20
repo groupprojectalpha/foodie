@@ -37,9 +37,26 @@ module.exports ={
     .catch(err => console.log(err))
   } ,
   async store(req, res){
+    const {nickname , chain , storeId} = req.body
+    const {id: userId} = req.session.shopper
+    // console.log(`nickname is ${nickname} , chain is ${chain} , store_id is ${storeId} , userId is ${userId}`)
     const db = req.app.get('db')
-    let storeExists = await db.get_store_chain({storeId: 2})
-    if(storeExists.length){return res.status(200).send(storeExists[0])}
-    res.sendStatus(404)
+    // THIS SECTION CHECKS TO SEE IF THE STORE EXISTS ON DB. IF NOT, IT ADDS IT //
+    let storeExists = await db.check_store_exists({storeId: `${storeId}`})
+    if(!storeExists.length){
+      let newStores = await db.create_store({storeId: '' + storeId , chain}).catch(err => res.status(500).send("DB Error:" + err))
+      storeExists.push(...newStores)
+    } else {
+    // THIS SECTION CHECKS TO BE SURE THE STORE ISN'T ALREADY ASSOCIATED WITH THE USER //
+    let userStores = await db.get_user_stores({userId}).catch(err => res.status(500).send("DB Error:" + err))
+    let alreadyThere = userStores.findIndex(store => store.store === storeExists[0].id || store.nickname === nickname)
+    if(alreadyThere !== -1){return res.status(409).send({message: "Store Already Saved! Nickname or StoreId already in use."})}
+    }
+    // THIS SECTION ASSOCIATES THE STORE WITH THE USER //
+    let userStores = await db.add_user_store({storeId: storeExists[0].id , userId , nickname}).catch(err => res.status(500).send(err))
+    let wasCreated = userStores.findIndex((store) => store.nickname === nickname)
+    if(wasCreated === -1){return res.status(500).send("Unable to Create Store! Check New Controller.")}
+    // THIS SECTION RETURNS ALL OF THE USER'S STORES, INCLUDING THE ADDED ONE //
+    res.status(200).send(userStores)
   }
 }
