@@ -62,7 +62,6 @@ module.exports = {
   async addItems(req, res){
     let db = req.app.get('db')
     let {items} = req.body
-    console.log(items)
     // THIS SECTION SORTS NEW ITEMS INTO A NEW ARRAY SO THEY CAN BE ADDED TO THE DB //
     let toAdd = []
     let existing = []
@@ -96,7 +95,6 @@ module.exports = {
     } else {
       listId = listIdArr[0].id
     }
-
     // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
     all.forEach(async (item) => {
       await db.add_list_item({item: item.id , list: listId})

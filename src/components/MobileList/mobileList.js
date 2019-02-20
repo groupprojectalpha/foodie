@@ -6,18 +6,28 @@ export default class Mobile extends React.Component{
         list:[],
         user:[]
     }
-    async componentDidMount(){
-       let user = await axios.get('/auth/check')
-        this.setState({user:user.data})
-      let list = await axios.get(`/list/${this.props.match.params.id}`)
-       this.setState({list:list.data})
+     componentDidMount(){
+      axios.get(`/list/${this.props.match.params.id}`).then((res)=>{
+        this.setState({list:res.data})
+      })
+    }
+
+    remove=()=>{
+        this.state.list.splice(1)
     }
 
 
     render(){
+        let items = this.state.list.map((item,i)=>{
+            return <div key={i} onClick={()=>this.remove} >
+            <p>{item.name}</p>
+            <p>{item.price/100}</p>
+
+            </div>
+        })
         return(
             <>
-            
+            {items}
             </>
         )
     }

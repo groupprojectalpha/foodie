@@ -153,9 +153,7 @@ class Dashboard extends React.Component {
                 this.getList(destination.droppableId).forEach((item) => {
                     if (itemId === item.itemcode) {
                         isMatch = true;
-                        if (!item.quantity) { item.quantity = 0 }
-                        item.quantity++
-                        console.log(item.quantity)
+                        if (item.quantity) { item.quantity += 1 }
                         return;
                     }
                 })
@@ -212,14 +210,14 @@ class Dashboard extends React.Component {
         if (targetIndex !== -1) { this.setState({ shoppingList: newShoppingList }) }
         else { console.log("updateQuantity: No Object Found!") }
     }
-    sendText = async () => {
-        await axios.delete('/list/clear')
+    sendText =  () => {
+      axios.delete('/list/clear')
         axios.put('/item/additems', {
             name: 'clearabledefault',
             items: this.state.shoppingList
         })
         const { phone } = this.state.user[0]
-        let res = await axios.get(`/text/${phone}`).then(() => {
+        let res =  axios.get(`/text/${phone}`).then(() => {
         }).catch(error => { console.log(res, error) })
     }
 
