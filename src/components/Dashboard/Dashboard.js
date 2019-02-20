@@ -8,6 +8,13 @@ import SideDrawer from '../Appbar/SideDrawer'
 import { DragDropContext } from "react-beautiful-dnd"
 import './Dashboard.css'
 import { reorder, move } from "../../lib/dragFuncModule"
+import CardFlip from './CardFlip'
+import { Spring } from 'react-spring/renderprops';
+import BudgetInput from './BudgetInput'
+import Logo from '../Logo.svg'
+import Zoom from 'react-reveal/Zoom';
+import ToggleButton from './ToggleButton.js';
+
 
 class Dashboard extends React.Component {
     constructor() {
@@ -22,7 +29,12 @@ class Dashboard extends React.Component {
             overBudget: 0,
             remaining: 0,
             name: '',
-            user: {}
+            profilePic: '',
+            email: '',
+            providerId: '',
+            user: {},
+            toggle: true,
+            hidden: false
             // prices: [],
         }
     }
@@ -36,7 +48,7 @@ class Dashboard extends React.Component {
     // sets user info to state
 
 
-    componentDidMount = () => {
+    componentDidMount = async() => {
         axios.get(`/auth/check`)
             .then(res => {
                 console.log('current user', res.data)
@@ -44,12 +56,24 @@ class Dashboard extends React.Component {
                     name: res.data[0].name
                 })
                 axios.get('/user/lists')
-                .then(res => {
-                    this.setState({
-                        lists: res.data
+                    .then(res => {
+                        this.setState({
+                            lists: res.data
+                        })
                     })
-                })
             })
+
+            await axios.get(`/auth/check`)
+            .then(res => {
+              console.log(res.data[0])
+              this.setState({
+               name: res.data[0].displayName,
+               profilePic: res.data[0].photoURL,
+               email: res.data[0].email,
+               providerId: res.data[0].providerId
+              })
+            })
+    
 
 
         // if(!this.props.getUserData){
@@ -63,12 +87,19 @@ class Dashboard extends React.Component {
         // this.setState({user: this.props.getUserData})
     }
 
+    toggle = () => {
+        this.setState({
+            toggle: !this.state.toggle
+        })
+       
+    }
+
     clickList = (id) => {
         // sends get request for items in lists
         axios.get(`/list/${id}/items`)
-        .catch(er => console.log(er))
-        // sets items to itemCards on state
-        .then((res) => this.setState({itemCards: res.data}))
+            .catch(er => console.log(er))
+            // sets items to itemCards on state
+            .then((res) => this.setState({ itemCards: res.data }))
         // sets prices from server response to prices(pin)
         // sends items to ShowItems as props
     }
@@ -83,7 +114,7 @@ class Dashboard extends React.Component {
     }
 
     getList = (id) => {
-        switch(id){
+        switch (id) {
             case "shoppingList":
                 return this.state.shoppingList
             case "itemCards":
@@ -131,14 +162,14 @@ class Dashboard extends React.Component {
             this.setState({ [list]: reorderedList })
         } else {
             // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
-            if(source.droppableId === "showLists"){
+            if (source.droppableId === "showLists") {
                 axios.get(`/list/${result.draggableId}/items`)
-                .then((res) => {
-                    this.setState({
-                        shoppingList: res.data
+                    .then((res) => {
+                        this.setState({
+                            shoppingList: res.data
+                        })
                     })
-                })
-            } else if (destination.droppableId === "showLists"){
+            } else if (destination.droppableId === "showLists") {
                 return;
             } else {
                 // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
@@ -146,22 +177,22 @@ class Dashboard extends React.Component {
                 let itemId = result.draggableId.slice(1)
                 let isMatch = false
                 this.getList(destination.droppableId).forEach((item) => {
-                    if(itemId === item.itemcode){
+                    if (itemId === item.itemcode) {
                         isMatch = true;
-                        if(item.quantity){item.quantity += 1}
+                        if (item.quantity) { item.quantity += 1 }
                         return;
                     }
                 })
-                if(isMatch){return;}
+                if (isMatch) { return; }
                 // IF THE ITEM ISN'T PRESENT ON THE TARGET ARRAY, THIS SECTION MOVES IT OVER AND REORDERS BOTH ARRAYS //
                 let r = move(
-                    this.getList(source.droppableId) ,
-                    this.getList(destination.droppableId) ,
+                    this.getList(source.droppableId),
+                    this.getList(destination.droppableId),
                     source,
                     destination
                 )
                 this.setState({
-                    shoppingList: r.shoppingList ,
+                    shoppingList: r.shoppingList,
                     itemCards: r.itemCards
                 })
             }
@@ -214,35 +245,53 @@ class Dashboard extends React.Component {
 
             </h3>
         })
-        return (
-            <>
-                <SideDrawer />
-                welcome {this.state.name}
-                {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
 
-                <div>
-                    {displayShopper}
+
+        return (
+
+
+            
+            <div className='dashboard'>
+                <SideDrawer />
+
+{ this.state.toggle ? (
+
+    <div className='budget-container'>
+    <Zoom>
+    <div className='budget-card'>
+    <div id='budget-face'>
+    <img src={Logo} className='logo-dash'/>
+    <h1>welcome</h1>
+    <h3>{this.state.name}</h3>
+    <BudgetInput></BudgetInput>
+    
+    <ToggleButton toggle={this.toggle}/>
+    </div>
+    </div>
+    </Zoom>
+    </div>
+
+) : (
+    <>
+               <button  onClick={()=>{this.toggle()}}>toggle</button>
+                <div className='calculator-card'>
+                            <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
+                            <h2>budget: ${+this.state.budget / 100}</h2>
+                            <p>your total is:  ${this.state.total}</p>
+                            <p>you have ${this.state.remaining} left</p>
+                            <p>you are ${this.state.overBudget} over your budget</p>
+                            <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
                 </div>
-                <hr />
-                <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
-                <h2>budget: ${+this.state.budget / 100}</h2>
-                your total is:  ${this.state.total}
-                <br />
-                you have ${this.state.remaining} left
-           <br />
-                you are ${this.state.overBudget} over your budget
-           <br />
-                <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
-                <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
                         <ShoppingList items={this.state.shoppingList} budget={this.state.budget} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
-
-                {/* <BottomBar style={{ width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)' }} /> */}
-            </>
+                </>
+                )}
+            </div>
+            
         )
     }
 }
