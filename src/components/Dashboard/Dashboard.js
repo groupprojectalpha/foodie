@@ -73,15 +73,6 @@ class Dashboard extends React.Component {
         // sends items to ShowItems as props
     }
 
-    dragList = () => {
-        // listener for new list in ShoppingList
-        // on new list  sends axios request for list_items table to fetch items
-        // sets items to state
-        // sends items as props to ShoppingList
-        // adds prices to total on state
-        // invokes handleBudget
-    }
-
     getList = (id) => {
         switch (id) {
             case "shoppingList":
@@ -170,15 +161,13 @@ class Dashboard extends React.Component {
                 })
             }
         }
-        // listener for new itemCard in ShoppingList
-        // sends itemCard to ShoppingList as prop
-        // adds price to total on state
-        // invokes handleBudget
     }
 
-    removeCard() {
-        // adds itemCard to ShowItem array
-        // invokes handleBudget
+    removeCard = (index) => {
+        // REMOVES CARD FROM SHOPPINGLIST //
+        let newShoppingList = this.state.shoppingList.slice()
+        newShoppingList.splice(index , 1)
+        this.setState({shoppingList: newShoppingList})
     }
 
 
@@ -259,7 +248,7 @@ class Dashboard extends React.Component {
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
