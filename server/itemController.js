@@ -48,9 +48,6 @@ module.exports = {
       case 2:
         apiItems = await pCtrl.searchWalMart(store, term, req)
         break;
-      case 3:
-        apiItems = await pCtrl.searchWalMart(store, term, req)
-        break;
       default:
         apiItems = []
     }
@@ -101,6 +98,7 @@ module.exports = {
     } else {
       listId = listIdArr[0].id
     }
+
     // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
     all.forEach(async (item) => {
       await db.add_list_item({item: item.id , list: listId})
