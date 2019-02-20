@@ -36,7 +36,7 @@ export default class ShoppingList extends React.Component{
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
                                     >
-                                    <ItemCard item={item} Price={<Price item={item} updateQuantity={this.props.updateQuantity} />} classString={arr.slice(0 , i + 1).reduce((total , item) => total + item.price * item.quantity , 0) < this.props.budget ? "green" : "red"}/>
+                                    <ItemCard item={item} remove={() => this.props.remove(i)} Price={<Price item={item} updateQuantity={this.props.updateQuantity} />} classString={arr.slice(0 , i + 1).reduce((total , item) => total + item.price * item.quantity , 0) < this.props.budget ? "green" : "red"}/>
                                     </div>
                                 )}
                             </Draggable>

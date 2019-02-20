@@ -60,9 +60,10 @@ app.get('/test', (req, res) => {
         .then((reply) => res.status(200).send(reply))
         .catch((error) => res.status(400).send(error))
 })
-app.get('/test/walmart', testCtrl.testWalmart)
-app.get('/test/pass', (req, res) => res.status(200).send(req.session.shopper))
-app.put('/test/additems', iCtrl.addItems)
+app.get('/test/walmart' , testCtrl.testWalmart)
+app.get('/test/pass' , (req , res) => res.status(200).send(req.session.shopper))
+app.put('/test/additems' , iCtrl.addItems)
+app.get('/test/createstore' , nCtrl.store)
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login', aCtrl.login)
@@ -71,8 +72,9 @@ app.get('/auth/check', aCtrl.check)
 app.delete('/auth/logout', aCtrl.logout)
 
 // USER DATA ENDPOINTS //
-app.get('/user/lists', uCtrl.getLists)
-app.get('/user/:id', uCtrl.findUser) // IN PROGRESS //
+app.get('/user/lists' , uCtrl.getLists)
+// app.get('/user/stores' , uCtrl.getStores) // IN PROGRESS //
+app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 
 // ITEM DATA ENDPOINTS //
 app.put('/item/additems', iCtrl.addItems)
@@ -89,7 +91,8 @@ app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
 
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 
-app.post('/new/list', nCtrl.list)
+app.post('/new/list' , nCtrl.list)
+app.post('/new/store' , nCtrl.store) // IN PROGRESS //
 
 
 massive(CONNECTION_STRING).then(dbInstance => {

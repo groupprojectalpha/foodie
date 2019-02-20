@@ -9,6 +9,7 @@ export default function ItemCard(props){
     <img src={image} alt={name} className="thumbnail" />
     <p>{name}</p>
     {props.Price && props.Price}
+    {props.remove && <button className="remove" onClick={props.remove}>Remove</button>}
     </div>
   )
 }

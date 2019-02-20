@@ -22,7 +22,8 @@ module.exports = {
     // expect array with all list objects with a user property = id
     // on failure (empty array) return 404 message "No Lists Saved"
     if(!userLists.length){return res.status(404).send({message: "No Lists Saved"})}
-    // on success 200 send lists array
-    res.status(200).send(userLists)
+    // on success 200 send lists array - clearabledefault
+    let filteredLists = userLists.filter(list => list.name !== "clearabledefault")
+    res.status(200).send(filteredLists)
   }
 }
