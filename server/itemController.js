@@ -35,14 +35,20 @@ module.exports = {
     // let { id } = req.session.shopper
     // let dbItems = await db.new_items({searchTerm , id , store})
 
+    // DETERMINE THE CHAIN OF THE STORE //
+    let chains = await db.get_store_chain({storeId: +store}).catch(err => res.status(500).send("DB Error: " + err))
+    if(!chains.length)(res.status(404).send("Chain not found! Check DB to see that store is properly assigned."))
 
     // Determine which store they're searching by, and pass the search off the the appropriate API controller
     let apiItems = null;
-    switch(+store){
+    switch(chains[0].chain){
       case 1:
         apiItems = [{message: "It's foodie inc!"}]
         break;
       case 2:
+        apiItems = await pCtrl.searchWalMart(store, term, req)
+        break;
+      case 3:
         apiItems = await pCtrl.searchWalMart(store, term, req)
         break;
       default:

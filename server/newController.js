@@ -35,5 +35,11 @@ module.exports ={
       lCtrl.findList(req, res)
     })
     .catch(err => console.log(err))
+  } ,
+  async store(req, res){
+    const db = req.app.get('db')
+    let storeExists = await db.get_store_chain({storeId: 2})
+    if(storeExists.length){return res.status(200).send(storeExists[0])}
+    res.sendStatus(404)
   }
 }

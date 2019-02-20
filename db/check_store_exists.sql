@@ -1,0 +1,1 @@
+SELECT id FROM store WHERE store_id = ${storeId}

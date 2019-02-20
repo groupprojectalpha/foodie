@@ -62,7 +62,11 @@ CREATE TABLE store (
 );
 
 INSERT INTO store (name , store_id)
-	VALUES ('Foodie inc,' , 'foodie test');
+	VALUES ('Foodie inc,' , 'foodie test') , ('Test WalMart' , 1855) , ('SF WalMart' , 4068);
+
+ALTER TABLE store
+ADD COLUMN chain INT REFERENCES chain(id)
+;
 
 CREATE TABLE list (
 	id SERIAL PRIMARY KEY ,
@@ -110,3 +114,10 @@ INSERT INTO store_item (item , store)
 	(19 , 1 ),
 	(20 , 1 );
 
+CREATE TABLE chain (
+    id SERIAL PRIMARY KEY ,
+    name TEXT
+);
+
+INSERT INTO chain (id , name)
+VALUES (2 , 'WalMart');

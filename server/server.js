@@ -54,6 +54,7 @@ app.get('/test' , (req , res) => {
 app.get('/test/walmart' , testCtrl.testWalmart)
 app.get('/test/pass' , (req , res) => res.status(200).send(req.session.shopper))
 app.put('/test/additems' , iCtrl.addItems)
+app.get('/test/createstore' , nCtrl.store)
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login' , aCtrl.login) 
@@ -63,6 +64,7 @@ app.delete('/auth/logout' , aCtrl.logout)
 
 // USER DATA ENDPOINTS //
 app.get('/user/lists' , uCtrl.getLists)
+// app.get('/user/stores' , uCtrl.getStores) // IN PROGRESS //
 app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 
 // ITEM DATA ENDPOINTS //
@@ -81,6 +83,7 @@ app.delete('/list/clear', lCtrl.clear)
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 
 app.post('/new/list' , nCtrl.list)
+// app.post('/new/store' , nCtrl.store) // IN PROGRESS //
 
 
 massive(CONNECTION_STRING).then(dbInstance => {
