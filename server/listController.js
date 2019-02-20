@@ -32,14 +32,14 @@ module.exports = {
 
   async clear(req, res) {
     const { id } = req.session.shopper
-    console.log(id)
     const db = req.app.get('db');
-    let res = await db.clear_default({ id }).catch((error) => {
+     await db.clear_default({ id }).catch((error) => {
       res.sendStatus(500)
       console.log(error)
     })
     res.sendStatus(201)
   },
+
 
   async items(req, res) {
     let db = req.app.get('db')

@@ -22,6 +22,7 @@ export default class ShoppingList extends React.Component{
                         ref={provided.innerRef} 
                         style={getListStyle(snapshot.isDraggingOver)}
                         className="list"
+                       
                     >
                         {this.props.items.map((item, i , arr) => (<Draggable
                                 key={item.itemcode}
