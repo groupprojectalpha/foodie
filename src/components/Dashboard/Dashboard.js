@@ -39,13 +39,16 @@ class Dashboard extends React.Component {
     componentDidMount = () => {
         axios.get(`/auth/check`)
             .then(res => {
-                console.log('current user', res.data)
                 this.setState({
                     name: res.data[0].name,
                     user: res.data
                 })
                 axios.get('/user/lists')
-                    .then(res => {
+                .then(res => {
+                    console.log(res.data)
+                    if(!res.data){
+                        this.props.history.push('/add')
+                    }
                         this.setState({
                             lists: res.data
                         })
@@ -240,7 +243,6 @@ class Dashboard extends React.Component {
             <>
                 <SideDrawer />
                 welcome {this.state.name}
-                {/* <BottomBar style={{width: 120, background: 'linear-gradient(to right bottom, #430089, #82ffa1)'}}/> */}
 
                 <div>
                     {displayShopper}
