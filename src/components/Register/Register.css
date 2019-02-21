@@ -1,0 +1,50 @@
+.register {
+    background-image: linear-gradient(to right top, #342c4a, #4f3558, #6c3d62, #8a4668, #a65069, #b05b6e, #b96573, #c27079, #bd7b85, #b68590, #af8f98, #a8999e);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+
+.fields{
+    text-align: center;
+    float: center;
+    margin-left: 35px;
+    margin-top: 15px;
+}
+
+.card2{
+    background-color: white;
+    
+    width: 500px;
+    height: 300px;
+    border-radius: 20px;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: stretch;
+    align-content: stretch;
+    box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
+}
+
+#card3 {
+    margin-top: 100px;
+    padding: 15px;
+    height: 330px;
+    width: 530px;
+    border-radius: 25px;
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.5);
+}
+
+#store {
+    width: 200px;
+    object-fit: cover;
+    border-radius: 0px 20px 20px 0px;
+}
+
+#hide {
+    display: none;
+}
+

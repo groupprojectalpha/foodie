@@ -31,7 +31,8 @@ const styles = theme => ({
       position: 'relative'
   },
   AppBar: {
-    background: 'linear-gradient(to right top, #342c4a, #4f3558, #6c3d62, #8a4668, #a65069, #b05b6e, #b96573, #c27079, #bd7b85, #b68590, #af8f98, #a8999e);'
+    background: 'black',
+    opacity: .7
   }
 });
 

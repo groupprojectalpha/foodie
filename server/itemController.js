@@ -8,12 +8,12 @@ module.exports = {
     // on failure return 404 message no item found
     // on success return 200 single obj array
   },
-  all(req, res) {
+  async all(req, res) {
+    const { id } = req.session.shopper
     let db = req.app.get('db')
-    // qurey DB for items
+    let response = await db.item_all({id}).catch((error)=>{console.log(error)})
+    res.status(200).send(response)
     // expect response array 20 obj sorted by rank
-    // on failure send message 404 unable to load items
-    // on success return 200 and obj array
   },
   foodieIncPrice(req, res) {
     // destructure item id and store id off req.params
@@ -35,10 +35,13 @@ module.exports = {
     // let { id } = req.session.shopper
     // let dbItems = await db.new_items({searchTerm , id , store})
 
+    // DETERMINE THE CHAIN OF THE STORE //
+    let chains = await db.get_store_chain({storeId: +store}).catch(err => res.status(500).send("DB Error: " + err))
+    if(!chains.length)(res.status(404).send("Chain not found! Check DB to see that store is properly assigned."))
 
     // Determine which store they're searching by, and pass the search off the the appropriate API controller
     let apiItems = null;
-    switch(+store){
+    switch(chains[0].chain){
       case 1:
         apiItems = [{message: "It's foodie inc!"}]
         break;
@@ -95,6 +98,7 @@ module.exports = {
     } else {
       listId = listIdArr[0].id
     }
+
     // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
     all.forEach(async (item) => {
       await db.add_list_item({item: item.id , list: listId})

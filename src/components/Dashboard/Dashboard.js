@@ -8,6 +8,16 @@ import SideDrawer from '../Appbar/SideDrawer'
 import { DragDropContext } from "react-beautiful-dnd"
 import './Dashboard.css'
 import { reorder, move } from "../../lib/dragFuncModule"
+import CardFlip from './CardFlip'
+import { Spring } from 'react-spring/renderprops';
+import BudgetInput from './BudgetInput'
+import Logo from '../Logo.svg'
+import Zoom from 'react-reveal/Zoom';
+import Fade from 'react-reveal/Fade'
+import Bounce from 'react-reveal/Bounce'
+import ToggleButton from './ToggleButton.js';
+import TrashButton from './TrashButton'
+
 
 class Dashboard extends React.Component {
     constructor() {
@@ -22,38 +32,35 @@ class Dashboard extends React.Component {
             overBudget: 0,
             remaining: 0,
             name: '',
-            user: []
-            // prices: [],
+            profilePic: '',
+            email: '',
+            providerId: '',
+            user: {},
+            toggle: true,
+            hidden: false
         }
     }
-
-    // checks for user on session, if not redirects to AddItems
-    // if user =>
     // makes axios request for top 20 most popular itemCards
-    // makes axios request for user lists ('/user/:id/lists)
-    // if no list, route user to AddItems
-    // sets lists to lists on state
-    // sets user info to state
-
-
-    componentDidMount = () => {
-        axios.get(`/auth/check`)
-            .then(res => {
+    componentDidMount = async() => {
+     let res = await axios.get(`/auth/check`)
                 this.setState({
+                    user: res.data,
                     name: res.data[0].name,
-                    user: res.data
+                    profilePic: res.data[0].photoURL,
+                    email: res.data[0].email,
+                    providerId: res.data[0].providerId
                 })
-                axios.get('/user/lists')
+                axios.get(`/user/lists`)
                 .then(res => {
-                    console.log(res.data)
-                    if(!res.data){
-                        this.props.history.push('/add')
-                    }
                         this.setState({
                             lists: res.data
                         })
                     })
-            })
+
+                    axios.get(`/item/all`).then((reply)=>{
+                        this.setState({itemCards:reply.data})
+                        console.log(reply.data)
+                    })
 
 
         // if(!this.props.getUserData){
@@ -67,6 +74,13 @@ class Dashboard extends React.Component {
         // this.setState({user: this.props.getUserData})
     }
 
+    toggle = () => {
+        this.setState({
+            toggle: !this.state.toggle
+        })
+       
+    }
+
     clickList = (id) => {
         // sends get request for items in lists
         axios.get(`/list/${id}/items`)
@@ -75,15 +89,6 @@ class Dashboard extends React.Component {
             .then((res) => this.setState({ itemCards: res.data }))
         // sets prices from server response to prices(pin)
         // sends items to ShowItems as props
-    }
-
-    dragList = () => {
-        // listener for new list in ShoppingList
-        // on new list  sends axios request for list_items table to fetch items
-        // sets items to state
-        // sends items as props to ShoppingList
-        // adds prices to total on state
-        // invokes handleBudget
     }
 
     getList = (id) => {
@@ -182,9 +187,11 @@ class Dashboard extends React.Component {
         
     }
 
-    removeCard() {
-        // adds itemCard to ShowItem array
-        // invokes handleBudget
+    removeCard = (index) => {
+        // REMOVES CARD FROM SHOPPINGLIST //
+        let newShoppingList = this.state.shoppingList.slice()
+        newShoppingList.splice(index , 1)
+        this.setState({shoppingList: newShoppingList})
     }
 
 
@@ -213,7 +220,10 @@ class Dashboard extends React.Component {
         if (targetIndex !== -1) { this.setState({ shoppingList: newShoppingList }) }
         else { console.log("updateQuantity: No Object Found!") }
     }
+
+
     sendText =  () => {
+     this.rankUp()
       axios.delete('/list/clear')
         axios.put('/item/additems', {
             name: 'clearabledefault',
@@ -224,6 +234,17 @@ class Dashboard extends React.Component {
         }).catch(error => { console.log(res, error) })
     }
 
+    rankUp(){
+        this.state.shoppingList.forEach((item)=>{
+            axios.put(`/list/rank/${item.id}`)
+        })
+    }
+
+   handleBudgetInput = (e) => {
+       this.setState({
+        budget: e * 100
+       })
+   }
 
 
 
@@ -232,21 +253,48 @@ class Dashboard extends React.Component {
 
 
     render() {
-        let displayShopper = this.state.shopper.map((el, i) => {
-            return <h3 key={i} >
-                <p>{el.name}</p>
-                <p>{el.state}</p>
-
-            </h3>
-        })
+        console.log(this.state)
         return (
-            <>
+
+
+            
+            <div className='dashboard'>
                 <SideDrawer />
                 welcome {this.state.name}
 
-                <div>
-                    {displayShopper}
+{ this.state.toggle ? (
+
+    <div className='budget-container'>
+    <Zoom>
+    <div className='budget-card'>
+    <div id='budget-face'>
+    <img src={Logo} className='logo-dash'/>
+    <h1>welcome</h1>
+    <h3>{this.state.name}</h3>
+    
+    <BudgetInput handleBudgetInput={this.handleBudgetInput}></BudgetInput>
+    
+    <ToggleButton toggle={this.toggle}/>
+    </div>
+    </div>
+    </Zoom>
+    </div>
+
+) : (
+    <>
+              
+               <Fade>
+                <div className='calculator-card'>
+                            {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
+                            <input onChange={(e)=> {this.handleBudgetInput(e)}}></input> */}
+                            <h2>budget: ${+this.state.budget / 100} </h2>
+                            <p>your total is:  ${this.state.total}</p>
+                            <p>you have ${this.state.remaining} left</p>
+                            <p>you are ${this.state.overBudget} over your budget</p>
+                            {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
+                            <TrashButton toggle={this.toggle} handleBudget={()=>this.handleBudget(this.state.shoppingList)}/>
                 </div>
+                </Fade>
                 <hr />
                 <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                 <h2>budget: ${+this.state.budget / 100}</h2>
@@ -261,11 +309,14 @@ class Dashboard extends React.Component {
                 <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
-            </>
+                </>
+                )}
+            </div>
+            
         )
     }
 }
