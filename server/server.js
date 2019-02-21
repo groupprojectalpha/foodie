@@ -55,7 +55,7 @@ app.get('/text/:recipient', async (req, res) => {
 
 
 // TESTING ENDPOINTS //
-app.get('/test/:zip' , pCtrl.getStores)
+app.get('/test/:store/:id' , iCtrl.callItems)
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login', aCtrl.login)

@@ -135,4 +135,23 @@ module.exports = {
     // Return the new array of items
     res.status(200).send(await Promise.all(comparedItems))
   } ,
+  async callItems(req, res){
+    // CALL DB FOR ITEMS //
+    const db = req.app.get('db')
+    let items = await db.load_list({list: req.params.id , limit: null})
+    // USE GETWALMARTITEM TO GET EACH ITEM //
+    let calledItems = [];
+    for(let i = 0 ; i < items.length ; i++){
+      let item = items[i]
+      switch(item.chain){
+        case 2:
+          calledItems.push(await pCtrl.getWalmartItem(+req.params.store , +item.itemcode))
+          break;
+        default:
+          console.log("callItems: Unable to determine chain on item " + item.id)
+      }
+    }
+    // RETURN ARRAY OF ITEMS //
+    res.status(200).send(calledItems)
+  }
 }

@@ -24,5 +24,16 @@ module.exports = {
     let walmartParsed = walmartRes.data.accessPointList.filter((store) => store.fulfillmentType === "INSTORE_PICKUP").map(store => ({storeId: +store.dispenseStoreId , name: store.name , chain: 2}))
     storesArr.push(... walmartParsed)
     res.status(200).send(storesArr)
+  } ,
+  async getWalmartItem(store , code){
+    let itemRes = await axios.get(`https://grocery.walmart.com/v3/api/products/${code}?itemFields=all&storeId=${store}`).catch(() => console.log("WalMart API Error"))
+    let item = itemRes.data
+    let name = item.basic.name
+    let type = null;
+    let brand = null;
+    let itemcode = item.USItemId
+    let price = item.store.isInStock ? item.store.price.list : 0
+    let image = item.basic.image.thumbnail
+    return {name , type , brand , itemcode , price , store , image}
   }
 }
