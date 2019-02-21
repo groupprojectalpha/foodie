@@ -38,46 +38,29 @@ class Dashboard extends React.Component {
             user: {},
             toggle: true,
             hidden: false
-            // prices: [],
         }
     }
-
-    // checks for user on session, if not redirects to AddItems
-    // if user =>
     // makes axios request for top 20 most popular itemCards
-    // makes axios request for user lists ('/user/:id/lists)
-    // if no list, route user to AddItems
-    // sets lists to lists on state
-    // sets user info to state
-
-
     componentDidMount = async() => {
-        axios.get(`/auth/check`)
-            .then(res => {
-                console.log('current user', res.data)
+     let res = await axios.get(`/auth/check`)
                 this.setState({
+                    user: res.data,
                     name: res.data[0].name,
-                    user: res.data
+                    profilePic: res.data[0].photoURL,
+                    email: res.data[0].email,
+                    providerId: res.data[0].providerId
                 })
-                axios.get('/user/lists')
-                    .then(res => {
+                axios.get(`/user/lists`)
+                .then(res => {
                         this.setState({
                             lists: res.data
                         })
                     })
-            })
 
-            await axios.get(`/auth/check`)
-            .then(res => {
-              console.log(res.data[0])
-              this.setState({
-               name: res.data[0].displayName,
-               profilePic: res.data[0].photoURL,
-               email: res.data[0].email,
-               providerId: res.data[0].providerId
-              })
-            })
-    
+                    axios.get(`/item/all`).then((reply)=>{
+                        this.setState({itemCards:reply.data})
+                        console.log(reply.data)
+                    })
 
 
         // if(!this.props.getUserData){
@@ -237,7 +220,10 @@ class Dashboard extends React.Component {
         if (targetIndex !== -1) { this.setState({ shoppingList: newShoppingList }) }
         else { console.log("updateQuantity: No Object Found!") }
     }
+
+
     sendText =  () => {
+     this.rankUp()
       axios.delete('/list/clear')
         axios.put('/item/additems', {
             name: 'clearabledefault',
@@ -246,6 +232,12 @@ class Dashboard extends React.Component {
         const { phone } = this.state.user[0]
         let res =  axios.get(`/text/${phone}`).then(() => {
         }).catch(error => { console.log(res, error) })
+    }
+
+    rankUp(){
+        this.state.shoppingList.forEach((item)=>{
+            axios.put(`/list/rank/${item.id}`)
+        })
     }
 
    handleBudgetInput = (e) => {
@@ -261,21 +253,14 @@ class Dashboard extends React.Component {
 
 
     render() {
-        let displayShopper = this.state.shopper.map((el, i) => {
-            return <h3 key={i} >
-                <p>{el.name}</p>
-                <p>{el.state}</p>
-
-            </h3>
-        })
-
-
+        console.log(this.state)
         return (
 
 
             
             <div className='dashboard'>
                 <SideDrawer />
+                welcome {this.state.name}
 
 { this.state.toggle ? (
 

@@ -33,7 +33,7 @@ module.exports = {
   async clear(req, res) {
     const { id } = req.session.shopper
     const db = req.app.get('db');
-     await db.clear_default({ id }).catch((error) => {
+    await db.clear_default({ id }).catch((error) => {
       res.sendStatus(500)
       console.log(error)
     })
@@ -45,6 +45,15 @@ module.exports = {
     let db = req.app.get('db')
     let r = await db.load_list({ list: req.params.id, limit: 25 }).catch(error => res.status(500).send(error))
     res.status(200).send(r)
+  },
+
+  rank(req, res) {
+    const { id } = req.params
+    let db = req.app.get('db')
+    db.rank_up({ id }).catch((error)=>{
+      console.log(error)
+    })
+    res.sendStatus(201)
   }
 
 
