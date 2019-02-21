@@ -2,13 +2,14 @@ import React from 'react';
 import {Droppable , Draggable} from 'react-beautiful-dnd'
 import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
 import ItemCard from '../ItemCard/ItemCard';
+import './ShoppingList.css'
 import Price from '../ItemCard/Price';
 
 export default class ShoppingList extends React.Component{
     constructor(props){
         super(props)
         this.state={
-
+            
         }
     }
 
