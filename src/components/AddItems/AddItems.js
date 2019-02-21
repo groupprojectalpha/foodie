@@ -80,25 +80,15 @@ class AddItems extends React.Component {
     }
 
 
+    // findItem = async (value) => {
+    //     let res = await Axios.get(`/search/${this.state.storeId}/${value}`)
+    //     this.setState({ itemList: res.data })
+    // }
+
     findItem = async (value) => {
-        let res = await Axios.get(`/search/${this.state.storeId}/${value}`)
+        const {chain , storeId} = this.state.targetStore
+        let res = await Axios.get(`/search/${chain}/${storeId}/${value}`)
         this.setState({ itemList: res.data })
-    }
-
-    findStore(e) {
-        switch (e) {
-            case 'walmart':
-                this.setState({ storeId: 2 })
-
-                break;
-            case 'smiths':
-                this.setState({ storeId: 4 })
-
-                break;
-            case 'aldi':
-                this.setState({ storeId: 6 })
-
-        }
     }
 
     SaveList = async () => {
@@ -124,7 +114,7 @@ class AddItems extends React.Component {
     render() {
         let storesList = this.state.stores.map((store , i) => 
             (
-                <option value={i}>{store.name}</option>
+                <option key={i} value={i}>{store.name}</option>
             )
         )
         return (
@@ -145,7 +135,8 @@ class AddItems extends React.Component {
 
 
 
-                <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
+                <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})} placeholder="Select Store">
+                    <option value="" disabled selected hidden>Select Store...</option>
                     {storesList}
                 </select>
                 <button onClick={() => console.log(this.state.targetStore)}>DEBUG</button>
