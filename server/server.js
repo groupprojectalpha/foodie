@@ -69,14 +69,15 @@ app.get('/user/lists' , uCtrl.getLists)
 app.get('/user/:id' , uCtrl.findUser) // IN PROGRESS //
 
 // ITEM DATA ENDPOINTS //
+app.get('/item/all', iCtrl.all) //IN PROGRESS //
 app.put('/item/additems', iCtrl.addItems)
 app.get('/item/:id', iCtrl.findItem) // IN PROGRESS //
-app.get('/item/all', iCtrl.all) //IN PROGRESS //
 app.get('/item/:id/:storeId', iCtrl.foodieIncPrice) //IN PROGRESS //
 app.get('/search/:chain/:store/:term', iCtrl.newItemsAgain)
 app.get('/search/:store/:term', iCtrl.newItems)
 
 // LIST DATA ENDPOINTS //
+app.put('/list/rank/:id', lCtrl.rank)
 app.delete('/list/clear', lCtrl.clear)
 app.get('/list/:id', lCtrl.findList)
 app.get('/list/:id/items', lCtrl.items)

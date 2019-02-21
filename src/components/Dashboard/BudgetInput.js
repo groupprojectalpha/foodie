@@ -8,6 +8,7 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import MoneyIcon from '@material-ui/icons/AttachMoney';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   margin: {
@@ -29,12 +30,18 @@ function InputWithIcon(props) {
             <InputAdornment position="start">
               <MoneyIcon/>
             </InputAdornment>
-          }
-          
+          } 
         />
       </FormControl>
-    
+      <div>
+      <h3>Or</h3>
+      <p>Create a list</p>
+      <Link to='/add' >
+          <button>Add Items</button>
+      </Link>
+      </div>
     </div>
+    
   );
 }
 
