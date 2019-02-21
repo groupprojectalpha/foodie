@@ -19,12 +19,12 @@ export default class AddStore extends React.Component{
     console.log(this.state)
     return(
       <div className="addstore-main">
-        <input value={this.state.nickname} onChange={(e) => this.setState({nickname: e.target.value})} />
+        <input value={this.state.nickname} onChange={(e) => this.setState({nickname: e.target.value})} placeholder="nickname" />
         <select onChange={(e) => this.setState({chain: +e.target.value})}>
           <option value="0">Choose Chain</option>
           <option value="2">WalMart</option>
         </select>
-        <input value={this.state.storeId} onChange={(e) => this.setState({storeId: e.target.value})} />
+        <input value={this.state.storeId} onChange={(e) => this.setState({storeId: e.target.value})} placeholder="storeId" />
         <button onClick={this.handleSubmit}>Submit</button>
       </div>
     )

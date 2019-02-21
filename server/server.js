@@ -7,6 +7,7 @@ const uCtrl = require('./userController')
 const lCtrl = require('./listController')
 const iCtrl = require('./itemController')
 const nCtrl = require('./newController')
+const pCtrl = require('./apiController')
 const testCtrl = require('./testController')
 const passThrough = require('./middlewares/devPassthrough')
 const twilio = require('twilio')
@@ -54,16 +55,7 @@ app.get('/text/:recipient', async (req, res) => {
 
 
 // TESTING ENDPOINTS //
-app.get('/test', (req, res) => {
-    let db = app.get('db')
-    db.query("select * from shopper")
-        .then((reply) => res.status(200).send(reply))
-        .catch((error) => res.status(400).send(error))
-})
-app.get('/test/walmart' , testCtrl.testWalmart)
-app.get('/test/pass' , (req , res) => res.status(200).send(req.session.shopper))
-app.put('/test/additems' , iCtrl.addItems)
-app.get('/test/createstore' , nCtrl.store)
+app.get('/test/:zip' , pCtrl.getStores)
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login', aCtrl.login)

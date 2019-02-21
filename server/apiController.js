@@ -22,5 +22,12 @@ module.exports = {
     })
     // return the formatted array
     return items
+  } ,
+  async getStores(req, res){
+    let storesArr = [];
+    let walmartRes = await axios.get('https://grocery.walmart.com/v4/api/serviceAvailability?postalCode=' + req.params.zip).catch(err => res.status(500).send("DB Error on GetStores" + err))
+    let walmartParsed = walmartRes.data.accessPointList.filter((store) => store.fulfillmentType === "INSTORE_PICKUP").map(store => ({storeId: +store.dispenseStoreId , name: store.name , chain: 2}))
+    storesArr.push(... walmartParsed)
+    res.status(200).send(storesArr)
   }
 }

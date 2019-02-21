@@ -17,6 +17,8 @@ class AddItems extends React.Component {
             zip: 0,
             storeId: 0,
             showInput: false,
+            stores: [] ,
+            targetStore: {} ,
         }
 
         this.onDraggEnd = this.onDraggEnd.bind(this)
@@ -25,6 +27,13 @@ class AddItems extends React.Component {
 
     getList = (id) => {
         return this.state[id]
+    }
+
+    getStores = async () => {
+        let {zip} = this.state
+        if(zip.toString().length !== 5 || typeof +zip !== "number"){return console.log("Bad Zip Code")}
+        let stores = await Axios.get('/test/' +zip)
+        if(Array.isArray(stores.data)){this.setState({stores: stores.data})}
     }
 
     onDraggEnd(result) {
@@ -113,7 +122,11 @@ class AddItems extends React.Component {
 
 
     render() {
-        console.log(this.state)
+        let storesList = this.state.stores.map((store , i) => 
+            (
+                <option value={i}>{store.name}</option>
+            )
+        )
         return (
             <>
             <SideDrawer/>
@@ -132,13 +145,12 @@ class AddItems extends React.Component {
 
 
 
-                <select onChange={(e) => this.findStore(e.target.value)}>
-                    <option value='' >Please select store</option>
-                    <option value='walmart' >Walmart</option>
-                    <option value='smiths' >Smiths</option>
-                    <option value='aldi' >Aldi</option>
+                <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
+                    {storesList}
                 </select>
+                <button onClick={() => console.log(this.state.targetStore)}>DEBUG</button>
                 <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} />
+                <button onClick={this.getStores}>Find Stores</button>
                 <hr />
                 <DragDropContext onDragEnd={this.onDraggEnd} >
                     <Droppable droppableId='itemList'>
