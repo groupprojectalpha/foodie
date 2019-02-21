@@ -21,14 +21,16 @@ function InputWithIcon(props) {
   return (
     <div>
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="input-with-icon-adornment">Budget</InputLabel>
+        <InputLabel  htmlFor="input-with-icon-adornment">Budget</InputLabel>
         <Input
+        onChange={(e)=>props.handleBudgetInput(e.target.value)}
           id="input-with-icon-adornment"
           startAdornment={
             <InputAdornment position="start">
               <MoneyIcon/>
             </InputAdornment>
           }
+          
         />
       </FormControl>
     

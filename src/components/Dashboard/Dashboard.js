@@ -13,7 +13,10 @@ import { Spring } from 'react-spring/renderprops';
 import BudgetInput from './BudgetInput'
 import Logo from '../Logo.svg'
 import Zoom from 'react-reveal/Zoom';
+import Fade from 'react-reveal/Fade'
+import Bounce from 'react-reveal/Bounce'
 import ToggleButton from './ToggleButton.js';
+import TrashButton from './TrashButton'
 
 
 class Dashboard extends React.Component {
@@ -233,6 +236,11 @@ class Dashboard extends React.Component {
         }
     }
 
+   handleBudgetInput = (e) => {
+       this.setState({
+        budget: e * 100
+       })
+   }
 
 
 
@@ -263,7 +271,8 @@ class Dashboard extends React.Component {
     <img src={Logo} className='logo-dash'/>
     <h1>welcome</h1>
     <h3>{this.state.name}</h3>
-    <BudgetInput></BudgetInput>
+    
+    <BudgetInput handleBudgetInput={this.handleBudgetInput}></BudgetInput>
     
     <ToggleButton toggle={this.toggle}/>
     </div>
@@ -273,15 +282,19 @@ class Dashboard extends React.Component {
 
 ) : (
     <>
-               <button  onClick={()=>{this.toggle()}}>toggle</button>
+              
+               <Fade>
                 <div className='calculator-card'>
-                            <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
-                            <h2>budget: ${+this.state.budget / 100}</h2>
+                            {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
+                            <input onChange={(e)=> {this.handleBudgetInput(e)}}></input> */}
+                            <h2>budget: ${+this.state.budget / 100} </h2>
                             <p>your total is:  ${this.state.total}</p>
                             <p>you have ${this.state.remaining} left</p>
                             <p>you are ${this.state.overBudget} over your budget</p>
-                            <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button>
+                            {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
+                            <TrashButton toggle={this.toggle} handleBudget={()=>this.handleBudget(this.state.shoppingList)}/>
                 </div>
+                </Fade>
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
                         <ShoppingList items={this.state.shoppingList} budget={this.state.budget} />

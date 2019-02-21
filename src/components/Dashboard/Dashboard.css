@@ -1,6 +1,6 @@
 .dashboard{
   background: linear-gradient(to right top, #342c4a, #4f3558, #6c3d62, #8a4668, #a65069, #b05b6e, #b96573, #c27079, #bd7b85, #b68590, #af8f98, #a8999e);
-  height: 200vh;
+  height: 100vh;
   width: 100vw;
 }
 
@@ -22,6 +22,7 @@
   border-radius: 2em;
   margin-left: 100px;
   margin-bottom: 50px;
+  margin-top: 20px;
 }
 
 .budget-card{
