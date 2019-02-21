@@ -19,3 +19,12 @@
 .red {
   border-color: red;
 }
+
+.price-main{
+  height: 100%;
+  width: 30%;
+}
+
+.remove{
+  background-color: darkred;
+}

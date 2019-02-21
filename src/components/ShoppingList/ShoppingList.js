@@ -3,6 +3,7 @@ import {Droppable , Draggable} from 'react-beautiful-dnd'
 import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
 import ItemCard from '../ItemCard/ItemCard';
 import './ShoppingList.css'
+import Price from '../ItemCard/Price';
 
 export default class ShoppingList extends React.Component{
     constructor(props){
@@ -22,11 +23,11 @@ export default class ShoppingList extends React.Component{
                         ref={provided.innerRef} 
                         style={getListStyle(snapshot.isDraggingOver)}
                         className="list"
+                       
                     >
-                        {this.props.items.map((item, i , arr) => (
-                            <Draggable
+                        {this.props.items.map((item, i , arr) => (<Draggable
                                 key={item.itemcode}
-                                draggableId={item.itemcode}
+                                draggableId={"S" + item.itemcode}
                                 index={i}
                             >
                                 {(provided , snapshot) => (
@@ -36,7 +37,7 @@ export default class ShoppingList extends React.Component{
                                         {...provided.draggableProps}
                                         {...provided.dragHandleProps}
                                     >
-                                    <ItemCard item={item} classString={arr.slice(0 , i + 1).reduce((total , item) => total + item.price , 0) < this.props.budget ? "green" : "red"}/>
+                                    <ItemCard item={item} remove={() => this.props.remove(i)} Price={<Price item={item} updateQuantity={this.props.updateQuantity} />} classString={arr.slice(0 , i + 1).reduce((total , item) => total + item.price * item.quantity , 0) < this.props.budget ? "green" : "red"}/>
                                     </div>
                                 )}
                             </Draggable>

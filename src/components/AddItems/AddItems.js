@@ -105,7 +105,7 @@ class AddItems extends React.Component {
 
     onKeyPressed=(e)=>{
         if(e.keyCode === 13){
-            this.SaveList()
+            alert('Saved List Name')
             this.toggleInput()
         }
     }
@@ -125,8 +125,8 @@ class AddItems extends React.Component {
                 {
                     this.state.showInput ?
 
-                        <input placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value }) }}
-                        onKeyDown={this.onKeyPressed} />
+                        <input placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value}) }}
+                        onKeyDown={this.onKeyPressed} maxLength='20' />
                         : <button onClick={this.toggleInput} >Save as List</button>
                 }
 

@@ -56,7 +56,8 @@ class Dashboard extends React.Component {
             .then(res => {
                 console.log('current user', res.data)
                 this.setState({
-                    name: res.data[0].name
+                    name: res.data[0].name,
+                    user: res.data
                 })
                 axios.get('/user/lists')
                     .then(res => {
@@ -107,15 +108,6 @@ class Dashboard extends React.Component {
         // sends items to ShowItems as props
     }
 
-    dragList = () => {
-        // listener for new list in ShoppingList
-        // on new list  sends axios request for list_items table to fetch items
-        // sets items to state
-        // sends items as props to ShoppingList
-        // adds prices to total on state
-        // invokes handleBudget
-    }
-
     getList = (id) => {
         switch (id) {
             case "shoppingList":
@@ -136,6 +128,8 @@ class Dashboard extends React.Component {
         if (!destination) {
             return;
         }
+       
+
 
         // THIS FIRST SECTION REORDERS AN ARRAY, IF THE ITEM IS GETTING MOVED FROM AN ARRAY TO AN ARRAY //
         if (source.droppableId === destination.droppableId) {
@@ -163,6 +157,7 @@ class Dashboard extends React.Component {
                 destination.index
             )
             this.setState({ [list]: reorderedList })
+            return;
         } else {
             // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
             if (source.droppableId === "showLists") {
@@ -174,6 +169,7 @@ class Dashboard extends React.Component {
                     })
             } else if (destination.droppableId === "showLists") {
                 return;
+
             } else {
                 // THIS SECTION CHECKS TO BE SURE AN ITEM INSTANCE IS NOT PRESENT ON THE TARGET ARRAY //
                 // IF IT IS, IT INCREMENTS THE "QUANTITY" PROPERTY AND ENDS THE FUNCTION WITHOUT MOVING THE ITEM OVER //
@@ -198,17 +194,21 @@ class Dashboard extends React.Component {
                     shoppingList: r.shoppingList,
                     itemCards: r.itemCards
                 })
+                
             }
         }
-        // listener for new itemCard in ShoppingList
-        // sends itemCard to ShoppingList as prop
-        // adds price to total on state
-        // invokes handleBudget
+
+        setTimeout(()=>{
+            this.handleBudget(this.state.shoppingList)
+        },0)
+        
     }
 
-    removeCard() {
-        // adds itemCard to ShowItem array
-        // invokes handleBudget
+    removeCard = (index) => {
+        // REMOVES CARD FROM SHOPPINGLIST //
+        let newShoppingList = this.state.shoppingList.slice()
+        newShoppingList.splice(index , 1)
+        this.setState({shoppingList: newShoppingList})
     }
 
 
@@ -223,17 +223,29 @@ class Dashboard extends React.Component {
         let currentRemaining = 0;
         let currentOverBudget = 0;
         for (let i = 0; i < arr.length; i++) {
-            currentTotal += arr[i].price
+            currentTotal += arr[i].price * arr[i].quantity
             if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
             if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
-            await this.setState({ total: currentTotal / 100, overBudget: currentOverBudget / 100, remaining: currentRemaining / 100 })
+            await this.setState({ total:Math.floor(currentTotal*100)/100, overBudget:Math.floor(currentOverBudget*100)/100 , remaining: Math.floor(currentRemaining*100)/100  })
         }
+    }
 
-        // media query for card background color to change yellow on 85% of budget used
-        // media query for background color change to red when budget has been exceeded
-        if (this.state.total > this.state.budget) {
-            alert('You are over budget!')
-        }
+    updateQuantity = (id, newPrice) => {
+        let targetIndex = this.state.shoppingList.findIndex((item) => item.id === id)
+        let newShoppingList = this.state.shoppingList.slice()
+        newShoppingList[targetIndex].quantity = newPrice
+        if (targetIndex !== -1) { this.setState({ shoppingList: newShoppingList }) }
+        else { console.log("updateQuantity: No Object Found!") }
+    }
+    sendText =  () => {
+      axios.delete('/list/clear')
+        axios.put('/item/additems', {
+            name: 'clearabledefault',
+            items: this.state.shoppingList
+        })
+        const { phone } = this.state.user[0]
+        let res =  axios.get(`/text/${phone}`).then(() => {
+        }).catch(error => { console.log(res, error) })
     }
 
    handleBudgetInput = (e) => {
@@ -241,6 +253,9 @@ class Dashboard extends React.Component {
         budget: e * 100
        })
    }
+
+
+
 
 
 
@@ -295,9 +310,21 @@ class Dashboard extends React.Component {
                             <TrashButton toggle={this.toggle} handleBudget={()=>this.handleBudget(this.state.shoppingList)}/>
                 </div>
                 </Fade>
+                <hr />
+                <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
+                <h2>budget: ${+this.state.budget / 100}</h2>
+                your total is:  ${this.state.total/100}
+                <br />
+                you have ${this.state.remaining/100} left
+           <br />
+                you are ${this.state.overBudget/100} over your budget
+           <br />
+                <button onClick={() => this.sendText()} >text</button>
+
+                <hr />
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
