@@ -1,13 +1,13 @@
 .dashboard{
   background: linear-gradient(to right top, #342c4a, #4f3558, #6c3d62, #8a4668, #a65069, #b05b6e, #b96573, #c27079, #bd7b85, #b68590, #af8f98, #a8999e);
-  height: 100vh;
+  height: 200vh;
   width: 100vw;
 }
 
 .lists-block{
   display: flex;
-  border: 1px dotted red;
-  width: 100vw;
+  
+  width: 80vw;
   justify-content: center;
 }
 
@@ -15,12 +15,18 @@
   width: 50%;
 }
 
+.header-dash{
+display: flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+}
+
 .calculator-card {
   width: 400px;
   box-sizing: border-box;
   background-color: rgba(1,1,1,0.2);
   border-radius: 2em;
-  margin-left: 100px;
   margin-bottom: 50px;
   margin-top: 20px;
 }

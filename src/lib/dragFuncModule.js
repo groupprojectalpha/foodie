@@ -35,6 +35,8 @@ export const getItemStyle = (isDragging, draggableStyle) => ({
 export const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? 'rgba(1,1,1,0.2)' : 'lighgrey',
     padding: grid,
-    height: '100%',
-    minimumHeight: "25rem"
+    width: '418px',
+    height: '100vh',
+    minimumHeight: "25rem",
+    borderRadius: '20px'
 })

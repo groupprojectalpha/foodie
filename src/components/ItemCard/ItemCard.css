@@ -1,23 +1,43 @@
 .item-card {
   height: 5rem;
   width: 25rem;
-  border: 2px solid #F4D8C2;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
   display: flex;
   overflow: hidden;
+  box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
+}
+
+.new-card {
+  width: 24rem;
+  height: 4rem;
+  background:white;
+  margin-left: .5rem;
+  margin-top: 0.5rem;
+  
+}
+
+.thumbnail-container {
+  height: 4rem;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.336);
+  padding: 2px;
+  box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
 }
 
 .thumbnail {
-  height: 4.5rem;
+  height: 3.5rem;
   border-radius: 50%;
   margin: 2px;
+  box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
 }
 
 .green {
-  border-color: green;
+  color: black;
 }
 
 .red {
-  border-color: red;
+  color: red;
 }
 
 .price-main{
@@ -27,4 +47,12 @@
 
 .remove{
   background-color: darkred;
+}
+
+#prod-name {
+  font-size: 12px;
+}
+#prod-price {
+  font-size: 9px;
+  display: center;
 }

@@ -5,6 +5,8 @@ import ItemCard from '../ItemCard/ItemCard';
 
 export default function ShowItems(props){
     return(
+        <div>
+        {/* <button onClick={props.toggle}>revert</button> */}
         <Droppable droppableId="itemCards">
             {(provided , snapshot) => (
                 <div
@@ -33,5 +35,6 @@ export default function ShowItems(props){
                 </div>
             )}
         </Droppable>
+        </div>
     )
 }
