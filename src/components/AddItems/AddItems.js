@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { reorder, move, getListStyle, getItemStyle } from '../../lib/dragFuncModule'
 import SideDrawer from '../Appbar/SideDrawer'
+import "./AddItems.css"
 
 class AddItems extends React.Component {
     constructor() {

@@ -17,6 +17,8 @@ import Fade from 'react-reveal/Fade'
 import Bounce from 'react-reveal/Bounce'
 import ToggleButton from './ToggleButton.js';
 import TrashButton from './TrashButton'
+import NewListButton from './NewListButton';
+import TextIcon from './TextButton'
 
 
 class Dashboard extends React.Component {
@@ -260,7 +262,7 @@ class Dashboard extends React.Component {
             
             <div className='dashboard'>
                 <SideDrawer />
-                welcome {this.state.name}
+                
 
 { this.state.toggle ? (
 
@@ -275,6 +277,7 @@ class Dashboard extends React.Component {
     <BudgetInput handleBudgetInput={this.handleBudgetInput}></BudgetInput>
     
     <ToggleButton toggle={this.toggle}/>
+    <NewListButton/>
     </div>
     </div>
     </Zoom>
@@ -284,7 +287,13 @@ class Dashboard extends React.Component {
     <>
               <header className='header-dash'>
                <Fade>
-                
+                <div className='send-text'>
+                    <div className='text-face'>
+                    <p>Send</p>
+                    <p>List</p>
+                    <TextIcon toggle={this.sendText}/>
+                    </div>
+                </div>
                 <div className='calculator-card'>
                             {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                             <input onChange={(e)=> {this.handleBudgetInput(e)}}></input> */}
