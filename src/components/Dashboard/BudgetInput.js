@@ -33,13 +33,7 @@ function InputWithIcon(props) {
           } 
         />
       </FormControl>
-      <div>
-      <h3>Or</h3>
-      <p>Create a list</p>
-      <Link to='/add' >
-          <button>Add Items</button>
-      </Link>
-      </div>
+     
     </div>
     
   );

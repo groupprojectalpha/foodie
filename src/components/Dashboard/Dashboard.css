@@ -39,7 +39,7 @@ align-items: center;
   padding: 15px 20px;
   border-radius: 2em;
   box-sizing: border-box;
-  background-color: rgba(1,1,1,0.2);
+  background-color: rgba(248, 247, 247, 0.089);
   box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
 
   
@@ -71,6 +71,28 @@ align-items: center;
   width: 100px;
 }
 
+.send-text {
+  position: absolute;
+  margin-left: -38vw;
+  margin-top: -55vh;
+  width: 100px;
+  height: 100px;
+  border-radius: 1.7em;
+  box-sizing: border-box;
+  padding-left: 10px;
+  padding-top: 10px;
+  background-color: rgba(248, 247, 247, 0.089);
+  box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
+}
+
+.text-face {
+  background-color: white;
+  height: 80px;
+  width: 80px;
+  border-radius: 1.3em;
+  box-sizing: border-box;
+  box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
+}
 
 
 /* linear-gradient(to right top, #342c4a, #4f3558, #6c3d62, #8a4668, #a65069, #b05b6e, #b96573, #c27079, #bd7b85, #b68590, #af8f98, #a8999e); */
