@@ -13,7 +13,8 @@ module.exports = {
       let itemcode = item.USItemId;
       let price = item.store.price.list;
       let image = item.basic.image.thumbnail
-      return {name , type , brand , itemcode , price , store , image}
+      let chain = 2
+      return {name , type , brand , itemcode , price , store , image , chain}
     })
     // return the formatted array
     return items
@@ -35,5 +36,5 @@ module.exports = {
     let price = item.store.isInStock ? item.store.price.list : 0
     let image = item.basic.image.thumbnail
     return {name , type , brand , itemcode , price , store , image}
-  }
+  } ,
 }

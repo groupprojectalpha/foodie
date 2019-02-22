@@ -32,7 +32,7 @@ class AddItems extends React.Component {
     getStores = async () => {
         let {zip} = this.state
         if(zip.toString().length !== 5 || typeof +zip !== "number"){return console.log("Bad Zip Code")}
-        let stores = await Axios.get('/test/' +zip)
+        let stores = await Axios.get('/api/' +zip)
         if(Array.isArray(stores.data)){this.setState({stores: stores.data})}
     }
 
@@ -135,7 +135,7 @@ class AddItems extends React.Component {
 
 
 
-                <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})} placeholder="Select Store">
+                <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
                     <option value="" disabled selected hidden>Select Store...</option>
                     {storesList}
                 </select>

@@ -57,6 +57,9 @@ app.get('/text/:recipient', async (req, res) => {
 // TESTING ENDPOINTS //
 app.get('/test/:store/:id' , iCtrl.callItems)
 
+// API ENDPOINTS //
+app.get('/api/:zip' , pCtrl.getStores)
+
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login', aCtrl.login)
 app.post('/auth/register', aCtrl.register)
@@ -74,7 +77,7 @@ app.put('/item/additems', iCtrl.addItems)
 app.get('/item/:id', iCtrl.findItem) // IN PROGRESS //
 app.get('/item/:id/:storeId', iCtrl.foodieIncPrice) //IN PROGRESS //
 app.get('/search/:chain/:store/:term', iCtrl.newItemsAgain)
-app.get('/search/:store/:term', iCtrl.newItems)
+// app.get('/search/:store/:term', iCtrl.newItems) // DEPRECIATED ... DO NOT USE //
 
 // LIST DATA ENDPOINTS //
 app.put('/list/rank/:id', lCtrl.rank)
