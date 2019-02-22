@@ -5,10 +5,10 @@ export default function (props) {
   let newQuantity = quantity
   return (
     <div className="price-main">
-      <p>${price / 100} x {quantity}</p>
+      <p>${price} x {quantity}</p>
       {props.updateQuantity && <button onClick={() => props.updateQuantity(id, ++newQuantity)}> +1 </button>}
       {props.updateQuantity && <button onClick={() => props.updateQuantity(id, --newQuantity)}> -1 </button>}
-      <div>Total: {quantity * price / 100}</div>
+      <div>Total: {quantity * price}</div>
     </div>
   )
 }

@@ -4,12 +4,29 @@ import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
 import ItemCard from '../ItemCard/ItemCard';
 import './ShoppingList.css'
 import Price from '../ItemCard/Price';
+import calculateTotal from "../../lib/calcTotal"
 
 export default class ShoppingList extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            
+            duplicateCount: 0,
+        }
+    }
+
+    componentDidUpdate(prevProps){
+        let trueTotal = calculateTotal(this.props.items)
+        if (prevProps.total === this.props.total){
+            this.state.duplicateCount++ } else {this.state.duplicateCount = 0}
+        if (this.state.duplicateCount > 3){
+            console.log("ShoppingList: Cancelling Budget Handle to avoid loop.")
+            console.log(`Duplicate Total: ${this.props.total} typeof ${typeof this.props.total}`)
+            console.log("ShoppingList: Cancelling Budget Handle to avoid loop.")
+            return;
+        }
+        if (this.props.total !== trueTotal && this.props.loopBreak){
+            this.props.handleBudget()
+            console.log(`trueTotal = ${trueTotal} : prevTotal = ${prevProps.total}`)
         }
     }
 

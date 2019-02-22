@@ -124,7 +124,6 @@ module.exports = {
 
   async newItemsAgain(req, res){
     const { chain , store , term } = req.params
-    let db = req.app.get('db')
 
     // Determine which store they're searching by, and pass the search off the the appropriate API controller
     let apiItems = null;
