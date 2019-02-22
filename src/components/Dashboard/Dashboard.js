@@ -8,15 +8,13 @@ import SideDrawer from '../Appbar/SideDrawer'
 import { DragDropContext } from "react-beautiful-dnd"
 import './Dashboard.css'
 import { reorder, move } from "../../lib/dragFuncModule"
-import CardFlip from './CardFlip'
-import { Spring } from 'react-spring/renderprops';
 import BudgetInput from './BudgetInput'
 import Logo from '../Logo.svg'
 import Zoom from 'react-reveal/Zoom';
 import Fade from 'react-reveal/Fade'
-import Bounce from 'react-reveal/Bounce'
 import ToggleButton from './ToggleButton.js';
 import TrashButton from './TrashButton'
+import calculateTotal from '../../lib/calcTotal'
 import NewListButton from './NewListButton';
 import TextIcon from './TextButton'
 
@@ -39,11 +37,13 @@ class Dashboard extends React.Component {
             providerId: '',
             user: {},
             toggle: true,
-            hidden: false
+            hidden: false ,
+            loopBreak: true ,
         }
     }
     // makes axios request for top 20 most popular itemCards
     componentDidMount = async() => {
+        console.log("Why does shoppingList have no length?" , this.state.shoppingList)
      let res = await axios.get(`/auth/check`)
                 this.setState({
                     user: res.data,
@@ -183,9 +183,9 @@ class Dashboard extends React.Component {
             }
         }
 
-        setTimeout(()=>{
-            this.handleBudget(this.state.shoppingList)
-        },0)
+        // setTimeout(()=>{
+        //     this.handleBudget(this.state.shoppingList)
+        // },0)
         
     }
 
@@ -203,16 +203,18 @@ class Dashboard extends React.Component {
     // alerts success
     // }
 
-    handleBudget = async (arr) => {
-        let currentTotal = 0;
+    handleBudget = (arr) => {
+        let currentTotal = calculateTotal(arr)
         let currentRemaining = 0;
         let currentOverBudget = 0;
-        for (let i = 0; i < arr.length; i++) {
-            currentTotal += arr[i].price * arr[i].quantity
-            if (currentTotal < this.state.budget) { currentRemaining = this.state.budget - currentTotal } else { currentRemaining = 0 }
-            if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget } else { currentOverBudget = 0 }
-            await this.setState({ total:Math.floor(currentTotal*100)/100, overBudget:Math.floor(currentOverBudget*100)/100 , remaining: Math.floor(currentRemaining*100)/100  })
-        }
+
+        if (currentTotal <= this.state.budget) { currentRemaining = this.state.budget - currentTotal 
+        } else { currentRemaining = 0 }
+        
+        if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget 
+        } else { currentOverBudget = 0 }
+
+        this.setState({ total:Math.floor(currentTotal*100)/100, overBudget:Math.floor(currentOverBudget*100)/100 , remaining: Math.floor(currentRemaining*100)/100  })
     }
 
     updateQuantity = (id, newPrice) => {
@@ -302,16 +304,15 @@ class Dashboard extends React.Component {
                             <p>you have ${this.state.remaining / 100} left</p>
                             <p>you are ${this.state.overBudget / 100} over your budget</p>
                             {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
-                            <TrashButton toggle={this.toggle} handleBudget={()=>this.handleBudget(this.state.shoppingList)}/>
+                            <TrashButton toggle={this.toggle} handleBudget={() => this.handleBudget(this.state.shoppingList)}/>
                 </div>
                 
                 </Fade>
                 
-                
                 <Fade>
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
