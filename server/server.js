@@ -7,6 +7,7 @@ const uCtrl = require('./userController')
 const lCtrl = require('./listController')
 const iCtrl = require('./itemController')
 const nCtrl = require('./newController')
+const pCtrl = require('./apiController')
 const testCtrl = require('./testController')
 const passThrough = require('./middlewares/devPassthrough')
 const twilio = require('twilio')
@@ -54,16 +55,10 @@ app.get('/text/:recipient', async (req, res) => {
 
 
 // TESTING ENDPOINTS //
-app.get('/test', (req, res) => {
-    let db = app.get('db')
-    db.query("select * from shopper")
-        .then((reply) => res.status(200).send(reply))
-        .catch((error) => res.status(400).send(error))
-})
-app.get('/test/walmart' , testCtrl.testWalmart)
-app.get('/test/pass' , (req , res) => res.status(200).send(req.session.shopper))
-app.put('/test/additems' , iCtrl.addItems)
-app.get('/test/createstore' , nCtrl.store)
+app.get('/test/:store/:id' , iCtrl.callItems)
+
+// API ENDPOINTS //
+app.get('/api/:zip' , pCtrl.getStores)
 
 // AUTHORIZATION ENDPOINTS //
 app.post('/auth/login', aCtrl.login)
@@ -81,7 +76,8 @@ app.get('/item/all', iCtrl.all) //IN PROGRESS //
 app.put('/item/additems', iCtrl.addItems)
 app.get('/item/:id', iCtrl.findItem) // IN PROGRESS //
 app.get('/item/:id/:storeId', iCtrl.foodieIncPrice) //IN PROGRESS //
-app.get('/search/:store/:term', iCtrl.newItems)
+app.get('/search/:chain/:store/:term', iCtrl.newItemsAgain)
+// app.get('/search/:store/:term', iCtrl.newItems) // DEPRECIATED ... DO NOT USE //
 
 // LIST DATA ENDPOINTS //
 app.put('/list/rank/:id', lCtrl.rank)
@@ -93,7 +89,7 @@ app.delete('/list/:id', lCtrl.delete) //IN PROGRESS //
 // NEW DB OBJECT ENDPOINTS //
 app.post('/new/item', nCtrl.item) // IN PROGRESS // 
 app.post('/new/list' , nCtrl.list)
-app.post('/new/store' , nCtrl.store) // IN PROGRESS //
+app.post('/new/store' , nCtrl.store)
 
 
 massive(CONNECTION_STRING).then(dbInstance => {

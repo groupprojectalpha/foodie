@@ -62,25 +62,36 @@ module.exports = {
     // Return the new array of items
     res.status(200).send(await Promise.all(comparedItems))
   } ,
+
+
+
   async addItems(req, res){
     let db = req.app.get('db')
     let {items} = req.body
     // THIS SECTION SORTS NEW ITEMS INTO A NEW ARRAY SO THEY CAN BE ADDED TO THE DB //
+    let codeObjs = await db.query("SELECT itemcode FROM item")
+    let codes = codeObjs.map(obj => obj.itemcode)
+    console.log(codes)
+    
     let toAdd = []
     let existing = []
+
     items.forEach(item => {
-      if(item.store){
-        toAdd.push(item)
-      } else {
+      if(codes.includes(item.itemcode)){
         existing.push(item)
+      } else {
+        toAdd.push(item)
       }
     });
 
     // THIS SECTION INSERTS NEW ITEMS INTO DB, AND RETURNS AN ARRAY OF DB ITEMS //
     let processedItems = await Promise.all(toAdd.map( async (item) => {
-      let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price, image) VALUES ('${item.name}', '${item.type}', ${item.brand}, '${item.itemcode}', ${item.price * 100}, '${item.image}') RETURNING *`)
-      .catch((err) => console.log(err))
+      let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price , image , chain) VALUES ('${item.name.toString()}', null, null, '${item.itemcode}', ${item.price * 100} , '${item.image}' , ${item.chain}) RETURNING *`)
+      .catch((err) => console.log("addItems: DB Error: " + err))
+      console.log(insertedItemArr[0])
+      // vvv MOST LIKELY DEPRECIATED vvv //
       db.query(`INSERT INTO store_item (store , item) VALUES (${item.store} , ${insertedItemArr[0].id})`)
+      // ^^^ //
       return insertedItemArr[0]
     }))
 
@@ -108,4 +119,54 @@ module.exports = {
 
   res.status(200).send(all)
   } ,
+
+  // ================================================== END ================================================//
+
+  async newItemsAgain(req, res){
+    const { chain , store , term } = req.params
+    let db = req.app.get('db')
+
+    // Determine which store they're searching by, and pass the search off the the appropriate API controller
+    let apiItems = null;
+    switch(+chain){
+      case 1:
+        apiItems = [{message: "It's foodie inc!"}]
+        break;
+      case 2:
+        apiItems = await pCtrl.searchWalMart(store, term)
+        break;
+      default:
+        apiItems = []
+    }
+    // Expect back an array of objects matching the DB objects, but with the additional key 'store'
+    // // Compare the array with our DB
+    // let comparedItems = apiItems.map(async (item , i) => {
+    //   let retArr = await db.query(`SELECT * FROM item WHERE itemcode = '${+item.itemcode}'`)
+    //   if(retArr[0]){return retArr[0]}
+    //   else if(!retArr[0]){return item}
+    //   else {return;}
+    // })
+    // Return the new array of items
+    res.status(200).send(await Promise.all(apiItems))
+  } ,
+  async callItems(req, res){
+    // CALL DB FOR ITEMS //
+    const db = req.app.get('db')
+    let items = await db.load_list({list: req.params.id , limit: null})
+    // USE GETWALMARTITEM TO GET EACH ITEM //
+    let calledItems = [];
+    for(let i = 0 ; i < items.length ; i++){
+      let item = items[i]
+      switch(item.chain){
+        case 2:
+          let info = await pCtrl.getWalmartItem(+req.params.store , +item.itemcode)
+          calledItems.push({...item , ...info})
+          break;
+        default:
+          console.log("callItems: Unable to determine chain on item " + item.id)
+      }
+    }
+    // RETURN ARRAY OF ITEMS //
+    res.status(200).send(calledItems)
+  }
 }

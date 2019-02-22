@@ -83,7 +83,7 @@ class Dashboard extends React.Component {
 
     clickList = (id) => {
         // sends get request for items in lists
-        axios.get(`/list/${id}/items`)
+        axios.get(`/test/3208/${id}`)
             .catch(er => console.log(er))
             // sets items to itemCards on state
             .then((res) => this.setState({ itemCards: res.data }))
