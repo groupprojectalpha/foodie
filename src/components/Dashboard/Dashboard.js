@@ -297,38 +297,34 @@ class Dashboard extends React.Component {
 
 ) : (
     <>
-              
+              <header className='header-dash'>
                <Fade>
+                
                 <div className='calculator-card'>
                             {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                             <input onChange={(e)=> {this.handleBudgetInput(e)}}></input> */}
                             <h2>budget: ${+this.state.budget / 100} </h2>
-                            <p>your total is:  ${this.state.total}</p>
-                            <p>you have ${this.state.remaining} left</p>
-                            <p>you are ${this.state.overBudget} over your budget</p>
+                            <p>your total is:  ${this.state.total / 100}</p>
+                            <p>you have ${this.state.remaining / 100} left</p>
+                            <p>you are ${this.state.overBudget / 100} over your budget</p>
                             {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
                             <TrashButton toggle={this.toggle} handleBudget={()=>this.handleBudget(this.state.shoppingList)}/>
                 </div>
+                
                 </Fade>
-                <hr />
-                <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
-                <h2>budget: ${+this.state.budget / 100}</h2>
-                your total is:  ${this.state.total/100}
-                <br />
-                you have ${this.state.remaining/100} left
-           <br />
-                you are ${this.state.overBudget/100} over your budget
-           <br />
-                <button onClick={() => this.sendText()} >text</button>
-
-                <hr />
+                
+                
+                <Fade>
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
                         <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                     </div>
                 </DragDropContext>
+                </Fade>
+                </header>
                 </>
+
                 )}
             </div>
             

@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom'
 import Inputs from './RegisterInputs'
 import Inputs2 from './RegisterInputs2'
 import PhoneInput from './PhoneInput'
-
+import Zoom from 'react-reveal/Zoom';
 
  class Register extends React.Component{
     constructor(props){
@@ -50,8 +50,8 @@ import PhoneInput from './PhoneInput'
     render(){
         return(
             <>
-            
             <div className='register'>
+            <Zoom>
              <div id='card3'>
              <div className='card2'>
              <div className='fields'>
@@ -77,8 +77,8 @@ import PhoneInput from './PhoneInput'
             </div>
             </div>    
             </div>
+            </Zoom>
             </div>
-
             </>
         )
     }
