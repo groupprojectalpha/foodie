@@ -4,6 +4,8 @@ import { getLists, getItems } from './../../ducks/reducer';
 import ShowItems from '../ShowItems/ShowItems';
 import ShowLists from '../ShowLists/ShowLists';
 import Axios from 'axios';
+import './ListOptions.css'
+import RevertIcon from './RevertIcon'
 
 
 class ListOptions extends React.Component {
@@ -44,11 +46,15 @@ class ListOptions extends React.Component {
     render() {
         let show = this.state.toggleItems ? "My Lists" : "My Items"
         return (
+            
             <>
-            <button onClick={this.toggle}>{show}</button>
+            <div className="seperator">
+            
+            { this.state.toggleItems ? <RevertIcon toggle={this.toggle}/> : null}
+            </div>
             {
                 this.state.toggleItems ?
-                <ShowItems items={this.props.itemCards}  />
+                <ShowItems toggle={this.toggle} items={this.props.itemCards}  />
                 : <ShowLists lists={this.props.listsArray} clickList={this.clickList} />
             }
 

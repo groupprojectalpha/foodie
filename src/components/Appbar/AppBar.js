@@ -46,7 +46,7 @@ function ButtonAppBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            FOODIE
+            BUDGET BUTLER
           </Typography>
           {/* <Button color="inherit"><img src={Logo} id='logo'/></Button> */}
           <Link to='/' style={{ textDecoration: 'none' }}>

@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css?family=Muli');
+
+#list-faces {
+    background-color: rgba(255, 255, 255, 0.925);
+    box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
+    height: 25px;
+    width: 390px;
+    border-radius: 5px;
+   
+}
+
+#list-boxes {
+    background-color: rgba(255, 255, 255, 0.05);
+    
+    height: 35px;
+    width: 400px;
+    border-radius: 5px;
+    padding-left: 5px;
+    padding-top: 5px;
+}
+
+#list-names{
+    font-family: 'Muli', sans-serif;
+
+}
