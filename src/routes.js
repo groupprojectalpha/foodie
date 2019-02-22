@@ -7,8 +7,9 @@ import LoginOptions from './components/LoginOptions/LoginOptions';
 import Register from './components/Register/Register';
 import Profile from  './components/Profile/Profile';
 import ShoppingList from './components/ShoppingList/ShoppingList'
+import Mobile from './components/MobileList/mobileList';
+import AddStore from './components/AddStore/AddStore';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import Mobile from './components/MobileList/mobileList'
 
 export default (
     
@@ -21,6 +22,7 @@ export default (
     <Route path='/profile' component={Profile} />
     <Route path='/shopping_list' component={ShoppingList} />
     <Route path='/mobile/:id' component={Mobile} />
+    <Route path='/testing' component={AddStore} />
 
     </Switch>
     
