@@ -182,7 +182,7 @@ class Dashboard extends React.Component {
                 
             }
         }
-
+//merge
         setTimeout(()=>{
             this.handleBudget(this.state.shoppingList)
         },0)

@@ -7,6 +7,11 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { reorder, move, getListStyle, getItemStyle } from '../../lib/dragFuncModule'
 import SideDrawer from '../Appbar/SideDrawer'
 import "./AddItems.css"
+import GeoLocate from './GeoLocateTest'
+import geocoding, { location } from 'reverse-geocoding';
+
+
+
 
 class AddItems extends React.Component {
     constructor() {
@@ -110,6 +115,7 @@ class AddItems extends React.Component {
         }
     }
 
+   
 
 
     render() {
@@ -122,6 +128,7 @@ class AddItems extends React.Component {
             <>
             <SideDrawer/>
                 this is AddItems
+
             <input placeholder={'Search'} onChange={(e) => this.findItem(e.target.value)} />
                 <button onClick={this.SaveList}>Save</button>
              
@@ -180,6 +187,7 @@ class AddItems extends React.Component {
 
                     </Droppable>
                 </DragDropContext>
+                <GeoLocate/>
             </>
         )
     }
