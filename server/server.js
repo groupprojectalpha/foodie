@@ -1,3 +1,5 @@
+const path = require('path')
+
 require('dotenv').config();
 const express = require('express');
 const massive = require('massive');
@@ -28,7 +30,7 @@ app.use(session({
 }))
 app.use(passThrough)
 
-app.use(express.static(`${__dirname}/../build`))
+app.use( express.static( `${__dirname}/../build` ) );
 
 
 
@@ -101,3 +103,7 @@ massive(CONNECTION_STRING).then(dbInstance => {
 
 // FIREBASE ENDPOINT //
 app.post('/auth/firebase', aCtrl.fireBase)
+
+app.get('*', (req,res)=>{
+    res.sendFile(path.join(__dirname, '../build/index.html'))
+})
