@@ -12,7 +12,7 @@ const testCtrl = require('./testController')
 const passThrough = require('./middlewares/devPassthrough')
 const twilio = require('twilio')
 
-const { SERVER_PORT, CONNECTION_STRING, SECRET, AUTHTOKEN, SID, PHONENUMBER } = process.env;
+const { SERVER_PORT, CONNECTION_STRING, SECRET, AUTHTOKEN, SID, PHONENUMBER, TEXTURL } = process.env;
 const accountSid = SID;
 const authToken = AUTHTOKEN;
 const client = new twilio(accountSid, authToken)
@@ -49,7 +49,7 @@ app.get('/text/:recipient', async (req, res) => {
     client.messages.create({
         to: recipient,
         from: PHONENUMBER,
-        body: 'http://localhost:3001/#/mobile/' + listId[0].id,
+        body: TEXTURL + listId[0].id,
     })
         .then(message => console.log(message.sid)).catch((error) => { console.log(error) })
 }
