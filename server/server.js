@@ -28,6 +28,8 @@ app.use(session({
 }))
 app.use(passThrough)
 
+app.use(express.static(`${__dirname}/../build`))
+
 
 
 
@@ -47,7 +49,7 @@ app.get('/text/:recipient', async (req, res) => {
     client.messages.create({
         to: recipient,
         from: PHONENUMBER,
-        body: 'http://localhost:3000/#/mobile/' + listId[0].id,
+        body: 'http://localhost:3001/#/mobile/' + listId[0].id,
     })
         .then(message => console.log(message.sid)).catch((error) => { console.log(error) })
 }
