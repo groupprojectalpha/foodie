@@ -5,7 +5,9 @@ import ShowItems from '../ShowItems/ShowItems';
 import ShowLists from '../ShowLists/ShowLists';
 import Axios from 'axios';
 import './ListOptions.css'
-import RevertIcon from './RevertIcon'
+import RevertIcon from './RevertIcon';
+import Spinner from 'react-md-spinner';
+import Fade from 'react-reveal/Fade';
 
 
 class ListOptions extends React.Component {
@@ -37,14 +39,28 @@ class ListOptions extends React.Component {
         // passes items to ShowItems as props
     }
 
-    clickList = (id) => {
-        this.toggle()
-        this.props.clickList(id)
-    }
+    
+ clickList = (id) => {
+    this.toggle()
+    this.props.clickList(id)
+    this.props.handleLoading()
+}
 
 
     render() {
         let show = this.state.toggleItems ? "My Lists" : "My Items"
+        
+
+
+if (this.props.loading === true) {
+    return (
+        <Fade>
+        <h2>Please be patient while we fetch all your items fresh for the store</h2>
+            <Spinner size={100} />
+        </Fade>
+
+    )
+}
         return (
             
             <>
