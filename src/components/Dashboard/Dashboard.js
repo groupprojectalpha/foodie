@@ -39,6 +39,7 @@ class Dashboard extends React.Component {
             toggle: true,
             hidden: false ,
             loopBreak: true ,
+            loading: false
         }
     }
     // makes axios request for top 20 most popular itemCards
@@ -82,13 +83,20 @@ class Dashboard extends React.Component {
         })
        
     }
+    
+   handleLoading = () => {
+    this.setState({ loading: true })
+}
 
     clickList = (id) => {
         // sends get request for items in lists
         axios.get(`/test/3208/${id}`)
             .catch(er => console.log(er))
             // sets items to itemCards on state
-            .then((res) => this.setState({ itemCards: res.data }))
+            .then((res) => this.setState({ 
+                itemCards: res.data,
+                loading:false
+             }))
         // sets prices from server response to prices(pin)
         // sends items to ShowItems as props
     }
@@ -313,7 +321,7 @@ class Dashboard extends React.Component {
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
                         <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} />
-                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
+                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} loading={this.state.loading} handleLoading={this.handleLoading} />
                     </div>
                 </DragDropContext>
                 </Fade>
