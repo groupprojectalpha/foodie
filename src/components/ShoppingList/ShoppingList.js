@@ -15,7 +15,8 @@ export default class ShoppingList extends React.Component{
 
     componentDidUpdate(){
         let trueTotal = calculateTotal(this.props.items)
-        if (this.props.total !== trueTotal){
+        if (this.props.total !== trueTotal && !isNaN(this.props.total) && !isNaN(trueTotal)){
+            console.log('Handling Budget: trueTotal = ' , trueTotal , typeof trueTotal , " ; givenTotal = " , this.props.total , typeof this.props.total)
             this.props.handleBudget()
         }
     }

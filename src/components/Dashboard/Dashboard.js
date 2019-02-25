@@ -213,7 +213,7 @@ class Dashboard extends React.Component {
         if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget 
         } else { currentOverBudget = 0 }
 
-        this.setState({ total:Math.floor(currentTotal*100)/100, overBudget:Math.floor(currentOverBudget*100)/100 , remaining: Math.floor(currentRemaining*100)/100  })
+        this.setState({ total: currentTotal, overBudget: currentOverBudget , remaining: currentRemaining  })
     }
 
     updateQuantity = (id, newPrice) => {
