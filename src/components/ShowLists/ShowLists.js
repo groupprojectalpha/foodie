@@ -1,7 +1,6 @@
 import React from 'react';
 import {Draggable, Droppable} from 'react-beautiful-dnd';
 import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
-import Fade from 'react-reveal/Fade'
 import './ShowLists.css'
 
 export default function ShowList(props){
