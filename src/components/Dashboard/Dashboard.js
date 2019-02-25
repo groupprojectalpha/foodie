@@ -38,7 +38,6 @@ class Dashboard extends React.Component {
             user: {},
             toggle: true,
             hidden: false ,
-            loopBreak: true ,
         }
     }
     // makes axios request for top 20 most popular itemCards
