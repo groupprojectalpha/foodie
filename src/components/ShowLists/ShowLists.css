@@ -3,16 +3,17 @@
 #list-faces {
     background-color: rgba(255, 255, 255, 0.925);
     box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
-    height: 25px;
+    height: 52px;
     width: 390px;
     border-radius: 5px;
+    padding: 13px;
    
 }
 
 #list-boxes {
     background-color: rgba(255, 255, 255, 0.05);
     
-    height: 35px;
+    height: 60px;
     width: 400px;
     border-radius: 5px;
     padding-left: 5px;
@@ -21,5 +22,9 @@
 
 #list-names{
     font-family: 'Muli', sans-serif;
+    font-size: 20px;
+    text-transform: capitalize;
+    font-weight: bold;
+    letter-spacing: 1.5px;
 
 }

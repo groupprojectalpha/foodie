@@ -34,10 +34,12 @@
 
 .green {
   color: black;
+  background: #0080005e;
 }
 
 .red {
   color: red;
+  background: #ff000046;
 }
 
 .price-main{

@@ -1,7 +1,8 @@
 import React from 'react';
 import {Draggable, Droppable} from 'react-beautiful-dnd';
 import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
-import './ShowLists.css'
+import './ShowLists.css';
+import ListCard from '../ListCard/ListCard';
 
 export default function ShowList(props){
     return(
@@ -27,12 +28,7 @@ export default function ShowList(props){
                                     {...provided.draggableProps}
                                     onClick={() => props.clickList(list.id)}
                                 >
-                                <div id='list-boxes'>
-                                <div id='list-faces'>
-                                <p id='list-names'>{list.name}</p>
-                                </div>
-                                </div>
-                                    
+                                    <ListCard list={list}/>
                                 </div>
                                 
                             )}
