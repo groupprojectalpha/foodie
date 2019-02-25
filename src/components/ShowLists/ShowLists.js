@@ -13,6 +13,9 @@ export default function ShowList(props){
                     style={getListStyle(snapshot.isDraggingOver)}
                     className="list"
                 >
+                  <div>
+                        <h2 style={{margin:'10px'}}>My Lists</h2>
+                    </div>
                     {props.lists.map((list, i) => (
                         <Draggable
                             key={list.id}

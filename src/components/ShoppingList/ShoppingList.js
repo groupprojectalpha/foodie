@@ -42,6 +42,9 @@ export default class ShoppingList extends React.Component{
                         className="list"
                        
                     >
+                    <div>
+                        <h2 style={{margin:'10px'}}>Shopping List</h2>
+                    </div>
                         {this.props.items.map((item, i , arr) => (<Draggable
                                 key={item.itemcode}
                                 draggableId={"S" + item.itemcode}
