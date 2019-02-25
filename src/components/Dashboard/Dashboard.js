@@ -143,14 +143,18 @@ class Dashboard extends React.Component {
             this.setState({ [list]: reorderedList })
             return;
         } else {
-            // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
+            // THIS SECTION RUNS IN THE EVENT THAT A LIST IS DRAGGED INTO SHOPPINGLIST //
             if (source.droppableId === "showLists") {
-                axios.get(`/list/${result.draggableId}/items`)
-                    .then((res) => {
-                        this.setState({
-                            shoppingList: res.data
-                        })
+                axios.get(`/test/3208/${result.draggableId}`)
+                .then((res) => {
+                    let quantityAdded = res.data.slice()
+                    quantityAdded.forEach((item) => item.quantity = 1)
+                    console.log("Quantity Added : " , quantityAdded)
+                    this.setState({
+                        shoppingList: [...this.state.shoppingList , ...quantityAdded]
                     })
+                })
+                // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
             } else if (destination.droppableId === "showLists") {
                 return;
 
