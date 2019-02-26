@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
-
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -48,29 +47,16 @@ class OutlinedTextFields extends React.Component {
 
         <TextField
           id="outlined-email-input"
-          label="Email"
+          label="Search Store"
           className={classes.textField}
-          type="Email"
+          type="normal"
           name="Email"
           margin="normal"
           variant="outlined"
-          value={this.state.Username} 
-          onChange={this.props.handleUsername}
+          
+          onChange={(e)=>this.props.findItem(e.target.value)}
         />
 
-        <TextField
-          id="outlined-password-input"
-          label="Password"
-          className={classes.textField}
-          type="password"
-          autoComplete="current-password"
-          margin="normal"
-          variant="outlined"
-          value={this.state.Password}
-          onChange={this.props.handlePassword}
-        />
-
-       
       </form>
     );
   }
