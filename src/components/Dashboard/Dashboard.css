@@ -13,6 +13,22 @@
 
 .list{
   width: 50%;
+  overflow: auto;
+  height: 937px;
+}
+
+.tab{
+  background-color: rgba(1,1,1,0.2);
+  width: 50%;
+  border-radius: 20px 20px 0px 0px;
+}
+
+.spinner{
+  
+}
+
+::-webkit-scrollbar{
+  background: hidden;
 }
 
 .header-dash{

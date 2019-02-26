@@ -38,5 +38,5 @@ export const getListStyle = (isDraggingOver) => ({
     width: '418px',
     height: '100vh',
     minimumHeight: "25rem",
-    borderRadius: '20px'
+    borderRadius: '0px 20px 20px 20px'
 })
