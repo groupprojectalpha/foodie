@@ -13,7 +13,7 @@ export default function () {
         <Fade>
                 <div className="list" style={{ borderRadius: '0px 20px 20px 20px', width: '418px' }}>
 
-                    <h2>Please be patient while we fetch all your items fresh for the store</h2>
+                    <h2>Please be patient while we fetch all your items fresh from the store</h2>
                     <Spinner size={100} />
                 </div>
             </Fade>
