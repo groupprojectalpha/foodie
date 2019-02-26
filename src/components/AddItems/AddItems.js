@@ -26,7 +26,8 @@ class AddItems extends React.Component {
             showInput: false,
             stores: [] ,
             targetStore: {} ,
-            toggle: true
+            toggle: true,
+            zipClass: "zip-true"
         }
 
         this.onDraggEnd = this.onDraggEnd.bind(this)
@@ -39,9 +40,15 @@ class AddItems extends React.Component {
 
     getStores = async () => {
         let {zip} = this.state
+        if(!zip){return this.noZip();}
         if(zip.toString().length !== 5 || typeof +zip !== "number"){return console.log("Bad Zip Code")}
         let stores = await Axios.get('/api/' +zip)
         if(Array.isArray(stores.data)){this.setState({stores: stores.data})}
+    }
+    
+    noZip = () => {
+        console.log("noZip invoked")
+        this.setState({zipClass: "zip-false"})
     }
 
     onDraggEnd(result) {

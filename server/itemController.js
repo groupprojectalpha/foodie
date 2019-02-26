@@ -1,5 +1,6 @@
 const testCtrl = require('./testController')
 const pCtrl = require('./apiController')
+const parser = require('./lib/apostropheParser')
 
 module.exports = {
   findItem(req, res) {
@@ -71,7 +72,7 @@ module.exports = {
     // THIS SECTION SORTS NEW ITEMS INTO A NEW ARRAY SO THEY CAN BE ADDED TO THE DB //
     let codeObjs = await db.query("SELECT itemcode FROM item")
     let codes = codeObjs.map(obj => obj.itemcode)
-    console.log(codes)
+    // console.log(codes)
     
     let toAdd = []
     let existing = []
@@ -86,9 +87,9 @@ module.exports = {
 
     // THIS SECTION INSERTS NEW ITEMS INTO DB, AND RETURNS AN ARRAY OF DB ITEMS //
     let processedItems = await Promise.all(toAdd.map( async (item) => {
-      let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price , image , chain) VALUES ('${item.name.toString()}', null, null, '${item.itemcode}', ${item.price * 100} , '${item.image}' , ${item.chain}) RETURNING *`)
+      let insertedItemArr = await db.query(`INSERT INTO item (name, type, brand, itemcode, price , image , chain) VALUES ('${parser(item.name)}', null, null, '${item.itemcode}', ${item.price * 100} , '${item.image}' , ${item.chain}) RETURNING *`)
       .catch((err) => console.log("addItems: DB Error: " + err))
-      console.log(insertedItemArr[0])
+      // console.log(insertedItemArr[0])
       // vvv MOST LIKELY DEPRECIATED vvv //
       db.query(`INSERT INTO store_item (store , item) VALUES (${item.store} , ${insertedItemArr[0].id})`)
       // ^^^ //
@@ -100,7 +101,7 @@ module.exports = {
 
     // THIS SECTION CHECKS TO SEE IF THE LIST EXISTS //
     if(!req.body.name){req.body.name = "Favorite Items"}
-    let listIdArr = await db.query(`SELECT id FROM list WHERE name = '${req.body.name}' AND shopper = ${req.session.shopper.id}`)
+    let listIdArr = await db.query(`SELECT id FROM list WHERE name = '${parser(req.body.name)}' AND shopper = ${req.session.shopper.id}`)
     let listId = null;
     if(!listIdArr[0]){
       // THIS SECTION CREATES A LIST IF A LIST IS NOT FOUND //

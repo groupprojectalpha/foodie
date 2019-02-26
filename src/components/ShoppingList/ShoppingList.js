@@ -4,43 +4,36 @@ import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
 import ItemCard from '../ItemCard/ItemCard';
 import './ShoppingList.css'
 import Price from '../ItemCard/Price';
-import calculateTotal from "../../lib/calcTotal"
+import calculateTotal from "../../lib/calcTotal";
+import Headers from '../Headers';
 
 export default class ShoppingList extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            duplicateCount: 0,
         }
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate(){
         let trueTotal = calculateTotal(this.props.items)
-        if (prevProps.total === this.props.total){
-            this.state.duplicateCount++ } else {this.state.duplicateCount = 0}
-        if (this.state.duplicateCount > 3){
-            console.log("ShoppingList: Cancelling Budget Handle to avoid loop.")
-            console.log(`Duplicate Total: ${this.props.total} typeof ${typeof this.props.total}`)
-            console.log("ShoppingList: Cancelling Budget Handle to avoid loop.")
-            return;
-        }
-        if (this.props.total !== trueTotal && this.props.loopBreak){
+        if (this.props.total !== trueTotal && !isNaN(this.props.total) && !isNaN(trueTotal)){
+            console.log('Handling Budget: trueTotal = ' , trueTotal , typeof trueTotal , " ; givenTotal = " , this.props.total , typeof this.props.total)
             this.props.handleBudget()
-            console.log(`trueTotal = ${trueTotal} : prevTotal = ${prevProps.total}`)
         }
     }
 
 
     render(){
         return(
-            <>
+            <div>
+                <Headers title={'Shopping List'} />
             <Droppable droppableId="shoppingList">
                 {(provided, snapshot) => (
                     <div 
-                        ref={provided.innerRef} 
-                        style={getListStyle(snapshot.isDraggingOver)}
-                        className="list"
-                       
+                    ref={provided.innerRef} 
+                    style={getListStyle(snapshot.isDraggingOver)}
+                    className="list"
+                    
                     >
                         {this.props.items.map((item, i , arr) => (<Draggable
                                 key={item.itemcode}
@@ -62,7 +55,7 @@ export default class ShoppingList extends React.Component{
                     </div>
                 )}
             </Droppable>
-            </>
+            </div>
         )
     }
 }

@@ -4,5 +4,5 @@ export default function(arr){
     const x = arr[i].price * arr[i].quantity * 100
     if(typeof x === "number" || !isNaN(x)){total += x}
   }
-  return total
+  return Math.floor(total*100)/100
 }

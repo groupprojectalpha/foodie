@@ -6,6 +6,7 @@
   display: flex;
   overflow: hidden;
   box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
+  justify-content: space-between;
 }
 
 .new-card {
