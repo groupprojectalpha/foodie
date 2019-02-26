@@ -1,3 +1,5 @@
+const path = require('path')
+
 require('dotenv').config();
 const express = require('express');
 const massive = require('massive');
@@ -12,7 +14,7 @@ const testCtrl = require('./testController')
 const passThrough = require('./middlewares/devPassthrough')
 const twilio = require('twilio')
 
-const { SERVER_PORT, CONNECTION_STRING, SECRET, AUTHTOKEN, SID, PHONENUMBER } = process.env;
+const { SERVER_PORT, CONNECTION_STRING, SECRET, AUTHTOKEN, SID, PHONENUMBER, TEXTURL } = process.env;
 const accountSid = SID;
 const authToken = AUTHTOKEN;
 const client = new twilio(accountSid, authToken)
@@ -27,6 +29,8 @@ app.use(session({
     saveUninitialized: false
 }))
 app.use(passThrough)
+
+app.use( express.static( `${__dirname}/../build` ) );
 
 
 
@@ -47,7 +51,7 @@ app.get('/text/:recipient', async (req, res) => {
     client.messages.create({
         to: recipient,
         from: PHONENUMBER,
-        body: 'http://localhost:3000/#/mobile/' + listId[0].id,
+        body: TEXTURL + listId[0].id,
     })
         .then(message => console.log(message.sid)).catch((error) => { console.log(error) })
 }
@@ -99,3 +103,7 @@ massive(CONNECTION_STRING).then(dbInstance => {
 
 // FIREBASE ENDPOINT //
 app.post('/auth/firebase', aCtrl.fireBase)
+
+app.get('*', (req,res)=>{
+    res.sendFile(path.join(__dirname, '../build/index.html'))
+})

@@ -37,7 +37,9 @@ class Dashboard extends React.Component {
             providerId: '',
             user: {},
             toggle: true,
-            hidden: false,
+            hidden: false ,
+            loopBreak: true ,
+            loading: false
         }
     }
     // makes axios request for top 20 most popular itemCards
@@ -81,13 +83,20 @@ class Dashboard extends React.Component {
         })
 
     }
+    
+   handleLoading = () => {
+    this.setState({ loading: true })
+}
 
     clickList = (id) => {
         // sends get request for items in lists
         axios.get(`/test/3208/${id}`)
             .catch(er => console.log(er))
             // sets items to itemCards on state
-            .then((res) => this.setState({ itemCards: res.data }))
+            .then((res) => this.setState({ 
+                itemCards: res.data,
+                loading:false
+             }))
         // sets prices from server response to prices(pin)
         // sends items to ShowItems as props
     }
@@ -280,56 +289,57 @@ class Dashboard extends React.Component {
 
             <div className='dashboard'>
                 <SideDrawer />
+                
 
+{ this.state.toggle ? (
 
-                {this.state.toggle ? (
+    <div className='budget-container'>
+    <Zoom>
+    <div className='budget-card'>
+    <div id='budget-face'>
+    <img src={Logo} className='logo-dash'/>
+    <h1>welcome</h1>
+    <h3>{this.state.name}</h3>
+    
+    <BudgetInput handleBudgetInput={this.handleBudgetInput}></BudgetInput>
+    
+    <ToggleButton toggle={this.toggle}/>
+    <NewListButton/>
+    </div>
+    </div>
+    </Zoom>
+    </div>
 
-                    <div className='budget-container'>
-                        <Zoom>
-                            <div className='budget-card'>
-                                <div id='budget-face'>
-                                    <img src={Logo} className='logo-dash' />
-                                    <h1>welcome</h1>
-                                    <h3>{this.state.name}</h3>
-
-                                    <BudgetInput handleBudgetInput={this.handleBudgetInput}></BudgetInput>
-
-                                    <ToggleButton toggle={this.toggle} />
-                                    <NewListButton />
-                                </div>
-                            </div>
-                        </Zoom>
+) : (
+    <>
+              <header className='header-dash'>
+               <Fade>
+                <div className='send-text'>
+                    <div className='text-face'>
+                    <p>Send</p>
+                    <p>List</p>
+                    <TextIcon toggle={this.sendText}/>
                     </div>
-
-                ) : (
-                        <>
-                            <header className='header-dash'>
-                                <Fade>
-                                    <div className='send-text'>
-                                        <div className='text-face'>
-                                            <p>Send</p>
-                                            <p>List</p>
-                                            <TextIcon toggle={this.sendText} />
-                                        </div>
-                                    </div>
-                                    <div className='calculator-card'>
-                                        {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
+                </div>
+                <div className='calculator-card'>
+                            {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                             <input onChange={(e)=> {this.handleBudgetInput(e)}}></input> */}
-                                        <h2>budget: ${+this.state.budget / 100} </h2>
-                                        <p>your total is:  ${this.state.total / 100}</p>
-                                        <p>you have ${this.state.remaining / 100} left</p>
-                                        <p>you are ${this.state.overBudget / 100} over your budget</p>
-                                        {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
-                                        <TrashButton toggle={this.toggle} handleBudget={() => this.handleBudget(this.state.shoppingList)} />
-                                    </div>
+                            <h2>budget: ${+this.state.budget / 100} </h2>
+                            <p>your total is:  ${this.state.total / 100}</p>
+                            <p>you have ${this.state.remaining / 100} left</p>
+                            <p>you are ${this.state.overBudget / 100} over your budget</p>
+                            {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
+                            <TrashButton toggle={this.toggle} handleBudget={() => this.handleBudget(this.state.shoppingList)}/>
+                </div>
+                
+                </Fade>
+                
+                <Fade>
+                <DragDropContext onDragEnd={this.dragItem}>
+                    <div className="lists-block">
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} />
+                        <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} loading={this.state.loading} handleLoading={this.handleLoading} />
 
-                                </Fade>
-
-                                <Fade>
-                                    <DragDropContext onDragEnd={this.dragItem}>
-                                        <div className="lists-block">
-                                            <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} />
-                                            <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} />
                                         </div>
                                     </DragDropContext>
                                 </Fade>
