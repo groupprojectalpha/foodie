@@ -9,8 +9,8 @@ import SideDrawer from '../Appbar/SideDrawer'
 import "./AddItems.css"
 import GeoLocate from './GeoLocateTest'
 import geocoding, { location } from 'reverse-geocoding';
-
-
+import SearchInput from './SearchInput.js'
+import Zoom from 'react-reveal/Zoom';
 
 
 class AddItems extends React.Component {
@@ -20,11 +20,12 @@ class AddItems extends React.Component {
             itemList: [],
             newList: [],
             listName: '',
-            zip: 0,
+            zip: null,
             storeId: 0,
             showInput: false,
             stores: [] ,
             targetStore: {} ,
+            toggle: true
         }
 
         this.onDraggEnd = this.onDraggEnd.bind(this)
@@ -115,6 +116,13 @@ class AddItems extends React.Component {
         }
     }
 
+    updateZip = (t) => {
+        this.setState({
+            zip: t
+        })
+        console.log(this.state.zip)
+    }
+
    
 
 
@@ -125,36 +133,41 @@ class AddItems extends React.Component {
             )
         )
         return (
-            <>
+            <div className='addItems'>
             <SideDrawer/>
-                this is AddItems
 
-            <input placeholder={'Search'} onChange={(e) => this.findItem(e.target.value)} />
-                <button onClick={this.SaveList}>Save</button>
-             
+            <Zoom>
+            <div className='header34'>
+                <div className='outersearchbox'>
+                <div className='searchbox'>
+                    <button onClick={this.SaveList}>Save</button>
+                    
 
-                {
-                    this.state.showInput ?
+                    {
+                        this.state.showInput ?
 
-                        <input placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value}) }}
-                        onKeyDown={this.onKeyPressed} maxLength='20' />
-                        : <button onClick={this.toggleInput} >Save as List</button>
-                }
+                            <input placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value}) }}
+                            onKeyDown={this.onKeyPressed} maxLength='20' />
+                            : <button onClick={this.toggleInput} >Save as List</button>
+                    }
+                    <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
+                        <option value="" disabled selected hidden>Select Store...</option>
+                        {storesList}
+                    </select>
+                    <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} value={this.state.zip}/>
+                    <button onClick={this.getStores}>Find Stores</button>
+                    <GeoLocate updateZip={ this.updateZip } getStores={ this.getStores }/>
+                    <SearchInput findItem={this.findItem}/>
+                    </div>
+                    </div>
 
 
 
-                <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
-                    <option value="" disabled selected hidden>Select Store...</option>
-                    {storesList}
-                </select>
-                <button onClick={() => console.log(this.state.targetStore)}>DEBUG</button>
-                <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} />
-                <button onClick={this.getStores}>Find Stores</button>
-                <hr />
+                <div className='search-results'>
                 <DragDropContext onDragEnd={this.onDraggEnd} >
                     <Droppable droppableId='itemList'>
                         {(provided, snapshot) => (
-                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} >
+                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} className='list' >
                                 {this.state.itemList.map((item, i) => (
                                     <Draggable key={item.itemcode} draggableId={item.itemcode} index={i}>
                                         {(provided, snapshot) => (
@@ -168,10 +181,13 @@ class AddItems extends React.Component {
                         )}
                     </Droppable>
 
+                    <div className='space-between'>
+                        
+                    </div>
 
                     <Droppable droppableId='newList' >
                         {(provided, snapshot) => (
-                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)}>
+                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} className='list'>
                                 {this.state.newList.map((item, i) => (
                                     <Draggable key={item.itemcode} draggableId={item.itemcode} index={i} >
                                         {(provided, snapshot) => (
@@ -187,8 +203,11 @@ class AddItems extends React.Component {
 
                     </Droppable>
                 </DragDropContext>
-                <GeoLocate/>
-            </>
+                </div>
+                </div>
+                </Zoom>
+
+            </div>
         )
     }
 }
