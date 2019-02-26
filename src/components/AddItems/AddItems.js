@@ -11,7 +11,8 @@ import GeoLocate from './GeoLocateTest'
 import geocoding, { location } from 'reverse-geocoding';
 import SearchInput from './SearchInput.js'
 import Zoom from 'react-reveal/Zoom';
-
+import ZipInput from './ZipInput';
+import StoreSelect from './StoreSelect'
 
 class AddItems extends React.Component {
     constructor() {
@@ -123,6 +124,13 @@ class AddItems extends React.Component {
         console.log(this.state.zip)
     }
 
+    toggle = () => {
+        this.setState({
+            toggle: !this.state.toggle
+        })
+
+    }
+
    
 
 
@@ -140,9 +148,27 @@ class AddItems extends React.Component {
             <div className='header34'>
                 <div className='outersearchbox'>
                 <div className='searchbox'>
-                    <button onClick={this.SaveList}>Save</button>
+                    
                     
 
+                 { this.state.toggle ? 
+                    <>
+                    <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
+                        <option value="" disabled selected hidden>Select Store...</option>
+                        {storesList}
+                    </select>
+                    <StoreSelect />
+                    {/* <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} value={this.state.zip}/> */}
+                    <ZipInput updateZip={this.updateZip} val={this.state.zip}/>
+                    <button onClick={this.getStores}>Find Stores</button>
+                    <GeoLocate updateZip={ this.updateZip } getStores={ this.getStores }/>
+                    <button onClick={this.toggle}> toggle </button>
+                    </>
+
+                    :
+                    <>
+                    <SearchInput findItem={this.findItem}/>
+                    <button onClick={this.SaveList}>Save</button>
                     {
                         this.state.showInput ?
 
@@ -150,14 +176,11 @@ class AddItems extends React.Component {
                             onKeyDown={this.onKeyPressed} maxLength='20' />
                             : <button onClick={this.toggleInput} >Save as List</button>
                     }
-                    <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
-                        <option value="" disabled selected hidden>Select Store...</option>
-                        {storesList}
-                    </select>
-                    <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} value={this.state.zip}/>
-                    <button onClick={this.getStores}>Find Stores</button>
-                    <GeoLocate updateZip={ this.updateZip } getStores={ this.getStores }/>
-                    <SearchInput findItem={this.findItem}/>
+                    <button onClick={this.toggle}> toggle </button>
+                    </>
+                    }
+
+
                     </div>
                     </div>
 
