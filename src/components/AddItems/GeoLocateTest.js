@@ -6,15 +6,49 @@ import Axios from 'axios';
 const reverse = require('reverse-geocode')
 const  geo  =  ReverseGeocoder
 var geocoder = require('geocoder');
+const parser = require('fast-xml-parser');
+const he = require('he');
 
+const options = {
+  attributeNamePrefix : "@_",
+  attrNodeName: "attr", //default is 'false'
+  textNodeName : "#text",
+  ignoreAttributes : true,
+  ignoreNameSpace : false,
+  allowBooleanAttributes : false,
+  parseNodeValue : true,
+  parseAttributeValue : false,
+  trimValues: true,
+  cdataTagName: "__cdata", //default is 'false'
+  cdataPositionChar: "\\c",
+  localeRange: "", //To support non english character in tag/attribute values.
+  parseTrueNumberOnly: false,
+  attrValueProcessor: a => he.decode(a, {isAttributeValue: true}),//default is a=>a
+  tagValueProcessor : a => he.decode(a) //default is a=>a
+};
 
 class Demo extends React.Component {
-
+  constructor() {
+    super()
+    this.state = {
+        response: [],
+        postalCode: 0
+    }
+}
 
     getAddress = async() => {
-       let location = Axios.get('http://api.geonames.org/findNearbyPostalCodes?lat=40.2261058&lng=-111.6605702&username=ghuscroft')
-       console.log(location)
-       
+      if(this.props.coords.longitude){
+       let location = await Axios.get(`http://api.geonames.org/findNearbyPostalCodes?lat=${this.props.coords.latitude}&lng=${this.props.coords.longitude}&username=ghuscroft`).then((reject, cleared)=> {this.setState({response: reject})})
+       var tObj = parser.getTraversalObj(this.state.response.data,options);
+       let jsonObj = parser.convertToJson(tObj,options);
+       let ps = (jsonObj.geonames.code[0].postalcode)
+       this.setState({
+        postalCode: ps
+      })
+      console.log(this.state.postalCode)
+      this.props.updateZip(this.state.postalCode)
+      this.props.getStores()
+    }
     };
     
    
@@ -24,9 +58,10 @@ class Demo extends React.Component {
   {
     return (
     <>
-    <button onClick={()=>this.getAddress()}>click me</button>
-
-    {!this.props.isGeolocationAvailable
+    {this.props.coords ?
+    <button onClick={()=>this.getAddress()}>Get Current Location</button> : null
+    }
+    {/* {!this.props.isGeolocationAvailable
       ? <div>Your browser does not support Geolocation</div>
       : !this.props.isGeolocationEnabled
         ? <div>Geolocation is not enabled</div>
@@ -43,7 +78,7 @@ class Demo extends React.Component {
                
           : <div>Getting the location data&hellip; </div>
         
-        }
+        } */}
         </>
         )
   }

@@ -10,6 +10,7 @@
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "fast-xml-parser": "^3.12.13",
     "firebase": "^5.8.2",
     "geocoder": "^0.2.3",
     "massive": "^5.7.5",
