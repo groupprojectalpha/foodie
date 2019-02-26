@@ -4,7 +4,8 @@ import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
 import ItemCard from '../ItemCard/ItemCard';
 import './ShoppingList.css'
 import Price from '../ItemCard/Price';
-import calculateTotal from "../../lib/calcTotal"
+import calculateTotal from "../../lib/calcTotal";
+import Headers from '../Headers';
 
 export default class ShoppingList extends React.Component{
     constructor(props){
@@ -33,14 +34,15 @@ export default class ShoppingList extends React.Component{
 
     render(){
         return(
-            <>
+            <div>
+                <Headers title={'Shopping List'} />
             <Droppable droppableId="shoppingList">
                 {(provided, snapshot) => (
                     <div 
-                        ref={provided.innerRef} 
-                        style={getListStyle(snapshot.isDraggingOver)}
-                        className="list"
-                       
+                    ref={provided.innerRef} 
+                    style={getListStyle(snapshot.isDraggingOver)}
+                    className="list"
+                    
                     >
                         {this.props.items.map((item, i , arr) => (<Draggable
                                 key={item.itemcode}
@@ -62,7 +64,7 @@ export default class ShoppingList extends React.Component{
                     </div>
                 )}
             </Droppable>
-            </>
+            </div>
         )
     }
 }
