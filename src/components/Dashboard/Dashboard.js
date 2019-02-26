@@ -40,6 +40,7 @@ class Dashboard extends React.Component {
             hidden: false ,
             loopBreak: true ,
             loading: false ,
+            leftLoading: false,
         }
     }
     // makes axios request for top 20 most popular itemCards
@@ -153,6 +154,7 @@ class Dashboard extends React.Component {
             return;
         } else {
             // THIS SECTION RUNS IN THE EVENT THAT A LIST IS DRAGGED INTO SHOPPINGLIST //
+            this.setState({leftLoading: true})
             if (source.droppableId === "showLists") {
                 axios.get(`/test/3208/${result.draggableId}`)
                     .then((res) => {
@@ -171,7 +173,8 @@ class Dashboard extends React.Component {
                             readyArr = quantityAdded
                         }
                         this.setState({
-                            shoppingList: [...this.state.shoppingList, ...readyArr]
+                            shoppingList: [...this.state.shoppingList, ...readyArr],
+                            leftLoading: false
                         })
                     })
                 // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
@@ -339,7 +342,7 @@ class Dashboard extends React.Component {
                 <Fade>
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} loading={this.state.leftLoading} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} loading={this.state.loading} handleLoading={this.handleLoading} />
 
                                         </div>

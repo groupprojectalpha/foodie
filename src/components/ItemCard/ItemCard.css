@@ -7,6 +7,7 @@
   overflow: hidden;
   box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
   justify-content: space-between;
+  margin-top: 5px;
 }
 
 .new-card {
@@ -34,13 +35,10 @@
 }
 
 .green {
-  color: black;
-  background: #0080005e;
 }
 
 .red {
-  color: red;
-  background: #ff000046;
+  background: #ff000096;
 }
 
 .price-main{
