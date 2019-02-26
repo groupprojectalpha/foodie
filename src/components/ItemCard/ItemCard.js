@@ -4,8 +4,8 @@ import TrashIcon from './TrashIcon'
 
 
 export default function ItemCard(props){
-  console.log('class string for item card', props.classString)
-  const {id , name , type , brand , itemcode , rank , image} = props.item
+  // console.log('class string for item card', props.classString)
+  const {id , name , type , brand , itemcode , rank , image , price} = props.item
   const classString = props.classString ? "item-card " + props.classString : "item-card"
   const noPic = 'http://www.vermeer.com.au/wp-content/uploads/2016/12/attachment-no-image-available.png'
  
@@ -19,7 +19,7 @@ export default function ItemCard(props){
 
     </div>
     <p id='prod-name'>{name}</p>
-    {props.Price && props.Price}
+    {props.Price ? props.Price : <p>${props.item.price}</p>}
     {props.remove &&  <TrashIcon remove={props.remove}/>}
     </div>
     </div>

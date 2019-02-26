@@ -39,7 +39,7 @@ class Dashboard extends React.Component {
             toggle: true,
             hidden: false ,
             loopBreak: true ,
-            loading: false
+            loading: false ,
         }
     }
     // makes axios request for top 20 most popular itemCards
@@ -158,14 +158,14 @@ class Dashboard extends React.Component {
                     .then((res) => {
                         let quantityAdded = res.data.slice()
                         quantityAdded.forEach(item => item.quantity = 1)
-                        let readyArr = []
+                        var readyArr = []
                         if (this.state.shoppingList.length) {
                             quantityAdded.forEach((newItem) => {
-                                var match = false
+                                let match = false
                                 this.state.shoppingList.forEach((oldItem) => {
                                     if (newItem.itemcode === oldItem.itemcode) { oldItem.quantity++ ; match = true}
                                 })
-                            if(match = false){readyArr.push(newItem)}
+                            if(match === false){readyArr.push(newItem)}
                             })
                         } else {
                             readyArr = quantityAdded
