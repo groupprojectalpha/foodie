@@ -3,9 +3,12 @@ import {Draggable, Droppable} from 'react-beautiful-dnd';
 import {getListStyle , getItemStyle} from '../../lib/dragFuncModule'
 import './ShowLists.css';
 import ListCard from '../ListCard/ListCard';
+import Headers from '../Headers'
 
 export default function ShowList(props){
     return(
+        <div>
+            <Headers title='My Lists'/>
         <Droppable droppableId="showLists">
             {(provided , snapshot) => (
                 <div
@@ -13,9 +16,7 @@ export default function ShowList(props){
                     style={getListStyle(snapshot.isDraggingOver)}
                     className="list"
                 >
-                  <div>
-                        <h2 style={{margin:'10px'}}>My Lists</h2>
-                    </div>
+                    <div></div>
                     {props.lists.map((list, i) => (
                         <Draggable
                             key={list.id}
@@ -40,5 +41,6 @@ export default function ShowList(props){
                 </div>
             )}
         </Droppable>
+        </div>
     )
 }
