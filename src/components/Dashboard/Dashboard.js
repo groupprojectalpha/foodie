@@ -328,8 +328,8 @@ class Dashboard extends React.Component {
                <Fade>
                 <div className='send-text'>
                     <div className='text-face'>
-                    <p>Send</p>
-                    <p>List</p>
+                    <p>Text Me</p>
+                    <p>My List</p>
                     <TextIcon toggle={this.sendText}/>
                     </div>
                 </div>
