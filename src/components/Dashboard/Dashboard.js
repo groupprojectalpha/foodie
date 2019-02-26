@@ -39,31 +39,31 @@ class Dashboard extends React.Component {
             toggle: true,
             hidden: false ,
             loopBreak: true ,
-            loading: false
+            loading: false ,
         }
     }
     // makes axios request for top 20 most popular itemCards
-    componentDidMount = async() => {
-        console.log("Why does shoppingList have no length?" , this.state.shoppingList)
-     let res = await axios.get(`/auth/check`)
+    componentDidMount = async () => {
+        // console.log("Why does shoppingList have no length?" , this.state.shoppingList)
+        let res = await axios.get(`/auth/check`)
+        this.setState({
+            user: res.data,
+            name: res.data[0].name,
+            profilePic: res.data[0].photoURL,
+            email: res.data[0].email,
+            providerId: res.data[0].providerId
+        })
+        axios.get(`/user/lists`)
+            .then(res => {
                 this.setState({
-                    user: res.data,
-                    name: res.data[0].name,
-                    profilePic: res.data[0].photoURL,
-                    email: res.data[0].email,
-                    providerId: res.data[0].providerId
+                    lists: res.data
                 })
-                axios.get(`/user/lists`)
-                .then(res => {
-                        this.setState({
-                            lists: res.data
-                        })
-                    })
+            })
 
-                    axios.get(`/item/all`).then((reply)=>{
-                        this.setState({itemCards:reply.data})
-                        console.log(reply.data)
-                    })
+        axios.get(`/item/all`).then((reply) => {
+            this.setState({ itemCards: reply.data })
+            console.log(reply.data)
+        })
 
 
         // if(!this.props.getUserData){
@@ -81,7 +81,7 @@ class Dashboard extends React.Component {
         this.setState({
             toggle: !this.state.toggle
         })
-       
+
     }
     
    handleLoading = () => {
@@ -121,7 +121,7 @@ class Dashboard extends React.Component {
         if (!destination) {
             return;
         }
-       
+
 
 
         // THIS FIRST SECTION REORDERS AN ARRAY, IF THE ITEM IS GETTING MOVED FROM AN ARRAY TO AN ARRAY //
@@ -152,14 +152,29 @@ class Dashboard extends React.Component {
             this.setState({ [list]: reorderedList })
             return;
         } else {
-            // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
+            // THIS SECTION RUNS IN THE EVENT THAT A LIST IS DRAGGED INTO SHOPPINGLIST //
             if (source.droppableId === "showLists") {
-                axios.get(`/list/${result.draggableId}/items`)
+                axios.get(`/test/3208/${result.draggableId}`)
                     .then((res) => {
+                        let quantityAdded = res.data.slice()
+                        quantityAdded.forEach(item => item.quantity = 1)
+                        var readyArr = []
+                        if (this.state.shoppingList.length) {
+                            quantityAdded.forEach((newItem) => {
+                                let match = false
+                                this.state.shoppingList.forEach((oldItem) => {
+                                    if (newItem.itemcode === oldItem.itemcode) { oldItem.quantity++ ; match = true}
+                                })
+                            if(match === false){readyArr.push(newItem)}
+                            })
+                        } else {
+                            readyArr = quantityAdded
+                        }
                         this.setState({
-                            shoppingList: res.data
+                            shoppingList: [...this.state.shoppingList, ...readyArr]
                         })
                     })
+                // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
             } else if (destination.droppableId === "showLists") {
                 return;
 
@@ -187,21 +202,21 @@ class Dashboard extends React.Component {
                     shoppingList: r.shoppingList,
                     itemCards: r.itemCards
                 })
-                
+
             }
         }
 
         // setTimeout(()=>{
         //     this.handleBudget(this.state.shoppingList)
         // },0)
-        
+
     }
 
     removeCard = (index) => {
         // REMOVES CARD FROM SHOPPINGLIST //
         let newShoppingList = this.state.shoppingList.slice()
-        newShoppingList.splice(index , 1)
-        this.setState({shoppingList: newShoppingList})
+        newShoppingList.splice(index, 1)
+        this.setState({ shoppingList: newShoppingList })
     }
 
 
@@ -216,13 +231,15 @@ class Dashboard extends React.Component {
         let currentRemaining = 0;
         let currentOverBudget = 0;
 
-        if (currentTotal <= this.state.budget) { currentRemaining = this.state.budget - currentTotal 
+        if (currentTotal <= this.state.budget) {
+            currentRemaining = this.state.budget - currentTotal
         } else { currentRemaining = 0 }
-        
-        if (currentTotal > this.state.budget) { currentOverBudget = currentTotal - this.state.budget 
+
+        if (currentTotal > this.state.budget) {
+            currentOverBudget = currentTotal - this.state.budget
         } else { currentOverBudget = 0 }
 
-        this.setState({ total:Math.floor(currentTotal*100)/100, overBudget:Math.floor(currentOverBudget*100)/100 , remaining: Math.floor(currentRemaining*100)/100  })
+        this.setState({ total: currentTotal, overBudget: currentOverBudget, remaining: currentRemaining })
     }
 
     updateQuantity = (id, newPrice) => {
@@ -234,29 +251,29 @@ class Dashboard extends React.Component {
     }
 
 
-    sendText =  () => {
-     this.rankUp()
-      axios.delete('/list/clear')
+    sendText = () => {
+        this.rankUp()
+        axios.delete('/list/clear')
         axios.put('/item/additems', {
             name: 'clearabledefault',
             items: this.state.shoppingList
         })
         const { phone } = this.state.user[0]
-        let res =  axios.get(`/text/${phone}`).then(() => {
+        let res = axios.get(`/text/${phone}`).then(() => {
         }).catch(error => { console.log(res, error) })
     }
 
-    rankUp(){
-        this.state.shoppingList.forEach((item)=>{
+    rankUp() {
+        this.state.shoppingList.forEach((item) => {
             axios.put(`/list/rank/${item.id}`)
         })
     }
 
-   handleBudgetInput = (e) => {
-       this.setState({
-        budget: e * 100
-       })
-   }
+    handleBudgetInput = (e) => {
+        this.setState({
+            budget: e * 100
+        })
+    }
 
 
 
@@ -267,11 +284,11 @@ class Dashboard extends React.Component {
 
 
     render() {
-        console.log(this.state)
+        // console.log(this.state)
         return (
 
 
-            
+
             <div className='dashboard'>
                 <SideDrawer />
                 
@@ -324,15 +341,16 @@ class Dashboard extends React.Component {
                     <div className="lists-block">
                         <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} loading={this.state.loading} handleLoading={this.handleLoading} />
-                    </div>
-                </DragDropContext>
-                </Fade>
-                </header>
-                </>
 
-                )}
+                                        </div>
+                                    </DragDropContext>
+                                </Fade>
+                            </header>
+                        </>
+
+                    )}
             </div>
-            
+
         )
     }
 }

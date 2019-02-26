@@ -25,7 +25,8 @@ class AddItems extends React.Component {
             showInput: false,
             stores: [] ,
             targetStore: {} ,
-            toggle: true
+            toggle: true,
+            zipClass: "zip-true"
         }
 
         this.onDraggEnd = this.onDraggEnd.bind(this)
@@ -38,9 +39,15 @@ class AddItems extends React.Component {
 
     getStores = async () => {
         let {zip} = this.state
+        if(!zip){return this.noZip();}
         if(zip.toString().length !== 5 || typeof +zip !== "number"){return console.log("Bad Zip Code")}
         let stores = await Axios.get('/api/' +zip)
         if(Array.isArray(stores.data)){this.setState({stores: stores.data})}
+    }
+    
+    noZip = () => {
+        console.log("noZip invoked")
+        this.setState({zipClass: "zip-false"})
     }
 
     onDraggEnd(result) {
@@ -154,7 +161,7 @@ class AddItems extends React.Component {
                         <option value="" disabled selected hidden>Select Store...</option>
                         {storesList}
                     </select>
-                    <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} value={this.state.zip}/>
+                    <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} value={this.state.zip} className={this.state.zipClass} onSelect={() => this.setState({zipClass: "zip-true"})} />
                     <button onClick={this.getStores}>Find Stores</button>
                     <GeoLocate updateZip={ this.updateZip } getStores={ this.getStores }/>
                     <SearchInput findItem={this.findItem}/>
