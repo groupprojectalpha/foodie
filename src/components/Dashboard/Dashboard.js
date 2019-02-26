@@ -18,7 +18,6 @@ import calculateTotal from '../../lib/calcTotal'
 import NewListButton from './NewListButton';
 import TextIcon from './TextButton'
 
-
 class Dashboard extends React.Component {
     constructor() {
         super()
@@ -77,6 +76,14 @@ class Dashboard extends React.Component {
         // this.setState({lists:userList})
         // this.setState({user: this.props.getUserData})
     }
+
+    componentDidUpdate(p , prevState){
+        if(this.state.budget !== prevState.budget){
+            this.handleBudget(this.state.shoppingList)
+        }
+    }
+
+
 
     toggle = () => {
         this.setState({
@@ -154,8 +161,8 @@ class Dashboard extends React.Component {
             return;
         } else {
             // THIS SECTION RUNS IN THE EVENT THAT A LIST IS DRAGGED INTO SHOPPINGLIST //
-            this.setState({leftLoading: true})
             if (source.droppableId === "showLists") {
+                this.setState({leftLoading: true})
                 axios.get(`/test/3208/${result.draggableId}`)
                     .then((res) => {
                         let quantityAdded = res.data.slice()
@@ -329,10 +336,10 @@ class Dashboard extends React.Component {
                 <div className='calculator-card'>
                             {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                             <input onChange={(e)=> {this.handleBudgetInput(e)}}></input> */}
-                            <h2>budget: ${+this.state.budget / 100} </h2>
-                            <p>your total is:  ${this.state.total / 100}</p>
-                            <p>you have ${this.state.remaining / 100} left</p>
-                            <p>you are ${this.state.overBudget / 100} over your budget</p>
+                            <h2>budget: ${(+this.state.budget / 100).toFixed(2)} </h2>
+                            <p>your total is:  ${(this.state.total / 100).toFixed(2)}</p>
+                            <p>you have ${(this.state.remaining / 100).toFixed(2)} left</p>
+                            <p>you are ${(this.state.overBudget / 100).toFixed(2)} over your budget</p>
                             {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
                             <TrashButton toggle={this.toggle} handleBudget={() => this.handleBudget(this.state.shoppingList)}/>
                 </div>
