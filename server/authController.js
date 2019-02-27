@@ -25,13 +25,13 @@ module.exports = {
     // Should establish DB
     let db = req.app.get('db')
     // Needs to check against DB to ensure email doesn't exist
-    try {
-      let emailExists = await db.check_email({email: email})
-      // on failure, return and send message to client that email is in use
-      if(emailExists[0]){return res.status(400).send({message: "Email is in Use!"})}
-    } catch (error) {
-      return res.status(500).send(error)
-    }
+    let emailExists = await db.check_email({email: email}).catch(err => {
+      console.log(err)
+      return res.status(500).send(err)
+    })
+    
+    // on failure, return and send message to client that email is in use
+    if(emailExists[0]){return res.status(400).send({message: "Email is in Use!"})}
     // On Success, hash and salt password
     const salt = bcrypt.genSaltSync(10)
     const hash = bcrypt.hashSync(password , salt)
@@ -40,6 +40,7 @@ module.exports = {
     try {
       var newShopper = await db.create_shopper(req.body)
     } catch (error) {
+      console.log(error)
       return res.status(500).send(error)
     }
     // Create a default "Favorite Items" list for the new shopper

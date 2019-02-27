@@ -45,6 +45,8 @@ const currencies = [
 class TextFields extends React.Component {
   state = {
     name: '',
+    password: '',
+    email: '',
     age: '',
     multiline: 'Controlled',
     currency: 'EUR',
@@ -56,6 +58,7 @@ class TextFields extends React.Component {
 
   render() {
     const { classes } = this.props;
+    // const {}
 
     return (
       <form className={classes.container} noValidate autoComplete="off">
@@ -63,8 +66,8 @@ class TextFields extends React.Component {
           id="standard-name"
           label="Username"
           className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
+          // value={this.state.name}
+          onChange={e => this.props.handleUpdate("name" , e.target.value)}
           margin="normal"
         />
 
@@ -72,8 +75,8 @@ class TextFields extends React.Component {
           id="standard-name"
           label="Password"
           className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
+          // value={this.state.password}
+          onChange={e => this.props.handleUpdate("password" , e.target.value)}
           margin="normal"
         />
 
@@ -81,8 +84,8 @@ class TextFields extends React.Component {
           id="standard-name"
           label="Email"
           className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
+          // value={this.state.email}
+          onChange={e => this.props.handleUpdate("email" , e.target.value)}
           margin="normal"
         />
 
