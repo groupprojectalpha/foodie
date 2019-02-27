@@ -19,14 +19,14 @@ import Zoom from 'react-reveal/Zoom';
             password: '',
             state:'',
             email: '',
-            phoneNumber: '',
+            phone: 0,
             toggle: false
         }
     }
 
     async createNewUser()  {
-        const { name, password, email, phoneNumber, state } =this.state
-        let res = await axios.post('/auth/register', {name:name, password:password, email:email, phone:+phoneNumber, state:state}).catch((err)=>{
+        const { name, password, email, phone, state } =this.state
+        let res = await axios.post('/auth/register', {name:name, password:password, email:email, phone: phone, state:state}).catch((err)=>{
             console.log("Server Error: " , err)
             alert('Email already in use')
         })
