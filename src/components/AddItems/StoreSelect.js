@@ -48,6 +48,7 @@ class OutlinedInputAdornments extends React.Component {
 
   handleChange = prop => event => {
     this.setState({ [prop]: event.target.value });
+    
   };
 
   handleClickShowPassword = () => {
@@ -65,16 +66,19 @@ class OutlinedInputAdornments extends React.Component {
           select
           className={classNames(classes.margin, classes.textField)}
           variant="outlined"
-          label="With Select"
+          label="Stores"
+          fullWidth
+          onChange={(e) => {this.props.updateStore(e)
+            this.handleChange('weightRange')}}
           value={this.state.weightRange}
-          onChange={this.handleChange('weightRange')}
+          
           InputProps={{
-            startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+            startAdornment: <InputAdornment position="start"></InputAdornment>,
           }}
         >
-          {ranges.map(option => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {this.props.storesList.map((option, i) => (
+            <MenuItem key={ranges.key} value={i}>
+              {option}
             </MenuItem>
           ))}
         </TextField>

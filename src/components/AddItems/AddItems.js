@@ -13,6 +13,12 @@ import SearchInput from './SearchInput.js'
 import Zoom from 'react-reveal/Zoom';
 import ZipInput from './ZipInput';
 import StoreSelect from './StoreSelect'
+import LocationButton from './LocationButton'
+import SearchButton from './SearchButton'
+import ToggleButton from './ToggleButton'
+import Buttons from './Buttons'
+import SaveButton from './SaveButton'
+import SaveListButton from './SaveListButton'
 
 class AddItems extends React.Component {
     constructor() {
@@ -138,6 +144,12 @@ class AddItems extends React.Component {
 
     }
 
+    updateStore = (e) => {
+        this.setState({
+            targetStore: this.state.stores[e.target.value]
+        })
+    }
+
    
 
 
@@ -160,30 +172,42 @@ class AddItems extends React.Component {
 
                  { this.state.toggle ? 
                     <>
-                    <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
+                    {/* <select onChange={(e) => this.setState({targetStore: this.state.stores[e.target.value]})}>
                         <option value="" disabled selected hidden>Select Store...</option>
                         {storesList}
-                    </select>
-                    <StoreSelect />
+                    </select> */}
+                    
                     {/* <input placeholder={'ZipCode'} onChange={(e) => this.setState({ zip: e.target.value })} value={this.state.zip}/> */}
+                    <div className='zip-container'>
                     <ZipInput updateZip={this.updateZip} val={this.state.zip}/>
-                    <button onClick={this.getStores}>Find Stores</button>
                     <GeoLocate updateZip={ this.updateZip } getStores={ this.getStores }/>
-                    <button onClick={this.toggle}> toggle </button>
+                    </div>
+                    <StoreSelect updateStore={this.updateStore} storesList={storesList} />
+                    <div className='zip-container'>
+                    <SearchButton getStores={this.getStores}/>
+                    <ToggleButton toggle={this.toggle}/>
+                    </div>
                     </>
 
                     :
                     <>
-                    <SearchInput findItem={this.findItem}/>
-                    <button onClick={this.SaveList}>Save</button>
+                    <SearchInput  findItem={this.findItem}/>
+                    
+                    
                     {
                         this.state.showInput ?
-
+                            <>
                             <input placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value}) }}
                             onKeyDown={this.onKeyPressed} maxLength='20' />
-                            : <button onClick={this.toggleInput} >Save as List</button>
+                            <SaveButton saveList={this.SaveList}/>
+                            </>
+                            :   <>
+                             <SaveListButton toggleInput={this.toggleInput}/>
+                            
+                            </>
                     }
-                    <button onClick={this.toggle}> toggle </button>
+                    
+                    <Buttons toggle={this.toggle}></Buttons>
                     </>
                     }
 

@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
+
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -45,18 +46,20 @@ class OutlinedTextFields extends React.Component {
       <form className={classes.container} noValidate autoComplete="off">
        
 
-        <TextField
-          id="outlined-email-input"
+       
+<TextField
+          id="outlined-number"
           label="Zip/Postal Code"
-          className={classes.textField}
-          type="normal"
-          name="Email"
-          margin="normal"
-          variant="outlined"
           value={this.props.val}
           onChange={(e)=>this.props.updateZip(e.target.value)}
+          type="number"
+          className={classes.textField}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          margin="normal"
+          variant="outlined"
         />
-
       </form>
     );
   }

@@ -3,11 +3,14 @@ import {geolocated} from 'react-geolocated';
 import Geocode from 'react-geocode';
 import  ReverseGeocoder from 'open-street-map-reverse-geo-node-client';
 import Axios from 'axios';
+import LocationButton from './LocationButton'
+
 const reverse = require('reverse-geocode')
 const  geo  =  ReverseGeocoder
 var geocoder = require('geocoder');
 const parser = require('fast-xml-parser');
 const he = require('he');
+
 
 const options = {
   attributeNamePrefix : "@_",
@@ -58,9 +61,11 @@ class Demo extends React.Component {
   {
     return (
     <>
+  
     {this.props.coords ?
-    <button onClick={()=>this.getAddress()}>Get Current Location</button> : null
-    }
+    <LocationButton onClick={()=>this.getAddress()}/> : null
+  }
+    
     {/* {!this.props.isGeolocationAvailable
       ? <div>Your browser does not support Geolocation</div>
       : !this.props.isGeolocationEnabled
