@@ -314,9 +314,8 @@ class Dashboard extends React.Component {
     <h3>{this.state.name}</h3>
     
     <BudgetInput handleBudgetInput={this.handleBudgetInput}></BudgetInput>
-    
-    <ToggleButton toggle={this.toggle}/>
     <NewListButton/>
+    <ToggleButton toggle={this.toggle}/>
     </div>
     </div>
     </Zoom>

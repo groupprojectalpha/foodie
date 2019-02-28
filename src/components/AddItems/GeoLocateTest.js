@@ -63,7 +63,7 @@ class Demo extends React.Component {
     <>
   
     {this.props.coords ?
-    <LocationButton onClick={()=>this.getAddress()}/> : null
+    <div style={{display: "block"}}><LocationButton onClick={()=>this.getAddress()}/> <p style={{fontSize: "10px" , position: "relative" , top: "-10px"}}>Find My Zip</p> </div>: null
   }
     
     {/* {!this.props.isGeolocationAvailable

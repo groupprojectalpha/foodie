@@ -57,6 +57,7 @@
 #prod-price {
   font-size: 14px;
   display: center;
+  min-width: 71px;
 }
 
 #price-paragraph{

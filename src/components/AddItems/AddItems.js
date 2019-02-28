@@ -19,6 +19,7 @@ import ToggleButton from './ToggleButton'
 import Buttons from './Buttons'
 import SaveButton from './SaveButton'
 import SaveListButton from './SaveListButton'
+import Headers from '../Headers'
 
 class AddItems extends React.Component {
     constructor() {
@@ -37,6 +38,16 @@ class AddItems extends React.Component {
         }
 
         this.onDraggEnd = this.onDraggEnd.bind(this)
+    }
+
+    componentDidUpdate(p , s){
+        if(!this.state.zip || !s.zip){return;}
+        if(this.state.zip.length === 5 && s.zip.length !== 5){
+            this.getStores()
+        }
+        if(this.state.zip.length !== 5 && s.zip.length === 5){
+            this.setState({stores: []})
+        }
     }
 
 
@@ -134,7 +145,6 @@ class AddItems extends React.Component {
         this.setState({
             zip: t
         })
-        console.log(this.state.zip)
     }
 
     toggle = () => {
@@ -182,9 +192,9 @@ class AddItems extends React.Component {
                     <ZipInput updateZip={this.updateZip} val={this.state.zip}/>
                     <GeoLocate updateZip={ this.updateZip } getStores={ this.getStores }/>
                     </div>
-                    <StoreSelect updateStore={this.updateStore} storesList={storesList} />
+                    <StoreSelect updateStore={this.updateStore} storesList={storesList} value={this.state.targetStore.id} />
                     <div className='zip-container'>
-                    <SearchButton getStores={this.getStores}/>
+                    {/* <SearchButton getStores={this.getStores}/> */}
                     <ToggleButton toggle={this.toggle}/>
                     </div>
                     </>
@@ -197,14 +207,14 @@ class AddItems extends React.Component {
                     {
                         this.state.showInput ?
                             <>
-                            <input placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value}) }}
+                            <input id="listname" placeholder={'List Name'} onChange={(e) => { this.setState({ listName: e.target.value}) }}
                             onKeyDown={this.onKeyPressed} maxLength='20' />
                             <SaveButton saveList={this.SaveList}/>
                             </>
-                            :   <>
-                             <SaveListButton toggleInput={this.toggleInput}/>
-                            
-                            </>
+                            :   <div style={{display: "flex"}}>
+                                <SaveButton saveList={this.SaveList} title="Save to Favorites"/>
+                                <SaveListButton toggleInput={this.toggleInput}/>
+                            </div>
                     }
                     
                     <Buttons toggle={this.toggle}></Buttons>
@@ -219,26 +229,10 @@ class AddItems extends React.Component {
 
                 <div className='search-results'>
                 <DragDropContext onDragEnd={this.onDraggEnd} >
-                    <Droppable droppableId='itemList'>
-                        {(provided, snapshot) => (
-                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} className='list' >
-                                {this.state.itemList.map((item, i) => (
-                                    <Draggable key={item.itemcode} draggableId={item.itemcode} index={i}>
-                                        {(provided, snapshot) => (
-                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
-                                                <ItemCard item={item} />
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                            </div>
-                        )}
-                    </Droppable>
 
-                    <div className='space-between'>
-                        
-                    </div>
+                    <div>
 
+                    <Headers title={this.state.listName ? this.state.listName : "Favorites"}/>
                     <Droppable droppableId='newList' >
                         {(provided, snapshot) => (
                             <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} className='list'>
@@ -256,6 +250,28 @@ class AddItems extends React.Component {
                         )}
 
                     </Droppable>
+                        </div>
+                    <div className='space-between'>
+                        
+                    </div>
+                    <div>
+                    <Headers title="items"/>
+                    <Droppable droppableId='itemList'>
+                        {(provided, snapshot) => (
+                            <div ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} className='list' >
+                                {this.state.itemList.map((item, i) => (
+                                    <Draggable key={item.itemcode} draggableId={item.itemcode} index={i}>
+                                        {(provided, snapshot) => (
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}>
+                                                <ItemCard item={item} />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                            </div>
+                        )}
+                    </Droppable>
+                        </div>
                 </DragDropContext>
                 </div>
                 </div>
