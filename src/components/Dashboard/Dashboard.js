@@ -17,6 +17,7 @@ import TrashButton from './TrashButton'
 import calculateTotal from '../../lib/calcTotal'
 import NewListButton from './NewListButton';
 import TextIcon from './TextButton'
+import { getList } from '../../logic/dashboardLogic'
 
 class Dashboard extends React.Component {
     constructor() {
@@ -110,17 +111,7 @@ class Dashboard extends React.Component {
     }
 
     getList = (id) => {
-        switch (id) {
-            case "shoppingList":
-                return this.state.shoppingList
-            case "itemCards":
-                return this.state.itemCards
-            case "showLists":
-                throw new Error("getList: lists array should already be handled!")
-            default:
-                console.log("getList: Unable to determine list! Check list names and droppable ID's")
-                return;
-        }
+        return getList(id , this.state)
     }
 
 
