@@ -19,7 +19,7 @@ export default function ItemCard(props){
 
     </div>
     <p id='prod-name'>{name}</p>
-    {props.Price ? props.Price : <p>${props.item.price}</p>}
+    {props.Price ? props.Price : <p id="price-paragraph" >${props.item.price}</p>}
     {props.remove &&  <TrashIcon remove={props.remove}/>}
     </div>
     </div>

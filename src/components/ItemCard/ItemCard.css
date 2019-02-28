@@ -51,9 +51,14 @@
 }
 
 #prod-name {
-  font-size: 12px;
+  font-size: 15px;
+  padding: 0px 9px;
 }
 #prod-price {
-  font-size: 9px;
+  font-size: 14px;
   display: center;
+}
+
+#price-paragraph{
+  padding: 5px;
 }

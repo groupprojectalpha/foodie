@@ -51,7 +51,6 @@ import Zoom from 'react-reveal/Zoom';
     render(){
         return(
             <>
-            <button onClick={() => console.log(this.state)}>DEBUG</button>
             <div className='register'>
             <Zoom>
              <div id='card3'>

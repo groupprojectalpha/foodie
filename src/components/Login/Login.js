@@ -96,7 +96,7 @@ class Login extends Component {
 
     render() {
 
-        console.log(this.state)
+        // console.log(this.state)
         if (this.state.signedIn) {
             this.props.history.push('/dashboard')
         }
