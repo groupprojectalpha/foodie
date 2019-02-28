@@ -96,7 +96,7 @@ class Login extends Component {
 
     render() {
 
-        console.log(this.state)
+        // console.log(this.state)
         if (this.state.signedIn) {
             this.props.history.push('/dashboard')
         }
@@ -105,7 +105,7 @@ class Login extends Component {
             <>
                 <LoginInput handleUsername={this.handleUsername} handlePassword={this.handlePassword}></LoginInput>
                 <div className='button-container'>
-                    <Button variant="outlined" color="primary" onClick={() => this.login()}>Login</Button>
+                    <Button variant="outlined" color="primary" onClick={() => this.login()} style={{marginRight: '14px' , marginLeft: '8px'}} >Login</Button>
                     <Link to='/register' style={{ textDecoration: 'none' }}>
                         <Button> Register </Button>
                     </Link>

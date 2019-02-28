@@ -16,7 +16,7 @@ export default function ShowList(props){
                     style={getListStyle(snapshot.isDraggingOver)}
                     className="list"
                 >
-                    <div></div>
+                    {/* <div className="scrollbox"> */}
                     {props.lists.map((list, i) => (
                         <Draggable
                             key={list.id}
@@ -38,6 +38,7 @@ export default function ShowList(props){
                             )}
                         </Draggable>
                     ))}
+                    {/* </div> */}
                 </div>
             )}
         </Droppable>

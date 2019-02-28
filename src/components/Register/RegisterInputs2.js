@@ -25,217 +25,219 @@ const styles = theme => ({
 
 const currencies = [
   {
-    value: 'Alabama - AL',
+    value: 'AL',
     label: 'Alabama - AL',
   },
   {
-    value: 'Alaska - AK',
+    value: 'AK',
     label: 'Alaska - AK',
   },
   {
-    value: 'Arizona - AZ',
+    value: 'AZ',
     label: 'Arizona - AZ',
   },
   {
-    value: 'Arkansas - AR',
+    value: 'AR',
     label: 'Arkansas - AR',
   },
   {
-    value: 'California - CA',
+    value: 'CA',
     label: 'California - CA',
   },
   {
-    value: 'Colorado - CO',
+    value: 'CO',
     label: 'Colorado - CO',
   },
   {
-    value: 'Connecticut - CT',
+    value: 'CT',
     label: 'Connecticut - CT',
   },
   {
-    value: 'Delaware - DE',
+    value: 'DE',
     label: 'Delaware - DE',
   },
   {
-    value: 'Florida - FL',
+    value: 'FL',
     label: 'Florida - FL',
   },
   {
-    value: 'Georgia - GA',
+    value: 'GA',
     label: 'Georgia - GA',
   },
   {
-    value: 'Hawaii - HI',
+    value: 'HI',
     label: '¥Hawaii - HI',
   },
   {
-    value: 'Idaho - ID',
+    value: 'ID',
     label: 'Idaho - ID',
   },
   {
-    value: 'Illinois - IL',
+    value: 'IL',
     label: 'Illinois - IL',
   },
   {
-    value: 'Indiana - IN',
+    value: 'IN',
     label: 'Indiana - IN',
   },
   {
-    value: 'Iowa - IA',
+    value: 'IA',
     label: 'Iowa - IA',
   },
   {
-    value: 'Kansas - KS',
+    value: 'KS',
     label: 'Kansas - KS',
   },
   {
-    value: 'Kentucky - KY',
+    value: 'KY',
     label: 'Kentucky - KY',
   },
   {
-    value: 'Louisiana - LA',
+    value: 'LA',
     label: 'Louisiana - LA',
   },
   {
-    value: 'Maine - ME',
+    value: 'ME',
     label: 'Maine - ME',
   },
   {
-    value: 'Maryland - MD',
+    value: 'MD',
     label: 'Maryland - MD',
   },
   {
-    value: 'Massachusetts - MA',
+    value: 'MA',
     label: 'Massachusetts - MA',
   },
   {
-    value: 'Michigan - MI',
+    value: 'MI',
     label: 'Michigan - MI',
   },
   {
-    value: 'Minnesota - MN',
+    value: 'MN',
     label: 'Minnesota - MN',
   },
   {
-    value: 'Mississippi - MS',
+    value: 'MS',
     label: 'Mississippi - MS',
   },
   {
-    value: 'Missouri - MO',
+    value: 'MO',
     label: 'Missouri - MO',
   },
   {
-    value: 'Montana - MT',
+    value: 'MT',
     label: 'Montana - MT',
   },
   {
-    value: 'Nebraska - NE',
+    value: 'NE',
     label: 'Nebraska - NE',
   },
   {
-    value: 'Nevada - NV',
+    value: 'NV',
     label: 'Nevada - NV',
   },
   {
-    value: 'New Hampshire - NH',
+    value: 'NH',
     label: 'New Hampshire - NH',
   },
   {
-    value: 'New Jersey - NJ',
+    value: 'NJ',
     label: 'New Jersey - NJ',
   },
   {
-    value: 'New Mexico - NM',
+    value: 'NM',
     label: 'New Mexico - NM',
   },
   {
-    value: 'New York - NY',
+    value: 'NY',
     label: 'New York - NY',
   },
   {
-    value: 'North Carolina - NC',
+    value: 'NC',
     label: 'North Carolina - NC',
   },
   {
-    value: 'North Dakota - ND',
+    value: 'ND',
     label: 'North Dakota - ND',
   },
   {
-    value: 'Ohio - OH',
+    value: 'OH',
     label: 'Ohio - OH',
   },
   {
-    value: 'Oklahoma - OK',
+    value: 'OK',
     label: 'Oklahoma - OK',
   },
   {
-    value: 'Oregon - OR',
+    value: 'OR',
     label: 'Oregon - OR',
   },
   {
-    value: 'Pennsylvania - PA',
+    value: 'PA',
     label: 'Pennsylvania - PA',
   },
   {
-    value: 'Rhode Island - RI',
+    value: 'RI',
     label: 'Rhode Island - RI',
   },
   {
-    value: 'South Carolina - SC',
+    value: 'SC',
     label: 'South Carolina - SC',
   },
   {
-    value: 'South Dakota - SD',
+    value: 'SD',
     label: 'South Dakota - SD',
   },
   {
-    value: 'Tennessee - TN',
+    value: 'TN',
     label: 'Tennessee - TN',
   },
   {
-    value: 'Texas - TX',
+    value: 'TX',
     label: 'Texas - TX',
   },
   {
-    value: 'Utah - UT',
+    value: 'UT',
     label: 'Utah - UT',
   },
   {
-    value: 'Vermont - VT',
+    value: 'VT',
     label: 'Vermont - VT',
   },
   {
-    value: 'Virginia - VA',
+    value: 'VA',
     label: 'Virginia - VA',
   },
   {
-    value: 'Washington - WA',
+    value: 'WA',
     label: 'Washington - WA',
   },
   {
-    value: 'West Virginia - WV',
+    value: 'WV',
     label: 'West Virginia - WV',
   },
   {
-    value: 'Wisconsin - WI',
+    value: 'WI',
     label: 'Wisconsin - WI',
   },
   {
-    value: 'Wyoming - WY',
+    value: 'WY',
     label: 'Wyoming - WY',
   }
 ];
 
 class TextFields extends React.Component {
   state = {
+    selectedState: '',
     name: '',
     age: '',
     multiline: 'Controlled',
     currency: 'EUR',
   };
 
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.value });
+  handleChange = (name , value) => {
+    this.setState({selectedState: value})
+    this.props.handleUpdate(name , value);
   };
 
   render() {
@@ -250,8 +252,8 @@ class TextFields extends React.Component {
           select
           label="Select your state"
           className={classes.textField}
-          value={this.state.currency}
-          onChange={this.handleChange('currency')}
+          value={this.state.selectedState}
+          onChange={e => this.handleChange("state" , e.target.value)}
           SelectProps={{
             MenuProps: {
               className: classes.menu,

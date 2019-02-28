@@ -28,7 +28,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-app.use(passThrough)
+// app.use(passThrough)
 
 app.use( express.static( `${__dirname}/../build` ) );
 

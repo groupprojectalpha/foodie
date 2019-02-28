@@ -24,14 +24,14 @@ export default class LoginOptions extends React.Component{
     render(){
         return(
             <div className='landing'>
-                <header className='header-container'> <div id='about'>about</div> </header>
+                {/* <header className='header-container'> <div id='about'>about</div> </header> */}
                    <div className='top1'>
                         <div className='main-card'>
                             <img src={logo} className='logo'/>
                             <div className='words'>
                                 <h1 id='text'>Budget Butler</h1>
                                 <h2 id='text2'>Shopping.. Made Easy</h2>
-                                <h5 id='text3'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostr</h5>
+                                <h5 id='text3'>A virtual accountant for your quick shopping trip. Get started below!</h5>
                                 <Alert/>
                             </div>
                         </div>

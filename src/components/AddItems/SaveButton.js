@@ -15,11 +15,12 @@ const styles = theme => ({
 
 function OutlinedButtons(props) {
   const { classes } = props;
+  const title = props.title ? props.title : "Save"
   return (
     <div>
      
       <Button onClick={props.saveList} variant="outlined" color="inherit" className={classes.button}>
-        Save
+        {title}
       </Button>
     </div>
   );

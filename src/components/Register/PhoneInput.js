@@ -70,10 +70,17 @@ class FormattedInputs extends React.Component {
   };
 
   handleChange = name => event => {
+    this.props.handleUpdate("phone" , this.parsePhone(event.target.value))
     this.setState({
       [name]: event.target.value,
     });
   };
+
+  parsePhone(phone){
+    let parsed = phone.split('').filter((number) => typeof +number === 'number' && !isNaN(+number) && number !== ' ' ).join('')
+    console.log("phone parsed to " , +parsed)
+    return +parsed
+  }
 
   render() {
     const { classes } = this.props;

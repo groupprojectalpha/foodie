@@ -91,13 +91,19 @@ module.exports = {
       .catch((err) => console.log("addItems: DB Error: " + err))
       // console.log(insertedItemArr[0])
       // vvv MOST LIKELY DEPRECIATED vvv //
-      db.query(`INSERT INTO store_item (store , item) VALUES (${item.store} , ${insertedItemArr[0].id})`)
+      // db.query(`INSERT INTO store_item (store , item) VALUES (${item.store} , ${insertedItemArr[0].id})`)
       // ^^^ //
       return insertedItemArr[0]
     }))
 
+    let merged = await Promise.all(existing.map(async (item) => {
+      let dbItems = await db.query("SELECT * FROM item WHERE itemcode = " + `'${item.itemcode}'`)
+      // console.log("DBItems:" , dbItems)
+      return {...dbItems[0] , ...item}
+    }))
     // THIS SECTION RE-COMBINES THE TWO ARRAYS //
-    let all = [...existing , ...processedItems]
+    let all = [...merged , ...processedItems]
+    // console.log("All:" , all)
 
     // THIS SECTION CHECKS TO SEE IF THE LIST EXISTS //
     if(!req.body.name){req.body.name = "Favorite Items"}
@@ -111,8 +117,10 @@ module.exports = {
       listId = listIdArr[0].id
     }
 
+    
     // THIS SECTION ADDS ALL ITEMS TO LIST_ITEM //
     all.forEach(async (item) => {
+      // console.log("ListId: " , listId , "ItemId: " , item.id)
       await db.add_list_item({item: item.id , list: listId})
     })
 

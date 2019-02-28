@@ -18,7 +18,6 @@ import calculateTotal from '../../lib/calcTotal'
 import NewListButton from './NewListButton';
 import TextIcon from './TextButton'
 
-
 class Dashboard extends React.Component {
     constructor() {
         super()
@@ -40,6 +39,7 @@ class Dashboard extends React.Component {
             hidden: false ,
             loopBreak: true ,
             loading: false ,
+            leftLoading: false,
         }
     }
     // makes axios request for top 20 most popular itemCards
@@ -76,6 +76,14 @@ class Dashboard extends React.Component {
         // this.setState({lists:userList})
         // this.setState({user: this.props.getUserData})
     }
+
+    componentDidUpdate(p , prevState){
+        if(this.state.budget !== prevState.budget){
+            this.handleBudget(this.state.shoppingList)
+        }
+    }
+
+
 
     toggle = () => {
         this.setState({
@@ -154,6 +162,7 @@ class Dashboard extends React.Component {
         } else {
             // THIS SECTION RUNS IN THE EVENT THAT A LIST IS DRAGGED INTO SHOPPINGLIST //
             if (source.droppableId === "showLists") {
+                this.setState({leftLoading: true})
                 axios.get(`/test/3208/${result.draggableId}`)
                     .then((res) => {
                         let quantityAdded = res.data.slice()
@@ -171,7 +180,8 @@ class Dashboard extends React.Component {
                             readyArr = quantityAdded
                         }
                         this.setState({
-                            shoppingList: [...this.state.shoppingList, ...readyArr]
+                            shoppingList: [...this.state.shoppingList, ...readyArr],
+                            leftLoading: false
                         })
                     })
                 // THIS SECTION ENSURES WE CAN'T DROP ITEMS INTO THE LISTS ARRAY  //
@@ -304,9 +314,8 @@ class Dashboard extends React.Component {
     <h3>{this.state.name}</h3>
     
     <BudgetInput handleBudgetInput={this.handleBudgetInput}></BudgetInput>
-    
-    <ToggleButton toggle={this.toggle}/>
     <NewListButton/>
+    <ToggleButton toggle={this.toggle}/>
     </div>
     </div>
     </Zoom>
@@ -318,18 +327,18 @@ class Dashboard extends React.Component {
                <Fade>
                 <div className='send-text'>
                     <div className='text-face'>
-                    <p>Send</p>
-                    <p>List</p>
+                    <p>Text Me</p>
+                    <p>My List</p>
                     <TextIcon toggle={this.sendText}/>
                     </div>
                 </div>
                 <div className='calculator-card'>
                             {/* <input onChange={(e) => this.setState({ budget: e.target.value * 100 })} placeholder={'Enter Budget'} />
                             <input onChange={(e)=> {this.handleBudgetInput(e)}}></input> */}
-                            <h2>budget: ${+this.state.budget / 100} </h2>
-                            <p>your total is:  ${this.state.total / 100}</p>
-                            <p>you have ${this.state.remaining / 100} left</p>
-                            <p>you are ${this.state.overBudget / 100} over your budget</p>
+                            <h2>budget: ${(+this.state.budget / 100).toFixed(2)} </h2>
+                            <p>your total is:  ${(this.state.total / 100).toFixed(2)}</p>
+                            <p>you have ${(this.state.remaining / 100).toFixed(2)} left</p>
+                            <p>you are ${(this.state.overBudget / 100).toFixed(2)} over your budget</p>
                             {/* <button onClick={() => this.handleBudget(this.state.shoppingList)} >calc</button> */}
                             <TrashButton toggle={this.toggle} handleBudget={() => this.handleBudget(this.state.shoppingList)}/>
                 </div>
@@ -339,7 +348,7 @@ class Dashboard extends React.Component {
                 <Fade>
                 <DragDropContext onDragEnd={this.dragItem}>
                     <div className="lists-block">
-                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} />
+                        <ShoppingList items={this.state.shoppingList} budget={this.state.budget} updateQuantity={this.updateQuantity} remove={this.removeCard} handleBudget={() => this.handleBudget(this.state.shoppingList)} total={this.state.total} loopBreak={this.state.loopBreak} loading={this.state.leftLoading} />
                         <ListOptions listsArray={this.state.lists} itemCards={this.state.itemCards} clickList={this.clickList} loading={this.state.loading} handleLoading={this.handleLoading} />
 
                                         </div>

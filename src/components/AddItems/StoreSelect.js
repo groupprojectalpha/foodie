@@ -18,8 +18,10 @@ const styles = theme => ({
     margin: theme.spacing.unit,
   },
   textField: {
-    flexBasis: 200,
+    // flexBasis: 200,
+    minWidth: 300
   },
+
 });
 
 const ranges = [
@@ -42,11 +44,11 @@ class OutlinedInputAdornments extends React.Component {
     amount: '',
     password: '',
     weight: '',
-    weightRange: '',
+    weightRange: null,
     showPassword: false,
   };
 
-  handleChange = prop => event => {
+  handleChange = (prop , event) => {
     this.setState({ [prop]: event.target.value });
     
   };
@@ -57,6 +59,7 @@ class OutlinedInputAdornments extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.props)
 
     return (
       <div className={classes.root}>
@@ -66,18 +69,19 @@ class OutlinedInputAdornments extends React.Component {
           select
           className={classNames(classes.margin, classes.textField)}
           variant="outlined"
-          label="Stores"
-          fullWidth
+          label={this.props.storesList.length ? "Select Store" : "Click Target or Enter Zip Code"}
+          // fullWidth
+          autoWidth={true}
           onChange={(e) => {this.props.updateStore(e)
-            this.handleChange('weightRange')}}
+            this.handleChange('weightRange' , e)}}
           value={this.state.weightRange}
           
-          InputProps={{
-            startAdornment: <InputAdornment position="start"></InputAdornment>,
-          }}
+          // InputProps={{
+          //   startAdornment: <InputAdornment position="start"></InputAdornment>,
+          // }}
         >
           {this.props.storesList.map((option, i) => (
-            <MenuItem key={ranges.key} value={i}>
+            <MenuItem key={i} value={i}>
               {option}
             </MenuItem>
           ))}

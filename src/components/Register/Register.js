@@ -15,26 +15,23 @@ import Zoom from 'react-reveal/Zoom';
     constructor(props){
         super(props)
         this.state={
-            username: '',
+            name: '',
             password: '',
             state:'',
-            firstName: '',
-            lastName: '',
             email: '',
-            phoneNumber: '',
+            phone: 0,
             toggle: false
         }
     }
 
-    // firstName:firstName, lastName:lastName,
-
     async createNewUser()  {
-        const { username, password, firstName, lastName, email, phoneNumber, state } =this.state
-        let res = await axios.post('/auth/register', {name:username, password:password, email:email, phone:phoneNumber, state:state}).catch(()=>{
+        const { name, password, email, phone, state } =this.state
+        let res = await axios.post('/auth/register', {name:name, password:password, email:email, phone: phone, state:state}).catch((err)=>{
+            console.log("Server Error: " , err)
             alert('Email already in use')
         })
 
-        if(res.data){
+        if(res && res.data){
             this.props.history.push('/add')
         }
     }
@@ -44,6 +41,10 @@ import Zoom from 'react-reveal/Zoom';
             toggle: !this.state.toggle
         })
        
+    }
+
+    handleUpdate = (field , value) => {
+        this.setState({[field]: value})
     }
 
 
@@ -59,14 +60,14 @@ import Zoom from 'react-reveal/Zoom';
                {
                   this.state.toggle ? (
                       <>
-                      <Inputs2/>
-                      <PhoneInput/>
+                      <Inputs2 handleUpdate={this.handleUpdate} />
+                      <PhoneInput handleUpdate={this.handleUpdate} />
                       <Button style={{ marginTop: '20px', marginRight: '30px'}} variant="outlined" color="black" onClick={() => this.toggle()}>back</Button>
                       <Button style={{ marginTop: '20px', marginRight: '30px'}} variant="outlined" color="black" onClick={() => this.createNewUser()}>Finish</Button>
                       </>
                   ) :
                   <>
-                  <Inputs/>
+                  <Inputs handleUpdate={this.handleUpdate} />
                   <Button style={{ marginTop: '20px', marginRight: '30px'}} variant="outlined" color="black" onClick={() => this.toggle()}>next</Button>
                  
                   </>

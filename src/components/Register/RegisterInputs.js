@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
@@ -23,28 +21,11 @@ const styles = theme => ({
   },
 });
 
-const currencies = [
-  {
-    value: 'Texas',
-    label: 'TX',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-];
-
 class TextFields extends React.Component {
   state = {
     name: '',
+    password: '',
+    email: '',
     age: '',
     multiline: 'Controlled',
     currency: 'EUR',
@@ -56,6 +37,7 @@ class TextFields extends React.Component {
 
   render() {
     const { classes } = this.props;
+    // const {}
 
     return (
       <form className={classes.container} noValidate autoComplete="off">
@@ -63,17 +45,18 @@ class TextFields extends React.Component {
           id="standard-name"
           label="Username"
           className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
+          // value={this.state.name}
+          onChange={e => this.props.handleUpdate("name" , e.target.value)}
           margin="normal"
         />
 
 <TextField
-          id="standard-name"
+          id="filled-password-input"
           label="Password"
           className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
+          type="password"
+          // value={this.state.password}
+          onChange={e => this.props.handleUpdate("password" , e.target.value)}
           margin="normal"
         />
 
@@ -81,8 +64,8 @@ class TextFields extends React.Component {
           id="standard-name"
           label="Email"
           className={classes.textField}
-          value={this.state.name}
-          onChange={this.handleChange('name')}
+          // value={this.state.email}
+          onChange={e => this.props.handleUpdate("email" , e.target.value)}
           margin="normal"
         />
 

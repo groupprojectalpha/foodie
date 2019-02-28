@@ -6,9 +6,9 @@ export default function (props) {
   return (
     <div className="price-main" id='prod-price'>
       <p> QTY {quantity}</p>
+      <div>Total: ${(quantity * price).toFixed(2)}</div>
       {props.updateQuantity && <button onClick={() => props.updateQuantity(id, ++newQuantity)}> +1 </button>}
       {props.updateQuantity && <button onClick={() => props.updateQuantity(id, --newQuantity)}> -1 </button>}
-      <div>Total: {quantity * price}</div>
     </div>
   )
 }

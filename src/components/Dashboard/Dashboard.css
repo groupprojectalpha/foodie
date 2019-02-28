@@ -28,7 +28,7 @@
 }
 
 ::-webkit-scrollbar{
-  background: hidden;
+  display: none;
 }
 
 .header-dash{
@@ -108,6 +108,15 @@ align-items: center;
   border-radius: 1.3em;
   box-sizing: border-box;
   box-shadow: 1px 49px 800px 0px rgba(0, 0, 0, 0.452);
+}
+
+.scrollbox {
+  padding: 5px 0px;
+  overflow-x: auto;
+  height: 99%;
+  border-radius: 5px;
+  margin: 5px 0px;
+  filter: drop-shadow(0 0 2px black);
 }
 
 

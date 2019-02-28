@@ -19,7 +19,7 @@ function OutlinedButtons(props) {
     <div>
      
       <Button onClick={props.toggleInput} variant="outlined" color="inherit" className={classes.button}>
-        Save as List
+        Save as...
       </Button>
     </div>
   );
