@@ -118,6 +118,7 @@ class AddItems extends React.Component {
     // }
 
     findItem = async (value) => {
+        if(!value){return;}
         const {chain , storeId} = this.state.targetStore
         let res = await Axios.get(`/search/${chain}/${storeId}/${value}`)
         this.setState({ itemList: res.data })
